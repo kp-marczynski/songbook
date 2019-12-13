@@ -1,5 +1,7 @@
 {
   "name": "ionic-songbook",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

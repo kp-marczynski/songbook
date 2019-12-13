@@ -1,0 +1,23 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            All Songs
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button [routerLink]="['/tabs/song/new']">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+    <ion-list>
+        <ion-item *ngFor="let song of songIndex" [routerLink]="['/tabs/song', song.uuid, 'view']">
+            <ion-label>
+                <h3>{{song.author}}</h3>
+                <p>{{song.title}}</p>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+</ion-content>
