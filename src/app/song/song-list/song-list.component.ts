@@ -17,7 +17,15 @@ export class SongListComponent implements OnInit {
     ngOnInit(): void {
         this.storageHelperService.getSongIndex().then(res => {
                 this.songIndex = res;
+                this.songIndex.sort((a, b) =>
+                    this.compareStrings(a.author, b.author) === 0
+                        ? this.compareStrings(a.title, b.title)
+                        : this.compareStrings(a.author, b.author));
             }
         );
+    }
+
+    compareStrings(a: string, b: string): number {
+        return a.localeCompare(b, 'en', {sensitivity: 'base'});
     }
 }
