@@ -16,8 +16,8 @@ export class StorageHelperService {
 
     private saveSongLocally(song: Song): Promise<any> {
         return new Promise<any>((resolve, reject) =>
-            this.storage.set(song.uuid, JSON.stringify(song))
-                .then(() => this.updateSongIndex(song as SongBase).then(() => resolve()))
+            this.storage.set(song.uuid, song.getSongString())
+                .then(() => this.updateSongIndex(JSON.parse(song.getSongBaseString())).then(() => resolve()))
         );
     }
 

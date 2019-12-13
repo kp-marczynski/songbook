@@ -16,6 +16,16 @@ export class SongBase {
         this.uuid = uuid ? uuid : uuidv4();
         this.checksum = getChecksum(title, author, language, '');
     }
+
+    getSongBaseString(): string {
+        return JSON.stringify({
+            uuid: this.uuid,
+            title: this.title,
+            author: this.author,
+            language: this.language,
+            checksum: this.checksum
+        });
+    }
 }
 
 export class Song extends SongBase {
@@ -27,6 +37,17 @@ export class Song extends SongBase {
         this.content = content;
         this.checksum = getChecksum(title, author, language, content);
         this.formattedContent = parseChordPro(this.content);
+    }
+
+    getSongString(): string {
+        return JSON.stringify({
+            uuid: this.uuid,
+            title: this.title,
+            author: this.author,
+            language: this.language,
+            checksum: this.checksum,
+            content: this.content
+        });
     }
 }
 
