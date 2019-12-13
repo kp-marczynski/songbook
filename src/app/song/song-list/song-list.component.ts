@@ -7,17 +7,17 @@ import {StorageHelperService} from '../../../services/storage-helper.service';
     templateUrl: './song-list.component.html',
     styleUrls: ['./song-list.component.scss'],
 })
-export class SongListComponent implements AfterViewChecked {
+export class SongListComponent implements OnInit {
 
     songIndex: SongBase[] = [];
 
     constructor(private storageHelperService: StorageHelperService) {
     }
 
-    ngAfterViewChecked(): void {
-        setTimeout(() => this.storageHelperService.getSongIndex().then(res => {
+    ngOnInit(): void {
+        this.storageHelperService.getSongIndex().then(res => {
                 this.songIndex = res;
-            })
+            }
         );
     }
 }
