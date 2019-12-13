@@ -9,7 +9,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "deploy": "ionic build --prod && firebase deploy"
   },
   "private": true,
   "dependencies": {
@@ -29,6 +30,7 @@
     "cordova": "^9.0.0",
     "cordova-sqlite-storage": "^4.0.0",
     "core-js": "^2.5.4",
+    "firebase-tools": "^7.10.0",
     "ionic": "^5.4.12",
     "md5": "^2.2.1",
     "rxjs": "~6.5.1",
