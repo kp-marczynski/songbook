@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
-import {Song, SongBase} from '../model/song.model';
+import {getSongBase, Song} from '../model/song.model';
 
 @Injectable({
     providedIn: 'root'
@@ -16,8 +16,8 @@ export class StorageHelperService {
 
     private saveSongLocally(song: Song): Promise<any> {
         return new Promise<any>((resolve, reject) =>
-            this.storage.set(song.uuid, song.getSongString())
-                .then(() => this.updateSongIndex(JSON.parse(song.getSongBaseString())).then(() => resolve()))
+            this.storage.set(song.uuid, JSON.stringify(song))
+                .then(() => this.updateSongIndex(getSongBase(song)).then(() => resolve()))
         );
     }
 
@@ -28,24 +28,24 @@ export class StorageHelperService {
     private getLocalSong(uuid: string): Promise<Song> {
         return new Promise<Song>((resolve, reject) => {
             this.storage.get(uuid).then(res => {
-                resolve(JSON.parse(res) as Song);
+                resolve(JSON.parse(res));
             });
         });
     }
 
-    public getSongIndex(): Promise<SongBase[]> {
-        return new Promise<SongBase[]>((resolve, reject) => {
+    public getSongIndex(): Promise<any[]> {
+        return new Promise<any[]>((resolve, reject) => {
             this.storage.get('index').then(res => {
-                let index: SongBase[] = [];
+                let index: any[] = [];
                 if (res) {
-                    index = JSON.parse(res) as SongBase[];
+                    index = JSON.parse(res) as any[];
                 }
                 resolve(index);
             });
         });
     }
 
-    private updateSongIndex(newSong: SongBase): Promise<any> {
+    private updateSongIndex(newSong): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.getSongIndex().then(index => {
                 const pos = index.findIndex(obj => obj.uuid === newSong.uuid);

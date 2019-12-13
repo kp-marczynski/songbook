@@ -33,7 +33,7 @@
   </ion-item>
 <!--  <ion-toggle [(ngModel)]="simpleChords"></ion-toggle>-->
   <ion-list lines="none">
-    <ion-item-group *ngFor="let group of song.formattedContent">
+    <ion-item-group *ngFor="let group of formattedContent">
       <ion-item-divider sticky *ngIf="chordsVisible && group.simpleChords.length > 0">
         <!--        <ion-label>-->
         {{simpleChords ? group.simpleChords : group.chords}}

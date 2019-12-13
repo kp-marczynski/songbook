@@ -1,5 +1,4 @@
 import {AfterViewChecked, AfterViewInit, Component, OnInit} from '@angular/core';
-import {SongBase} from '../../../model/song.model';
 import {StorageHelperService} from '../../../services/storage-helper.service';
 
 @Component({
@@ -9,7 +8,7 @@ import {StorageHelperService} from '../../../services/storage-helper.service';
 })
 export class SongListComponent implements OnInit {
 
-    songIndex: SongBase[] = [];
+    songIndex: any[] = [];
 
     constructor(private storageHelperService: StorageHelperService) {
     }

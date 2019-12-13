@@ -1,8 +1,9 @@
 import {AfterViewChecked, Component, OnInit} from '@angular/core';
 import {StorageHelperService} from '../../../services/storage-helper.service';
 import {ActivatedRoute} from '@angular/router';
-import {Song} from '../../../model/song.model';
+import {parseChordPro, Song} from '../../../model/song.model';
 import {ToastController} from '@ionic/angular';
+import {ChordProGroup} from '../../../model/chord-pro-group.model';
 
 @Component({
     selector: 'app-song-details',
@@ -12,6 +13,7 @@ import {ToastController} from '@ionic/angular';
 export class SongDetailsComponent implements OnInit {
 
     song: Song;
+    formattedContent: ChordProGroup[];
     chordsVisible = true;
     simpleChords = true;
 
@@ -23,7 +25,12 @@ export class SongDetailsComponent implements OnInit {
 
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
-            this.storageHelperService.getSong(params.get('uuid')).then(res => this.song = res);
+            this.storageHelperService.getSong(params.get('uuid')).then(res => {
+                this.song = res;
+                if (this.song) {
+                    this.formattedContent = parseChordPro(this.song);
+                }
+            });
         });
     }
 

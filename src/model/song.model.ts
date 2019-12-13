@@ -2,56 +2,36 @@ import {ChordProGroup} from './chord-pro-group.model';
 import * as uuidv4 from 'uuid/v4';
 import * as md5 from 'md5';
 
-export class SongBase {
+export class Song  {
     uuid: string;
     title: string;
     author: string;
     language: string;
     checksum: string;
+    content: string;
 
-    constructor(title: string, author: string, language: string, uuid?: string) {
+    constructor(title: string, author: string, language: string, content: string, uuid?: string) {
         this.title = title;
         this.author = author;
         this.language = language;
         this.uuid = uuid ? uuid : uuidv4();
-        this.checksum = getChecksum(title, author, language, '');
-    }
-
-    getSongBaseString(): string {
-        return JSON.stringify({
-            uuid: this.uuid,
-            title: this.title,
-            author: this.author,
-            language: this.language,
-            checksum: this.checksum
-        });
-    }
-}
-
-export class Song extends SongBase {
-    content: string;
-    formattedContent: ChordProGroup[];
-
-    constructor(title: string, author: string, language: string, content: string, uuid?: string) {
-        super(title, author, language, uuid);
         this.content = content;
         this.checksum = getChecksum(title, author, language, content);
-        this.formattedContent = parseChordPro(this.content);
-    }
-
-    getSongString(): string {
-        return JSON.stringify({
-            uuid: this.uuid,
-            title: this.title,
-            author: this.author,
-            language: this.language,
-            checksum: this.checksum,
-            content: this.content
-        });
     }
 }
 
-function parseChordPro(chordProText: string): ChordProGroup[] {
+export function getSongBase(song: Song) {
+    return {
+        uuid: song.uuid,
+        title: song.title,
+        author: song.author,
+        language: song.language,
+        checksum: song.checksum
+    };
+}
+
+export function parseChordPro(song: Song): ChordProGroup[] {
+    const chordProText = song.content;
     const result: ChordProGroup[] = [];
     let currentChords = '';
     let tempText: string[] = [];
