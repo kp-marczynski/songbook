@@ -9,11 +9,11 @@ export class SongBase {
     language: string;
     checksum: string;
 
-    constructor(title: string, author: string, language: string) {
+    constructor(title: string, author: string, language: string, uuid?: string) {
         this.title = title;
         this.author = author;
         this.language = language;
-        this.uuid = uuidv4();
+        this.uuid = uuid ? uuid : uuidv4();
         this.checksum = getChecksum(title, author, language, '');
     }
 }
@@ -22,8 +22,8 @@ export class Song extends SongBase {
     content: string;
     formattedContent: ChordProGroup[];
 
-    constructor(title: string, author: string, language: string, content: string) {
-        super(title, author, language);
+    constructor(title: string, author: string, language: string, content: string, uuid?: string) {
+        super(title, author, language, uuid);
         this.content = content;
         this.checksum = getChecksum(title, author, language, content);
         this.formattedContent = parseChordPro(this.content);

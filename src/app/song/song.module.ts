@@ -6,7 +6,7 @@ import {SongListComponent} from './song-list/song-list.component';
 import {SongDetailsComponent} from './song-details/song-details.component';
 import {SongEditComponent} from './song-edit/song-edit.component';
 import {IonicModule} from '@ionic/angular';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -15,7 +15,8 @@ import {FormsModule} from '@angular/forms';
     CommonModule,
     SongRoutingModule,
     IonicModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class SongModule { }

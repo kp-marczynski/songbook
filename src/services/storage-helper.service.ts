@@ -10,13 +10,15 @@ export class StorageHelperService {
     constructor(private storage: Storage) {
     }
 
-    public saveSong(song: Song) {
-        this.saveSongLocally(song);
+    public saveSong(song: Song): Promise<any> {
+        return this.saveSongLocally(song);
     }
 
-    private saveSongLocally(song: Song) {
-        this.storage.set(song.uuid, JSON.stringify(song));
-        this.updateSongIndex(song as SongBase);
+    private saveSongLocally(song: Song): Promise<any> {
+        return new Promise<any>((resolve, reject) =>
+            this.storage.set(song.uuid, JSON.stringify(song))
+                .then(() => this.updateSongIndex(song as SongBase).then(() => resolve()))
+        );
     }
 
     public getSong(uuid: string): Promise<Song> {
@@ -43,15 +45,17 @@ export class StorageHelperService {
         });
     }
 
-    private updateSongIndex(newSong: SongBase) {
-        this.getSongIndex().then(index => {
-            const pos = index.findIndex(obj => obj.uuid === newSong.uuid);
-            if (pos >= 0) {
-                index[pos] = newSong;
-            } else {
-                index.push(newSong);
-            }
-            this.storage.set('index', JSON.stringify(index));
+    private updateSongIndex(newSong: SongBase): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            this.getSongIndex().then(index => {
+                const pos = index.findIndex(obj => obj.uuid === newSong.uuid);
+                if (pos >= 0) {
+                    index[pos] = newSong;
+                } else {
+                    index.push(newSong);
+                }
+                this.storage.set('index', JSON.stringify(index)).then(() => resolve());
+            });
         });
     }
 }

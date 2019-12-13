@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, OnInit} from '@angular/core';
 import {StorageHelperService} from '../../../services/storage-helper.service';
 import {ActivatedRoute} from '@angular/router';
 import {Song} from '../../../model/song.model';
@@ -15,7 +15,10 @@ export class SongDetailsComponent implements OnInit {
     chordsVisible = true;
     simpleChords = true;
 
-    constructor(private storageHelperService: StorageHelperService, private route: ActivatedRoute, private toastController: ToastController) {
+    constructor(
+        private storageHelperService: StorageHelperService,
+        private route: ActivatedRoute,
+        private toastController: ToastController) {
     }
 
     ngOnInit(): void {
@@ -24,12 +27,22 @@ export class SongDetailsComponent implements OnInit {
         });
     }
 
-  async presentToast() {
-    const toast = await this.toastController.create({
-      message: 'Song added to queue',
-      duration: 2000
-    });
-    toast.present();
-  }
+    // ngAfterViewChecked(): void {
+    //     setTimeout(() => {
+    //             if (this.song) {
+    //                 this.storageHelperService.getSong(this.song.uuid).then(res => this.song = res);
+    //             }
+    //         }
+    //     )
+    //     ;
+    // }
+
+    async presentToast() {
+        const toast = await this.toastController.create({
+            message: 'Song added to queue',
+            duration: 2000
+        });
+        toast.present();
+    }
 
 }
