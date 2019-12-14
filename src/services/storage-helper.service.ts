@@ -1,11 +1,18 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {getSongBase, Song} from '../model/song.model';
+import {Subject} from "rxjs";
 
 @Injectable({
     providedIn: 'root'
 })
 export class StorageHelperService {
+
+    private songListUpdateSubject = new Subject();
+    public songListUpdate$ = this.songListUpdateSubject.asObservable();
+
+    private queueUpdateSubject = new Subject();
+    public queueUpdate$ = this.queueUpdateSubject.asObservable();
 
     constructor(private storage: Storage) {
     }
@@ -54,7 +61,10 @@ export class StorageHelperService {
                 } else {
                     index.push(newSong);
                 }
-                this.storage.set('index', JSON.stringify(index)).then(() => resolve());
+                this.storage.set('index', JSON.stringify(index)).then(() => {
+                    this.songListUpdateSubject.next();
+                    resolve()
+                });
             });
         });
     }
@@ -62,13 +72,17 @@ export class StorageHelperService {
     public removeSong(song: Song) {
         this.storage.remove(song.uuid);
         this.removeSongFromIndex(song);
+        this.removeFromQueue(song);
     }
 
     private removeSongFromIndex(song: Song): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.getSongIndex().then(index => {
                 const updatedIndex = index.filter(elem => elem.uuid !== song.uuid);
-                this.storage.set('index', JSON.stringify(updatedIndex)).then(() => resolve());
+                this.storage.set('index', JSON.stringify(updatedIndex)).then(() => {
+                    this.songListUpdateSubject.next();
+                    resolve();
+                });
             });
         });
     }
@@ -89,16 +103,22 @@ export class StorageHelperService {
         return new Promise<any>((resolve, reject) => {
             this.getQueue().then(queue => {
                 queue.push(getSongBase(song));
-                this.storage.set('queue', JSON.stringify(queue)).then(() => resolve());
+                this.storage.set('queue', JSON.stringify(queue)).then(() => {
+                    this.queueUpdateSubject.next();
+                    resolve();
+                });
             });
         });
     }
 
-    private removeFromQueue(song): Promise<any> {
+    public removeFromQueue(song): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.getQueue().then(queue => {
                 queue = queue.filter(elem => elem.uuid !== song.uuid);
-                this.storage.set('queue', JSON.stringify(queue)).then(() => resolve());
+                this.storage.set('queue', JSON.stringify(queue)).then(() => {
+                    this.queueUpdateSubject.next();
+                    resolve();
+                });
             });
         });
     }

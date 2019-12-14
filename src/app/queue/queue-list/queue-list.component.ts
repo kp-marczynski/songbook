@@ -13,6 +13,9 @@ export class QueueListComponent implements OnInit {
 
   ngOnInit() {
     this.loadSongs();
+    this.storageHelperService.queueUpdate$.subscribe(() => {
+      this.loadSongs();
+    });
   }
 
   loadSongs(): Promise<any> {
@@ -27,5 +30,9 @@ export class QueueListComponent implements OnInit {
 
   doRefresh(event) {
     this.loadSongs().then(() => event.target.complete());
+  }
+
+  remove(song: any) {
+    this.storageHelperService.removeFromQueue(song);
   }
 }

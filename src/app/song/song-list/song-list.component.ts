@@ -17,6 +17,9 @@ export class SongListComponent implements OnInit {
 
     ngOnInit(): void {
         this.loadSongs();
+        this.storageHelperService.songListUpdate$.subscribe(() => {
+            this.loadSongs();
+        });
     }
 
     loadSongs(): Promise<any> {
@@ -45,13 +48,12 @@ export class SongListComponent implements OnInit {
         this.loadSongs().then(() => event.target.complete());
     }
 
-    @HostListener('window:popstate', ['$event'])
-    onPopState(event) {
-        this.loadSongs();
-    }
+    // @HostListener('window:popstate', ['$event'])
+    // onPopState(event) {
+    //     this.loadSongs();
+    // }
 
     remove(song: any) {
-        this.songIndex = this.songIndex.filter(elem => elem.uuid !== song.uuid)
         this.storageHelperService.removeSong(song);
     }
 

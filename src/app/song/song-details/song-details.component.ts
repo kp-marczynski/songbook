@@ -1,6 +1,6 @@
 import {AfterViewChecked, Component, OnInit} from '@angular/core';
 import {StorageHelperService} from '../../../services/storage-helper.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {parseChordPro, Song} from '../../../model/song.model';
 import {ToastController} from '@ionic/angular';
 import {ChordProGroup} from '../../../model/chord-pro-group.model';
@@ -20,7 +20,8 @@ export class SongDetailsComponent implements OnInit {
     constructor(
         private storageHelperService: StorageHelperService,
         private route: ActivatedRoute,
-        private toastController: ToastController) {
+        private toastController: ToastController,
+        private router: Router) {
     }
 
     ngOnInit(): void {
@@ -45,6 +46,7 @@ export class SongDetailsComponent implements OnInit {
     // }
 
     async presentToast() {
+        this.storageHelperService.addToQueue(this.song);
         const toast = await this.toastController.create({
             message: 'Song added to queue',
             duration: 2000
@@ -52,4 +54,8 @@ export class SongDetailsComponent implements OnInit {
         toast.present();
     }
 
+    remove() {
+        this.storageHelperService.removeSong(this.song);
+        this.router.navigate(['/tabs/song']);
+    }
 }
