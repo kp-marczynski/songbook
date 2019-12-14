@@ -3,7 +3,7 @@
   "index": "/index.html",
   "assetGroups": [
     {
-      "name": "app",
+      "name": "Ionic Songbook",
       "installMode": "prefetch",
       "resources": {
         "files": [
