@@ -18,7 +18,7 @@
     <ion-list #slidedList>
         <ion-item-sliding *ngFor="let song of songIndex">
             <ion-item [routerLink]="['/tabs/song', song.uuid, 'view']">
-                <ion-label>
+                <ion-label class="ion-text-wrap">
                     <h3>{{song.author}}</h3>
                     <p>{{song.title}}</p>
                 </ion-label>
