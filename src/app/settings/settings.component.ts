@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {StorageHelperService} from "../../services/storage-helper.service";
+import {version, name, author} from '../../../package.json';
 
 @Component({
     selector: 'app-settings',
@@ -8,6 +9,10 @@ import {StorageHelperService} from "../../services/storage-helper.service";
 })
 export class SettingsComponent implements OnInit {
     darkMode = false;
+    version: string = version;
+    name: string = name;
+    author: string = author;
+    year = new Date().getFullYear();
 
     constructor(private storageHelperService: StorageHelperService) {
     }
