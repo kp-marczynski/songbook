@@ -22,7 +22,7 @@
     </ion-item>
     <ion-item>
       <ion-label position="floating">Lyrics and chords in ChordPro format</ion-label>
-      <ion-textarea formControlName="content" rows="20"></ion-textarea>
+      <ion-textarea formControlName="content" rows="5" autoGrow="true"></ion-textarea>
     </ion-item>
   </ion-list>
   <ion-button type="submit" expand="block" [disabled]="editForm.invalid || isSaving">Save song!</ion-button>

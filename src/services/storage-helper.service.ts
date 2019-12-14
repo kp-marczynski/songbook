@@ -17,7 +17,7 @@ export class StorageHelperService {
     private saveSongLocally(song: Song): Promise<any> {
         return new Promise<any>((resolve, reject) =>
             this.storage.set(song.uuid, JSON.stringify(song))
-                .then(() => this.updateSongIndex(getSongBase(song)).then(() => resolve()))
+                .then(() => this.addSongToIndex(getSongBase(song)).then(() => resolve()))
         );
     }
 
@@ -45,7 +45,7 @@ export class StorageHelperService {
         });
     }
 
-    private updateSongIndex(newSong): Promise<any> {
+    private addSongToIndex(newSong): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.getSongIndex().then(index => {
                 const pos = index.findIndex(obj => obj.uuid === newSong.uuid);
@@ -55,6 +55,50 @@ export class StorageHelperService {
                     index.push(newSong);
                 }
                 this.storage.set('index', JSON.stringify(index)).then(() => resolve());
+            });
+        });
+    }
+
+    public removeSong(song: Song) {
+        this.storage.remove(song.uuid);
+        this.removeSongFromIndex(song);
+    }
+
+    private removeSongFromIndex(song: Song): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            this.getSongIndex().then(index => {
+                const updatedIndex = index.filter(elem => elem.uuid !== song.uuid);
+                this.storage.set('index', JSON.stringify(updatedIndex)).then(() => resolve());
+            });
+        });
+    }
+
+    public getQueue(): Promise<any[]> {
+        return new Promise<any[]>((resolve, reject) => {
+            this.storage.get('queue').then(res => {
+                let queue: any[] = [];
+                if (res) {
+                    queue = JSON.parse(res) as any[];
+                }
+                resolve(queue);
+            });
+        });
+    }
+
+    public addToQueue(song): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            this.getQueue().then(queue => {
+                queue.push(getSongBase(song));
+                this.storage.set('queue', JSON.stringify(queue)).then(() => resolve());
+            });
+        });
+    }
+
+    private removeFromQueue(song): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            this.getQueue().then(queue => {
+                queue = queue.filter(elem => elem.uuid !== song.uuid);
+                this.storage.set('queue', JSON.stringify(queue)).then(() => resolve());
             });
         });
     }

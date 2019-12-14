@@ -17,7 +17,9 @@ import { environment } from '../environments/environment';
     entryComponents: [],
     imports: [
         BrowserModule,
-        IonicModule.forRoot(),
+        IonicModule.forRoot({
+            animated: false
+        }),
         AppRoutingModule,
       IonicStorageModule.forRoot(),
       ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],

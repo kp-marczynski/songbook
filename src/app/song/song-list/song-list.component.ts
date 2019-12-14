@@ -1,6 +1,7 @@
 import {AfterViewChecked, AfterViewInit, Component, OnInit} from '@angular/core';
 import {StorageHelperService} from '../../../services/storage-helper.service';
 import {HostListener} from '@angular/core';
+import {Song} from "../../../model/song.model";
 
 @Component({
     selector: 'app-song-list',
@@ -47,5 +48,14 @@ export class SongListComponent implements OnInit {
     @HostListener('window:popstate', ['$event'])
     onPopState(event) {
         this.loadSongs();
+    }
+
+    remove(song: any) {
+        this.songIndex = this.songIndex.filter(elem => elem.uuid !== song.uuid)
+        this.storageHelperService.removeSong(song);
+    }
+
+    addToQueue(song: any) {
+        this.storageHelperService.addToQueue(song);
     }
 }

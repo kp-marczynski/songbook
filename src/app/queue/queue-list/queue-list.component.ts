@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {StorageHelperService} from "../../../services/storage-helper.service";
 
 @Component({
   selector: 'app-queue-list',
@@ -7,8 +8,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class QueueListComponent implements OnInit {
 
-  constructor() { }
+  songQueue: any[];
+  constructor(private storageHelperService: StorageHelperService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadSongs();
+  }
 
+  loadSongs(): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.storageHelperService.getQueue().then(res => {
+            this.songQueue = res;
+            resolve();
+          }
+      );
+    });
+  }
+
+  doRefresh(event) {
+    this.loadSongs().then(() => event.target.complete());
+  }
 }
