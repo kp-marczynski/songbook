@@ -1,11 +1,20 @@
-<ion-item>
-    <ion-label>Dark mode</ion-label>
-    <ion-toggle [(ngModel)]="darkMode" (ngModelChange)="switchDarkMode()"></ion-toggle>
-</ion-item>
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            Settings
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-item>
+        <ion-label>Dark mode</ion-label>
+        <ion-toggle [(ngModel)]="darkMode" (ngModelChange)="switchDarkMode()"></ion-toggle>
+    </ion-item>
+</ion-content>
 
 <ion-item slot="end" align-self-center>
     {{name}} v{{version}}
     <br/>
     &copy; {{year}} {{author}}
 </ion-item>
-
