@@ -1,8 +1,8 @@
 {
-  "name": "app",
-  "short_name": "app",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "name": "Songbook",
+  "short_name": "Songbook",
+  "theme_color": "#2C3E50",
+  "background_color": "#2C3E50",
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
