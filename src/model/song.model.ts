@@ -2,7 +2,7 @@ import {ChordProGroup} from './chord-pro-group.model';
 import * as uuidv4 from 'uuid/v4';
 import * as md5 from 'md5';
 
-export class Song  {
+export class Song {
     uuid: string;
     title: string;
     author: string;
@@ -34,6 +34,7 @@ export function parseChordPro(song: Song): ChordProGroup[] {
     const chordProText = song.content;
     const result: ChordProGroup[] = [];
     let currentChords = '';
+    let currentChordsArray = [];
     let tempText: string[] = [];
     const lines = chordProText.split('\n');
     for (const line of lines) {
@@ -41,9 +42,15 @@ export function parseChordPro(song: Song): ChordProGroup[] {
         let chords = '';
         let text = '';
         if (splitLeft.length > 1) {
-            result.push(new ChordProGroup(currentChords, tempText));
+            currentChordsArray.push(currentChords);
             currentChords = '';
-            tempText = [];
+            if (tempText.filter(text => text && text.length > 0).length > 0) {
+                currentChordsArray.push(currentChords);
+                result.push(new ChordProGroup(currentChordsArray, tempText));
+                currentChords = '';
+                currentChordsArray = [];
+                tempText = [];
+            }
             for (const left of splitLeft) {
                 if (left.includes(']')) {
                     const splitRight = left.split(']');
@@ -68,18 +75,32 @@ export function parseChordPro(song: Song): ChordProGroup[] {
                     chords += ' ' + '_'.repeat(left.length) + ' ';
                 }
             }
-            tempText.push(text);
+            if(!(tempText.length >= 2 && text.trim() === '' && tempText[tempText.length - 1].trim() === '' && tempText[tempText.length - 2].trim() === '')){
+            // if (tempText.length < 2 || !(text.trim() === '' && tempText[tempText.length - 1].trim() === '' && tempText[tempText.length - 2].trim() === '')) {
+                tempText.push(text);
+            }
             currentChords = chords;
         } else if (splitLeft[0].includes(']')) {
-            result.push(new ChordProGroup(currentChords, tempText));
-            tempText = [];
-            currentChords = splitLeft[0];
+            currentChordsArray.push(currentChords);
+            currentChords = '';
+            if (tempText.filter(text => text && text.length > 0).length > 0) {
+                result.push(new ChordProGroup(currentChordsArray, tempText));
+                tempText = [];
+                currentChordsArray = [];
+                currentChords = splitLeft[0];
+            }
         } else {
-            tempText.push(splitLeft[0]);
+            if(!(tempText.length >= 2 && splitLeft[0].trim() === '' && tempText[tempText.length - 1].trim() === '' && tempText[tempText.length - 2].trim() === '')){
+            // if (tempText.length < 2 || !(text.trim() === '' && tempText[tempText.length - 1].trim() === '' && tempText[tempText.length - 2].trim() === '')) {
+                tempText.push(splitLeft[0]);
+            }
         }
     }
+    if(currentChords != ''){
+        currentChordsArray.push(currentChords);
+    }
     if (tempText.length > 0 || currentChords.length > 0) {
-        result.push(new ChordProGroup(currentChords, tempText));
+        result.push(new ChordProGroup(currentChordsArray, tempText));
     }
     return result;
 }
