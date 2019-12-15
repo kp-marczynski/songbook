@@ -29,4 +29,7 @@ export class TabsComponent implements OnInit {
     //     this.router.navigate([res[0]]);
     //   }
     // }
+    changeTab(tab: string) {
+        this.router.navigate(['/tabs', tab]);
+    }
 }
