@@ -67,7 +67,9 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
     }
 
     previousState() {
-        const prevUrl = this.routerExtService.getPreviousUrl();
-        return prevUrl ? prevUrl : '/tabs/song';
+        // const prevUrl = this.routerExtService.getPreviousUrl();
+        // return prevUrl ? prevUrl : '/tabs/song';
+        // todo fix it
+        return '/tabs/song'
     }
 }
