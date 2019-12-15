@@ -13,6 +13,8 @@ export class SongListComponent implements OnInit {
     songIndex: any[] = [];
     displaySongs: any[] = [];
     numberOfItems = 20;
+    filteredSongs: any[] = [];
+    search = '';
 
     constructor(private storageHelperService: StorageHelperService) {
     }
@@ -30,7 +32,8 @@ export class SongListComponent implements OnInit {
                     this.songIndex = res;
                     if (this.songIndex) {
                         this.sortSongList();
-                        this.loadData(null);
+                        this.filteredSongs = this.songIndex;
+                        this.loadDisplayData(null);
                     }
                     resolve();
                 }
@@ -66,19 +69,32 @@ export class SongListComponent implements OnInit {
         this.storageHelperService.addToQueue(song);
     }
 
-    loadData(event) {
+    loadDisplayData(event) {
         setTimeout(() => {
             const displayedSongs = this.displaySongs.length;
-            for (let i = displayedSongs; i < this.songIndex.length && i - displayedSongs < this.numberOfItems; ++i) {
-                this.displaySongs.push(this.songIndex[i]);
+            for (let i = displayedSongs; i < this.filteredSongs.length && i - displayedSongs < this.numberOfItems; ++i) {
+                this.displaySongs.push(this.filteredSongs[i]);
             }
             if (event) {
                 event.target.complete();
             }
 
-            if (this.displaySongs.length == this.songIndex.length && event) {
+            if (this.displaySongs.length == this.filteredSongs.length && event) {
                 event.target.disabled = true;
             }
         }, 500);
+    }
+
+    searchSongs(value: string) {
+        console.log(value);
+        if (value && value.trim().length > 0) {
+            this.filteredSongs = this.songIndex.filter(elem =>
+                elem.title.toLowerCase().includes(value.trim().toLowerCase())
+                || elem.author.toLowerCase().includes(value.trim().toLowerCase()));
+        } else {
+            this.filteredSongs = this.songIndex;
+        }
+        this.displaySongs = [];
+        this.loadDisplayData(null);
     }
 }

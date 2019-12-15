@@ -4,6 +4,7 @@
             All Songs
         </ion-title>
     </ion-toolbar>
+    <ion-searchbar debounce="300" (ionChange)="searchSongs(searchbar.value)" #searchbar></ion-searchbar>
 </ion-header>
 
 <ion-content>
@@ -38,7 +39,7 @@
             </ion-item-options>
         </ion-item-sliding>
     </ion-list>
-    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadDisplayData($event)">
         <ion-infinite-scroll-content
                 loadingSpinner="bubbles"
                 loadingText="Loading more data...">
