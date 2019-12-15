@@ -32,7 +32,7 @@ export class SongListComponent implements OnInit {
                     this.songIndex = res;
                     if (this.songIndex) {
                         this.sortSongList();
-                        this.filteredSongs = this.songIndex;
+                        this.searchSongs(this.search);
                         this.loadDisplayData(null);
                     }
                     resolve();
@@ -86,13 +86,14 @@ export class SongListComponent implements OnInit {
     }
 
     searchSongs(value: string) {
-        console.log(value);
+        // console.log(value);
+        this.search = value;
         if (value && value.trim().length > 0) {
-            this.filteredSongs = this.songIndex.filter(elem =>
+            this.filteredSongs = [...this.songIndex.filter(elem =>
                 elem.title.toLowerCase().includes(value.trim().toLowerCase())
-                || elem.author.toLowerCase().includes(value.trim().toLowerCase()));
+                || elem.author.toLowerCase().includes(value.trim().toLowerCase()))];
         } else {
-            this.filteredSongs = this.songIndex;
+            this.filteredSongs = [...this.songIndex];
         }
         this.displaySongs = [];
         this.loadDisplayData(null);
