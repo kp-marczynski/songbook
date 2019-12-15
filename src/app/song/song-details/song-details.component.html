@@ -49,13 +49,13 @@
         <ion-item-group *ngFor="let group of formattedContent">
             <ion-item-divider sticky *ngIf="chordsVisible && group.simpleChords.length > 0">
                 <!--        <ion-label>-->
-                <ion-label class="ion-text-wrap" color="danger" style="max-height: 25vh; overflow-y: auto; width: 100%">
+                <ion-label class="ion-text-wrap chords" color="danger">
                     <p *ngFor="let chords of group.chords; let i=index">{{simpleChords ? group.simpleChords[i] : group.chords[i]}}</p>
                 </ion-label>
 
                 <!--        </ion-label>-->
             </ion-item-divider>
-            <ion-item *ngFor="let textLine of group.textLines" style="--min-height: 32px;">
+            <ion-item *ngFor="let textLine of group.textLines" class="lyrics-item">
                 <!--                <ion-label class="ion-text-wrap">-->
                 {{textLine}}
                 <!--                </ion-label>-->
