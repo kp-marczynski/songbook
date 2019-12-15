@@ -1,17 +1,17 @@
 <ion-tabs>
 
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="song">
+  <ion-tab-bar slot="bottom" *ngIf="showTabs">
+    <ion-tab-button tab="song" [selected]="isSelected('song')">
       <ion-icon name="musical-notes"></ion-icon>
       <ion-label>Songs</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="queue">
+    <ion-tab-button tab="queue" [selected]="isSelected('queue')">
       <ion-icon name="flame"></ion-icon>
       <ion-label>Campfire</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="settings">
+    <ion-tab-button tab="settings" [selected]="isSelected('settings')">
       <ion-icon name="settings"></ion-icon>
       <ion-label>Settings</ion-label>
     </ion-tab-button>

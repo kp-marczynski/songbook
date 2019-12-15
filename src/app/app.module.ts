@@ -11,6 +11,8 @@ import {AppRoutingModule} from './app-routing.module';
 import {IonicStorageModule} from '@ionic/storage';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import {TabsService} from "../services/tabs.service";
+import {RouterExtService} from "../services/router-ext.service";
 
 @NgModule({
     declarations: [AppComponent],
@@ -26,6 +28,8 @@ import { environment } from '../environments/environment';
     providers: [
         StatusBar,
         SplashScreen,
+        TabsService,
+        RouterExtService,
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
     ],
     bootstrap: [AppComponent]

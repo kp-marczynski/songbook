@@ -5,6 +5,7 @@ import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {StorageHelperService} from "../services/storage-helper.service";
 import {Song} from "../model/song.model";
+import {TabsService} from "../services/tabs.service";
 
 @Component({
     selector: 'app-root',
@@ -17,6 +18,7 @@ export class AppComponent {
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
         private storageHelperService: StorageHelperService,
+        public tabs: TabsService
     ) {
         this.initializeApp();
     }

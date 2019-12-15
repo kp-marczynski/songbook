@@ -1,18 +1,20 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterContentInit, AfterViewChecked, AfterViewInit, Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {ChordProGroup} from '../../../model/chord-pro-group.model';
 import {Song} from '../../../model/song.model';
 import {ActivatedRoute} from '@angular/router';
 import {StorageHelperService} from '../../../services/storage-helper.service';
+import {RouterExtService} from "../../../services/router-ext.service";
 
 @Component({
     selector: 'app-song-edit',
     templateUrl: './song-edit.component.html',
     styleUrls: ['./song-edit.component.scss'],
 })
-export class SongEditComponent implements OnInit {
+export class SongEditComponent implements OnInit, AfterViewInit {
 
     isSaving = false;
+    previousUrl = '';
 
     editForm = this.fb.group({
         uuid: [null],
@@ -25,7 +27,8 @@ export class SongEditComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private route: ActivatedRoute,
-        private storageHelperService: StorageHelperService) {
+        private storageHelperService: StorageHelperService,
+        private routerExtService: RouterExtService) {
     }
 
     ngOnInit() {
@@ -65,6 +68,12 @@ export class SongEditComponent implements OnInit {
     }
 
     previousState() {
-        window.history.back();
+        const prevUrl = this.routerExtService.getPreviousUrl();
+        return prevUrl ? prevUrl : '/tabs/song';
+    }
+
+    ngAfterViewInit(): void {
+        setTimeout(() =>
+            this.previousUrl = this.previousState());
     }
 }

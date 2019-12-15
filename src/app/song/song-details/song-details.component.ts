@@ -1,17 +1,19 @@
-import {AfterViewChecked, Component, OnInit} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, OnInit} from '@angular/core';
 import {StorageHelperService} from '../../../services/storage-helper.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {parseChordPro, Song} from '../../../model/song.model';
 import {ToastController} from '@ionic/angular';
 import {ChordProGroup} from '../../../model/chord-pro-group.model';
+import {RouterExtService} from "../../../services/router-ext.service";
 
 @Component({
     selector: 'app-song-details',
     templateUrl: './song-details.component.html',
     styleUrls: ['./song-details.component.scss'],
 })
-export class SongDetailsComponent implements OnInit {
+export class SongDetailsComponent implements OnInit, AfterViewInit {
 
+    previousUrl = '';
     song: Song;
     formattedContent: ChordProGroup[];
     chordsVisible = true;
@@ -21,7 +23,8 @@ export class SongDetailsComponent implements OnInit {
         private storageHelperService: StorageHelperService,
         private route: ActivatedRoute,
         private toastController: ToastController,
-        private router: Router) {
+        private router: Router,
+        private routerExtService: RouterExtService) {
     }
 
     ngOnInit(): void {
@@ -44,6 +47,10 @@ export class SongDetailsComponent implements OnInit {
     //     )
     //     ;
     // }
+    ngAfterViewInit(): void {
+        setTimeout(() =>
+            this.previousUrl = this.previousState());
+    }
 
     async presentToast() {
         this.storageHelperService.addToQueue(this.song);
@@ -57,5 +64,10 @@ export class SongDetailsComponent implements OnInit {
     remove() {
         this.storageHelperService.removeSong(this.song);
         this.router.navigate(['/tabs/song']);
+    }
+
+    previousState() {
+        const prevUrl = this.routerExtService.getPreviousUrl();
+        return prevUrl ? prevUrl : '/tabs/song';
     }
 }
