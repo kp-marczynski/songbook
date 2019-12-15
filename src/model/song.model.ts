@@ -41,13 +41,15 @@ export function parseChordPro(song: Song): ChordProGroup[] {
         const splitLeft = line.split('[');
         let chords = '';
         let text = '';
+        //console.log(line);
         if (splitLeft.length > 1) {
             currentChordsArray.push(currentChords);
+            //console.log('push1 chords line');
             currentChords = '';
             if (tempText.filter(text => text && text.length > 0).length > 0) {
-                currentChordsArray.push(currentChords);
+                // currentChordsArray.push(currentChords);
                 result.push(new ChordProGroup(currentChordsArray, tempText));
-                currentChords = '';
+                // currentChords = '';
                 currentChordsArray = [];
                 tempText = [];
             }
@@ -75,13 +77,15 @@ export function parseChordPro(song: Song): ChordProGroup[] {
                     chords += ' ' + '_'.repeat(left.length) + ' ';
                 }
             }
-            if(!(tempText.length >= 2 && text.trim() === '' && tempText[tempText.length - 1].trim() === '' && tempText[tempText.length - 2].trim() === '')){
-            // if (tempText.length < 2 || !(text.trim() === '' && tempText[tempText.length - 1].trim() === '' && tempText[tempText.length - 2].trim() === '')) {
+            if (text.trim() !== '') {
+                // if (tempText.length < 2 || !(text.trim() === '' && tempText[tempText.length - 1].trim() === '' && tempText[tempText.length - 2].trim() === '')) {
                 tempText.push(text);
+                //console.log('push2 text');
             }
             currentChords = chords;
         } else if (splitLeft[0].includes(']')) {
             currentChordsArray.push(currentChords);
+            //console.log('push3 chords line');
             currentChords = '';
             if (tempText.filter(text => text && text.length > 0).length > 0) {
                 result.push(new ChordProGroup(currentChordsArray, tempText));
@@ -90,14 +94,16 @@ export function parseChordPro(song: Song): ChordProGroup[] {
                 currentChords = splitLeft[0];
             }
         } else {
-            if(!(tempText.length >= 2 && splitLeft[0].trim() === '' && tempText[tempText.length - 1].trim() === '' && tempText[tempText.length - 2].trim() === '')){
-            // if (tempText.length < 2 || !(text.trim() === '' && tempText[tempText.length - 1].trim() === '' && tempText[tempText.length - 2].trim() === '')) {
+            if (!(tempText.length >= 2 && splitLeft[0].trim() === '' && tempText[tempText.length - 1].trim() === '' && tempText[tempText.length - 2].trim() === '')) {
+                // if (tempText.length < 2 || !(text.trim() === '' && tempText[tempText.length - 1].trim() === '' && tempText[tempText.length - 2].trim() === '')) {
                 tempText.push(splitLeft[0]);
+                //console.log('push4 text');
             }
         }
     }
-    if(currentChords != ''){
+    if (currentChords != '') {
         currentChordsArray.push(currentChords);
+        //console.log('push5 chords line');
     }
     if (tempText.length > 0 || currentChords.length > 0) {
         result.push(new ChordProGroup(currentChordsArray, tempText));

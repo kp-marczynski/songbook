@@ -11,6 +11,14 @@
         <ion-label>Dark mode</ion-label>
         <ion-toggle [(ngModel)]="darkMode" (ngModelChange)="switchDarkMode()"></ion-toggle>
     </ion-item>
+    <ion-item>
+        <ion-label>Import songs</ion-label>
+        <ion-input type="file" (change)="fileChanged($event)"></ion-input>
+        <ion-button (click)="uploadDocument()">Load!</ion-button>
+    </ion-item>
+    <ion-item *ngIf="uploading">
+        <ion-progress-bar [value]="progress" buffer="0"></ion-progress-bar>
+    </ion-item>
 </ion-content>
 
 <ion-item slot="end" class="ion-text-center">

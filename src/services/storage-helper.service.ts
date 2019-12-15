@@ -23,7 +23,7 @@ export class StorageHelperService {
 
     private saveSongLocally(song: Song): Promise<any> {
         return new Promise<any>((resolve, reject) =>
-            this.storage.set(song.uuid, JSON.stringify(song))
+            this.storage.set(song.uuid, song)
                 .then(() => this.addSongToIndex(getSongBase(song)).then(() => resolve()))
         );
     }
@@ -35,7 +35,7 @@ export class StorageHelperService {
     private getLocalSong(uuid: string): Promise<Song> {
         return new Promise<Song>((resolve, reject) => {
             this.storage.get(uuid).then(res => {
-                resolve(JSON.parse(res));
+                resolve(res);
             });
         });
     }
@@ -45,7 +45,7 @@ export class StorageHelperService {
             this.storage.get('index').then(res => {
                 let index: any[] = [];
                 if (res) {
-                    index = JSON.parse(res) as any[];
+                    index = res as any[];
                 }
                 resolve(index);
             });
@@ -61,7 +61,7 @@ export class StorageHelperService {
                 } else {
                     index.push(newSong);
                 }
-                this.storage.set('index', JSON.stringify(index)).then(() => {
+                this.storage.set('index', index).then(() => {
                     this.songListUpdateSubject.next();
                     resolve()
                 });
@@ -79,7 +79,7 @@ export class StorageHelperService {
         return new Promise<any>((resolve, reject) => {
             this.getSongIndex().then(index => {
                 const updatedIndex = index.filter(elem => elem.uuid !== song.uuid);
-                this.storage.set('index', JSON.stringify(updatedIndex)).then(() => {
+                this.storage.set('index', updatedIndex).then(() => {
                     this.songListUpdateSubject.next();
                     resolve();
                 });
@@ -92,7 +92,7 @@ export class StorageHelperService {
             this.storage.get('queue').then(res => {
                 let queue: any[] = [];
                 if (res) {
-                    queue = JSON.parse(res) as any[];
+                    queue = res as any[];
                 }
                 resolve(queue);
             });
@@ -103,7 +103,7 @@ export class StorageHelperService {
         return new Promise<any>((resolve, reject) => {
             this.getQueue().then(queue => {
                 queue.push(getSongBase(song));
-                this.storage.set('queue', JSON.stringify(queue)).then(() => {
+                this.storage.set('queue', queue).then(() => {
                     this.queueUpdateSubject.next();
                     resolve();
                 });
@@ -115,7 +115,7 @@ export class StorageHelperService {
         return new Promise<any>((resolve, reject) => {
             this.getQueue().then(queue => {
                 queue = queue.filter(elem => elem.uuid !== song.uuid);
-                this.storage.set('queue', JSON.stringify(queue)).then(() => {
+                this.storage.set('queue', queue).then(() => {
                     this.queueUpdateSubject.next();
                     resolve();
                 });
