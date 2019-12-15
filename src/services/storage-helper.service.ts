@@ -55,6 +55,7 @@ export class StorageHelperService {
     private addSongToIndex(newSong): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.getSongIndex().then(index => {
+                index = index ? index : [];
                 const pos = index.findIndex(obj => obj.uuid === newSong.uuid);
                 if (pos >= 0) {
                     index[pos] = newSong;

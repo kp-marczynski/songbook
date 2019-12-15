@@ -28,8 +28,10 @@ export class SongListComponent implements OnInit {
         return new Promise<any>((resolve, reject) => {
             this.storageHelperService.getSongIndex().then(res => {
                     this.songIndex = res;
-                    this.sortSongList();
-                    this.loadData(null);
+                    if (this.songIndex) {
+                        this.sortSongList();
+                        this.loadData(null);
+                    }
                     resolve();
                 }
             );
@@ -70,7 +72,7 @@ export class SongListComponent implements OnInit {
             for (let i = displayedSongs; i < this.songIndex.length && i - displayedSongs < this.numberOfItems; ++i) {
                 this.displaySongs.push(this.songIndex[i]);
             }
-            if(event){
+            if (event) {
                 event.target.complete();
             }
 
