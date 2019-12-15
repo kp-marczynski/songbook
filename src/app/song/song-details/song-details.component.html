@@ -1,12 +1,12 @@
 <ion-header>
     <ion-toolbar>
         <ion-buttons slot="start">
-            <ion-back-button  [defaultHref]="previousUrl"></ion-back-button>
+            <ion-back-button [defaultHref]="previousUrl"></ion-back-button>
         </ion-buttons>
-        <ion-title *ngIf="song">
+        <ion-title>
             <!--                <ion-icon name="close" (click)="previousState()"></ion-icon>-->
             <!--      <br>-->
-            {{song.title}}
+            Song Details
         </ion-title>
     </ion-toolbar>
 </ion-header>
@@ -20,9 +20,9 @@
             <ion-fab-button color="danger" (click)="presentToast()" data-desc="Add to queue">
                 <ion-icon name="flame"></ion-icon>
             </ion-fab-button>
-<!--            <ion-fab-button data-desc="Play">-->
-<!--                <ion-icon name="play"></ion-icon>-->
-<!--            </ion-fab-button>-->
+            <!--            <ion-fab-button data-desc="Play">-->
+            <!--                <ion-icon name="play"></ion-icon>-->
+            <!--            </ion-fab-button>-->
             <ion-fab-button [routerLink]="['/tabs/song', song.uuid, 'edit']" data-desc="Edit">
                 <ion-icon name="create"></ion-icon>
             </ion-fab-button>
@@ -32,10 +32,18 @@
         </ion-fab-list>
     </ion-fab>
 
-    <ion-item>
-        <ion-label>Show chords</ion-label>
-        <ion-toggle [(ngModel)]="chordsVisible"></ion-toggle>
-    </ion-item>
+    <ion-list *ngIf="song">
+        <ion-item-divider sticky>
+            <ion-label class="ion-text-wrap">
+                <h1>{{song.title}}</h1>
+                <h3>{{song.author}}</h3>
+            </ion-label>
+        </ion-item-divider>
+        <ion-item>
+            <ion-label>Show chords</ion-label>
+            <ion-toggle [(ngModel)]="chordsVisible"></ion-toggle>
+        </ion-item>
+    </ion-list>
     <!--  <ion-toggle [(ngModel)]="simpleChords"></ion-toggle>-->
     <ion-list lines="none">
         <ion-item-group *ngFor="let group of formattedContent">
