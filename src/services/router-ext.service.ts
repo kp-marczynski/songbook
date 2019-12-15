@@ -10,10 +10,10 @@ export class RouterExtService {
 
     constructor(private router: Router) {
         this.currentUrl = this.router.url;
-        console.log(this.currentUrl);
+        // console.log(this.currentUrl);
         router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
-                console.log(this.currentUrl);
+                // console.log(this.currentUrl);
                 this.history.push(this.currentUrl);
                 this.currentUrl = event.url;
             }
@@ -22,7 +22,7 @@ export class RouterExtService {
 
     public getPreviousUrl() {
         const res = this.history.pop();
-        console.log(res);
+        // console.log(res);
         return res == this.router.url ? null : res;
     }
 }
