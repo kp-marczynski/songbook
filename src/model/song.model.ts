@@ -7,7 +7,7 @@ export class Song {
     title: string;
     author: string;
     language: string;
-    checksum: string;
+    // checksum: string;
     content: string;
 
     constructor(title: string, author: string, language: string, content: string, uuid?: string) {
@@ -16,7 +16,7 @@ export class Song {
         this.language = language;
         this.uuid = uuid ? uuid : uuidv4();
         this.content = content;
-        this.checksum = getChecksum(title, author, language, content);
+        // this.checksum = getChecksum(title, author, language, content);
     }
 }
 
@@ -26,7 +26,7 @@ export function getSongBase(song: Song) {
         title: song.title,
         author: song.author,
         language: song.language,
-        checksum: song.checksum
+        // checksum: song.checksum
     };
 }
 

@@ -16,7 +16,7 @@
         </ion-fab-button>
     </ion-fab>
     <ion-list #slidedList>
-        <ion-item-sliding *ngFor="let song of songIndex">
+        <ion-item-sliding *ngFor="let song of displaySongs">
             <ion-item [routerLink]="['/tabs/song', song.uuid, 'view']">
                 <ion-label class="ion-text-wrap">
                     <h2>{{song.title}}</h2>
@@ -38,4 +38,10 @@
             </ion-item-options>
         </ion-item-sliding>
     </ion-list>
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+        <ion-infinite-scroll-content
+                loadingSpinner="bubbles"
+                loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 </ion-content>

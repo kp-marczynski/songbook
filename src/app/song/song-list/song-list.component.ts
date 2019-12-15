@@ -11,6 +11,8 @@ import {Song} from "../../../model/song.model";
 export class SongListComponent implements OnInit {
 
     songIndex: any[] = [];
+    displaySongs: any[] = [];
+    numberOfItems = 20;
 
     constructor(private storageHelperService: StorageHelperService) {
     }
@@ -27,6 +29,7 @@ export class SongListComponent implements OnInit {
             this.storageHelperService.getSongIndex().then(res => {
                     this.songIndex = res;
                     this.sortSongList();
+                    this.loadData(null);
                     resolve();
                 }
             );
@@ -59,5 +62,21 @@ export class SongListComponent implements OnInit {
 
     addToQueue(song: any) {
         this.storageHelperService.addToQueue(song);
+    }
+
+    loadData(event) {
+        setTimeout(() => {
+            const displayedSongs = this.displaySongs.length;
+            for (let i = displayedSongs; i < this.songIndex.length && i - displayedSongs < this.numberOfItems; ++i) {
+                this.displaySongs.push(this.songIndex[i]);
+            }
+            if(event){
+                event.target.complete();
+            }
+
+            if (this.displaySongs.length == this.songIndex.length && event) {
+                event.target.disabled = true;
+            }
+        }, 500);
     }
 }

@@ -14,7 +14,7 @@
     <ion-item>
         <ion-label>Import songs</ion-label>
         <ion-input type="file" (change)="fileChanged($event)"></ion-input>
-        <ion-button (click)="uploadDocument()">Load!</ion-button>
+        <ion-button (click)="uploadDocument()" [disabled]="uploading">Load!</ion-button>
     </ion-item>
     <ion-item *ngIf="uploading">
         <ion-progress-bar [value]="progress" buffer="0"></ion-progress-bar>
