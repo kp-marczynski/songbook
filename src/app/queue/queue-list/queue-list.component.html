@@ -19,8 +19,8 @@
         <ion-item-sliding *ngFor="let song of songQueue">
             <ion-item [routerLink]="['/tabs/song', song.uuid, 'view']">
                 <ion-label class="ion-text-wrap">
-                    <h3>{{song.author}}</h3>
-                    <p>{{song.title}}</p>
+                    <h2>{{song.title}}</h2>
+                    <p>{{song.author}}</p>
                 </ion-label>
             </ion-item>
             <ion-item-options side="end">
@@ -31,3 +31,10 @@
         </ion-item-sliding>
     </ion-list>
 </ion-content>
+<ion-item-divider slot="end" style="margin-left: 0">
+    <ion-icon name="play-circle" size="large" slot="end" style="padding-left: 1.5rem; padding-right: 1.5rem;"></ion-icon>
+    <ion-label class="ion-text-wrap">
+        <h1>Zombie</h1>
+        <h3>Cranberries</h3>
+    </ion-label>
+</ion-item-divider>
