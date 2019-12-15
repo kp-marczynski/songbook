@@ -2,7 +2,7 @@ import {AfterContentInit, AfterViewChecked, AfterViewInit, Component, OnInit} fr
 import {FormBuilder, Validators} from '@angular/forms';
 import {ChordProGroup} from '../../../model/chord-pro-group.model';
 import {Song} from '../../../model/song.model';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {StorageHelperService} from '../../../services/storage-helper.service';
 import {RouterExtService} from "../../../services/router-ext.service";
 
@@ -28,7 +28,8 @@ export class SongEditComponent implements OnInit, AfterViewInit {
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private storageHelperService: StorageHelperService,
-        private routerExtService: RouterExtService) {
+        private routerExtService: RouterExtService,
+        private router: Router) {
     }
 
     ngOnInit() {
@@ -64,7 +65,7 @@ export class SongEditComponent implements OnInit, AfterViewInit {
         this.isSaving = true;
         const song = this.createFromForm();
         console.log(song);
-        this.storageHelperService.saveSong(song).then(() => this.previousState());
+        this.storageHelperService.saveSong(song).then(() => this.router.navigate([this.previousUrl]));
     }
 
     previousState() {
