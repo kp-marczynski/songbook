@@ -7,6 +7,7 @@ export class Song {
     title: string;
     author: string;
     language: string;
+    lastEdit: number;
     // checksum: string;
     content: string;
 
@@ -15,8 +16,9 @@ export class Song {
         this.author = author;
         this.language = language;
         this.uuid = uuid ? uuid : uuidv4();
-        this.content = content;
+        this.lastEdit = ~~(Date.now() / 1000); // time in seconds
         // this.checksum = getChecksum(title, author, language, content);
+        this.content = content;
     }
 }
 
@@ -26,6 +28,7 @@ export function getSongBase(song: Song) {
         title: song.title,
         author: song.author,
         language: song.language,
+        lastEdit: song.lastEdit
         // checksum: song.checksum
     };
 }
