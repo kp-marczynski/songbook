@@ -1,0 +1,38 @@
+{
+  "songs-index": [
+    {
+      "<<userID>>": {
+        "songs": [
+          {
+            "songUid": "",
+            "title": "",
+            "author": "",
+            "language": "",
+            "lastEdit": ""
+          }
+        ],
+        "removed": [
+          "<<songUid>>"
+        ]
+      }
+    }
+  ],
+  "songs-details": [
+    {
+      "<<userId>>": {
+        "<<songUid>>": "<<content>>"
+      }
+    }
+  ],
+  "campfire": [
+    {
+      "<<userId>>": {
+        "position": "",
+        "pass": "",
+        "queue": [
+          "<<songUid>>"
+        ]
+      }
+    }
+  ]
+}

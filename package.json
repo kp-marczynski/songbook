@@ -16,6 +16,7 @@
   "dependencies": {
     "@angular/common": "~8.1.2",
     "@angular/core": "~8.1.2",
+    "@angular/fire": "^5.2.3",
     "@angular/forms": "~8.1.2",
     "@angular/platform-browser": "~8.1.2",
     "@angular/platform-browser-dynamic": "~8.1.2",
@@ -30,6 +31,7 @@
     "cordova": "^9.0.0",
     "cordova-sqlite-storage": "^4.0.0",
     "core-js": "^2.5.4",
+    "firebase": "^7.6.0",
     "firebase-tools": "^7.10.0",
     "ionic": "^5.4.12",
     "md5": "^2.2.1",
