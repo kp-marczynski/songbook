@@ -1,10 +1,10 @@
-import {AfterViewChecked, AfterViewInit, Component, OnInit} from '@angular/core';
-import {StorageHelperService} from '../../../services/storage-helper.service';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {parseChordPro, Song} from '../../../model/song.model';
 import {ToastController} from '@ionic/angular';
-import {ChordProGroup} from '../../../model/chord-pro-group.model';
-import {RouterExtService} from "../../../services/router-ext.service";
+import {RouterExtService} from '../../../services/router-ext.service';
+import {Song} from '../../../model/song.model';
+import {SongDetailsService} from '../../../services/song-details.service';
+import {CampfireService} from '../../../services/campfire.service';
 
 @Component({
     selector: 'app-song-details',
@@ -14,13 +14,13 @@ import {RouterExtService} from "../../../services/router-ext.service";
 export class SongDetailsComponent implements OnInit, AfterViewInit {
 
     previousUrl = '';
-    song: Song;
-    formattedContent: ChordProGroup[];
+    song: Song = null;
     chordsVisible = true;
     simpleChords = true;
 
     constructor(
-        private storageHelperService: StorageHelperService,
+        private songDetailsService: SongDetailsService,
+        private campfireService: CampfireService,
         private route: ActivatedRoute,
         private toastController: ToastController,
         private router: Router,
@@ -29,31 +29,27 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
-            this.storageHelperService.getSong(params.get('uuid')).then(res => {
+            if (!params || !params.get('uuid')) {
+                this.previousState();
+            }
+            this.songDetailsService.getSong(params.get('uuid')).then(res => {
                 this.song = res;
-                if (this.song) {
-                    this.formattedContent = parseChordPro(this.song);
+                if (!this.song) {
+                    this.previousState();
                 }
             });
         });
     }
 
-    // ngAfterViewChecked(): void {
-    //     setTimeout(() => {
-    //             if (this.song) {
-    //                 this.storageHelperService.getSong(this.song.uuid).then(res => this.song = res);
-    //             }
-    //         }
-    //     )
-    //     ;
-    // }
     ngAfterViewInit(): void {
-        setTimeout(() =>
-            this.previousUrl = this.previousState());
+        setTimeout(() => {
+            const prevUrl = this.routerExtService.getPreviousUrl();
+            this.previousUrl = prevUrl ? prevUrl : '/tabs/song';
+        });
     }
 
     async presentToast() {
-        this.storageHelperService.addToQueue(this.song);
+        this.campfireService.addToQueue(this.song.songBase);
         const toast = await this.toastController.create({
             message: 'Song added to queue',
             duration: 2000
@@ -62,12 +58,11 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
     }
 
     remove() {
-        this.storageHelperService.removeSong(this.song);
+        this.songDetailsService.removeSong(this.song.songBase);
         this.router.navigate(['/tabs/song']);
     }
 
     previousState() {
-        const prevUrl = this.routerExtService.getPreviousUrl();
-        return prevUrl ? prevUrl : '/tabs/song';
+        this.router.navigate([this.previousUrl]);
     }
 }

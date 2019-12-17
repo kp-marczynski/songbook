@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {StorageHelperService} from "../../services/storage-helper.service";
-import {version, name, author} from '../../../package.json';
-import {Song} from "../../model/song.model";
+import {StorageHelperService} from '../../services/storage-helper.service';
+import {Song} from '../../model/song.model';
+import {SongDetailsService} from '../../services/song-details.service';
+import {SongBase} from '../../model/song-base.model';
 
 @Component({
     selector: 'app-settings',
@@ -10,16 +11,13 @@ import {Song} from "../../model/song.model";
 })
 export class SettingsComponent implements OnInit {
     darkMode = false;
-    version: string = version;
-    name: string = name;
-    author: string = author;
-    year = new Date().getFullYear();
+
     uploading = false;
     progress = 0;
 
     file: any;
 
-    constructor(private storageHelperService: StorageHelperService) {
+    constructor(private storageHelperService: StorageHelperService, private songDetailsService: SongDetailsService) {
     }
 
     ngOnInit() {
@@ -46,9 +44,7 @@ export class SettingsComponent implements OnInit {
     }
 
     parseResult(result: string) {
-        // console.log(result);
         let songs = result.split("{new_song}");
-        // console.log(songs);
         this.progress = 0;
         this.uploading = true;
         this.parseResultRecursive(songs, 0);
@@ -59,14 +55,18 @@ export class SettingsComponent implements OnInit {
         if (index < songs.length) {
             console.log((index + 1) + ' of ' + songs.length);
             const song = songs[index];
-            const title = song.match('{title:.+}');
+            let title = song.match('{title:.+}');
+            if (!title || !title[0]) {
+                title = song.match('{t:.+}');
+            }
             const author = song.match('{artist:.+}');
             const language = song.match('{language:.+}');
             if (title && author && language) {
-                this.storageHelperService.saveSong(new Song(
+                this.songDetailsService.saveSong(new Song(new SongBase(
+                    null,
                     title[0].substring(title[0].indexOf(':') + 2, title[0].indexOf('}')),
                     author[0].substring(author[0].indexOf(':') + 2, author[0].indexOf('}')),
-                    language[0].substring(language[0].indexOf(':') + 2, language[0].indexOf('}')),
+                    language[0].substring(language[0].indexOf(':') + 2, language[0].indexOf('}'))),
                     song)).then(() =>
                     this.parseResultRecursive(songs, index + 1));
             } else {

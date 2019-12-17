@@ -4,14 +4,12 @@
             <ion-back-button [defaultHref]="previousUrl"></ion-back-button>
         </ion-buttons>
         <ion-title>
-            <!--                <ion-icon name="close" (click)="previousState()"></ion-icon>-->
-            <!--      <br>-->
             Song Details
         </ion-title>
     </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="song">
+<ion-content *ngIf="song && song.songBase">
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button>
             <ion-icon name="arrow-dropup"></ion-icon>
@@ -20,10 +18,7 @@
             <ion-fab-button color="danger" (click)="presentToast()" data-desc="Add to queue">
                 <ion-icon name="flame"></ion-icon>
             </ion-fab-button>
-            <!--            <ion-fab-button data-desc="Play">-->
-            <!--                <ion-icon name="play"></ion-icon>-->
-            <!--            </ion-fab-button>-->
-            <ion-fab-button [routerLink]="['/tabs/song', song.uuid, 'edit']" data-desc="Edit">
+            <ion-fab-button [routerLink]="['/tabs/song', song.songBase.uuid, 'edit']" data-desc="Edit">
                 <ion-icon name="create"></ion-icon>
             </ion-fab-button>
             <ion-fab-button color="danger" (click)="remove()" data-desc="Delete">
@@ -32,11 +27,11 @@
         </ion-fab-list>
     </ion-fab>
 
-    <ion-list *ngIf="song">
+    <ion-list *ngIf="song && song.songBase">
         <ion-item-divider sticky>
             <ion-label class="ion-text-wrap">
-                <h1>{{song.title}}</h1>
-                <h3>{{song.author}}</h3>
+                <h1>{{song.songBase.title}}</h1>
+                <h3>{{song.songBase.author}}</h3>
             </ion-label>
         </ion-item-divider>
         <ion-item>
@@ -44,21 +39,16 @@
             <ion-toggle [(ngModel)]="chordsVisible"></ion-toggle>
         </ion-item>
     </ion-list>
-    <!--  <ion-toggle [(ngModel)]="simpleChords"></ion-toggle>-->
     <ion-list lines="none">
-        <ion-item-group *ngFor="let group of formattedContent">
+        <ion-item-group *ngFor="let group of song.formattedContent">
             <ion-item-divider sticky *ngIf="chordsVisible && group.simpleChords.length > 0">
-                <!--        <ion-label>-->
                 <ion-label class="ion-text-wrap chords" color="danger">
                     <p *ngFor="let chords of group.chords; let i=index">{{simpleChords ? group.simpleChords[i] : group.chords[i]}}</p>
                 </ion-label>
 
-                <!--        </ion-label>-->
             </ion-item-divider>
             <ion-item *ngFor="let textLine of group.textLines" class="lyrics-item">
-                <!--                <ion-label class="ion-text-wrap">-->
                 {{textLine}}
-                <!--                </ion-label>-->
             </ion-item>
         </ion-item-group>
     </ion-list>

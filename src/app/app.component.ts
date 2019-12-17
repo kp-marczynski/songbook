@@ -3,9 +3,12 @@ import {Component} from '@angular/core';
 import {Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
-import {StorageHelperService} from "../services/storage-helper.service";
-import {Song} from "../model/song.model";
-import {TabsService} from "../services/tabs.service";
+import {StorageHelperService} from '../services/storage-helper.service';
+import {TabsService} from '../services/tabs.service';
+import {SongIndexService} from '../services/song-index.service';
+import {SongDetailsService} from '../services/song-details.service';
+import {Song} from '../model/song.model';
+import {SongBase} from '../model/song-base.model';
 
 @Component({
     selector: 'app-root',
@@ -18,6 +21,8 @@ export class AppComponent {
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
         private storageHelperService: StorageHelperService,
+        private songIndexService: SongIndexService,
+        private songDetailsService: SongDetailsService,
         public tabs: TabsService
     ) {
         this.initializeApp();
@@ -84,11 +89,11 @@ export class AppComponent {
             "\n" +
             "[EEbdim]  [Bb/D]   [Dbmaj13]   [C]   [Dbdim]   [C]    [F]  \n" +
             "[Bb]Any way[F] the wi[Fdim]nd blo[C7sus4]ws";
-        const song = new Song("Bohemian Rhapsody", "Queen", "en", songText);
+        const song = new Song(new SongBase(null, "Bohemian Rhapsody", "Queen", "en"), songText);
 
-        this.storageHelperService.getSongIndex().then(res => {
+        this.songIndexService.getSongIndex().then(res => {
             if (!res || res.length == 0) {
-                this.storageHelperService.saveSong(song);
+                this.songDetailsService.saveSong(song);
             }
         })
     }

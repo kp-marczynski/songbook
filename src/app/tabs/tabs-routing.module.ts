@@ -1,59 +1,59 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {TabsComponent} from './tabs.component';
 
-
 const routes: Routes = [
-  {
-    path: 'tabs',
-    component: TabsComponent,
-    children: [
-      {
-        path: 'queue',
+    {
+        path: 'tabs',
+        component: TabsComponent,
         children: [
-          {
-            path: '',
-            loadChildren: () =>
-                import('../queue/queue.module').then(m => m.QueueModule)
-          }
+            {
+                path: 'campfire',
+                children: [
+                    {
+                        path: '',
+                        loadChildren: () =>
+                            import('../campfire/campfire.module').then(m => m.CampfireModule)
+                    }
+                ]
+            },
+            {
+                path: 'song',
+                children: [
+                    {
+                        path: '',
+                        loadChildren: () =>
+                            import('../song/song.module').then(m => m.SongModule)
+                    }
+                ]
+            },
+            {
+                path: 'settings',
+                children: [
+                    {
+                        path: '',
+                        loadChildren: () =>
+                            import('../settings/settings.module').then(m => m.SettingsModule)
+                    }
+                ]
+            },
+            {
+                path: '',
+                redirectTo: '/tabs/song',
+                pathMatch: 'full'
+            }
         ]
-      },
-      {
-        path: 'song',
-        children: [
-          {
-            path: '',
-            loadChildren: () =>
-                import('../song/song.module').then(m => m.SongModule)
-          }
-        ]
-      },
-      {
-        path: 'settings',
-        children: [
-          {
-            path: '',
-            loadChildren: () =>
-                import('../settings/settings.module').then(m => m.SettingsModule)
-          }
-        ]
-      },
-      {
+    },
+    {
         path: '',
         redirectTo: '/tabs/song',
         pathMatch: 'full'
-      }
-    ]
-  },
-  {
-    path: '',
-    redirectTo: '/tabs/song',
-    pathMatch: 'full'
-  }
+    }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
-export class TabsRoutingModule { }
+export class TabsRoutingModule {
+}

@@ -1,7 +1,8 @@
-import {AfterViewChecked, AfterViewInit, Component, OnInit} from '@angular/core';
-import {StorageHelperService} from '../../../services/storage-helper.service';
-import {HostListener} from '@angular/core';
-import {Song} from "../../../model/song.model";
+import {Component, OnInit} from '@angular/core';
+import {SongBase} from '../../../model/song-base.model';
+import {SongIndexService} from '../../../services/song-index.service';
+import {CampfireService} from '../../../services/campfire.service';
+import {SongDetailsService} from '../../../services/song-details.service';
 
 @Component({
     selector: 'app-song-list',
@@ -10,25 +11,29 @@ import {Song} from "../../../model/song.model";
 })
 export class SongListComponent implements OnInit {
 
-    songIndex: any[] = [];
-    displaySongs: any[] = [];
+    songIndex: SongBase[] = [];
+    displaySongs: SongBase[] = [];
+    filteredSongs: SongBase[] = [];
+
     numberOfItems = 20;
-    filteredSongs: any[] = [];
     search = '';
 
-    constructor(private storageHelperService: StorageHelperService) {
+    constructor(
+        private songIndexService: SongIndexService,
+        private songDetailsService: SongDetailsService,
+        private campfireService: CampfireService) {
     }
 
     ngOnInit(): void {
         this.loadSongs();
-        this.storageHelperService.songListUpdate$.subscribe(() => {
+        this.songIndexService.songListUpdate$.subscribe(() => {
             this.loadSongs();
         });
     }
 
     loadSongs(): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            this.storageHelperService.getSongIndex().then(res => {
+            this.songIndexService.getSongIndex().then(res => {
                     this.songIndex = res;
                     if (this.songIndex) {
                         this.sortSongList();
@@ -56,17 +61,12 @@ export class SongListComponent implements OnInit {
         this.loadSongs().then(() => event.target.complete());
     }
 
-    // @HostListener('window:popstate', ['$event'])
-    // onPopState(event) {
-    //     this.loadSongs();
-    // }
-
-    remove(song: any) {
-        this.storageHelperService.removeSong(song);
+    remove(song: SongBase) {
+        this.songDetailsService.removeSong(song);
     }
 
-    addToQueue(song: any) {
-        this.storageHelperService.addToQueue(song);
+    addToQueue(song: SongBase) {
+        this.campfireService.addToQueue(song);
     }
 
     loadDisplayData(event) {
@@ -86,7 +86,6 @@ export class SongListComponent implements OnInit {
     }
 
     searchSongs(value: string) {
-        // console.log(value);
         this.search = value;
         if (value && value.trim().length > 0) {
             this.filteredSongs = [...this.songIndex.filter(elem =>

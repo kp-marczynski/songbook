@@ -1,20 +1,20 @@
 <ion-tabs>
 
-  <ion-tab-bar slot="bottom" *ngIf="showTabs">
-    <ion-tab-button tab="song" [selected]="isSelected('song')" (click)="changeTab('song')">
-      <ion-icon name="musical-notes"></ion-icon>
-      <ion-label>Songs</ion-label>
-    </ion-tab-button>
+    <ion-tab-bar slot="bottom" *ngIf="showTabs">
+        <ion-tab-button tab="song" [selected]="isSelected('song')" (click)="changeTab('song')">
+            <ion-icon name="musical-notes"></ion-icon>
+            <ion-label>Songs</ion-label>
+        </ion-tab-button>
 
-    <ion-tab-button tab="queue" [selected]="isSelected('queue')" (click)="changeTab('queue')">
-      <ion-icon name="flame"></ion-icon>
-      <ion-label>Campfire</ion-label>
-    </ion-tab-button>
+        <ion-tab-button tab="campfire" [selected]="isSelected('campfire')" (click)="changeTab('campfire')">
+            <ion-icon name="flame"></ion-icon>
+            <ion-label>Campfire</ion-label>
+        </ion-tab-button>
 
-    <ion-tab-button tab="settings" [selected]="isSelected('settings')" (click)="changeTab('settings')">
-      <ion-icon name="settings"></ion-icon>
-      <ion-label>Settings</ion-label>
-    </ion-tab-button>
-  </ion-tab-bar>
+        <ion-tab-button tab="settings" [selected]="isSelected('settings')" (click)="changeTab('settings')">
+            <ion-icon name="settings"></ion-icon>
+            <ion-label>Settings</ion-label>
+        </ion-tab-button>
+    </ion-tab-bar>
 
 </ion-tabs>

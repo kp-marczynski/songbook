@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {TabsService} from "../../services/tabs.service";
-import {RouterExtService} from "../../services/router-ext.service";
+import {Router} from '@angular/router';
+import {TabsService} from '../../services/tabs.service';
+import {RouterExtService} from '../../services/router-ext.service';
 
 @Component({
     selector: 'app-tabs',
@@ -23,12 +23,6 @@ export class TabsComponent implements OnInit {
         return this.router.url.includes(tab);
     }
 
-    // handleTabChange($event: { tab: string }) {
-    //   let res = this.router.url.match('/tabs/[a-z]+/');
-    //   if(res){
-    //     this.router.navigate([res[0]]);
-    //   }
-    // }
     changeTab(tab: string) {
         this.router.navigate(['/tabs', tab]);
     }

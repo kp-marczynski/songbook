@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {filter} from 'rxjs/operators';
 import {NavigationEnd, Router} from '@angular/router';
 import {Platform} from '@ionic/angular';
-import {Subject} from "rxjs";
+import {Subject} from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
