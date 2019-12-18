@@ -79,7 +79,7 @@ export class SongListComponent implements OnInit {
                 event.target.complete();
             }
 
-            if (this.displaySongs.length == this.filteredSongs.length && event) {
+            if (this.displaySongs.length === this.filteredSongs.length && event) {
                 event.target.disabled = true;
             }
         }, 500);

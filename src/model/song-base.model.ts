@@ -12,6 +12,6 @@ export class SongBase {
         this.author = author;
         this.language = language;
         this.uuid = uuid ? uuid : uuidv4();
-        this.lastEdit = ~~(Date.now() / 1000); // time in seconds
+        this.lastEdit = Date.now();
     }
 }

@@ -23,6 +23,6 @@ export class RouterExtService {
     public getPreviousUrl() {
         const res = this.history.pop();
         // console.log(res);
-        return res == this.router.url ? null : res;
+        return res === this.router.url ? null : res;
     }
 }

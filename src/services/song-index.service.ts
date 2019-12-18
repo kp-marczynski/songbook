@@ -49,7 +49,7 @@ export class SongIndexService {
                 this.songIndex = index;
                 this.storage.set('index', index).then(() => {
                     this.songListUpdateSubject.next();
-                    resolve()
+                    resolve();
                 });
             });
         });

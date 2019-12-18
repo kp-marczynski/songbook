@@ -9,6 +9,6 @@ export class ChordProGroup {
         this.simpleChords = [];
         chords.forEach(chordLine => {
             this.simpleChords.push(chordLine.replace(new RegExp('_', 'g'), ''));
-        })
+        });
     }
 }
