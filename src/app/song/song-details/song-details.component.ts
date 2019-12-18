@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToastController} from '@ionic/angular';
 import {RouterExtService} from '../../../services/router-ext.service';
-import {Song} from '../../../model/song.model';
+import {ISong} from '../../../model/song.model';
 import {SongDetailsService} from '../../../services/song-details.service';
 import {CampfireService} from '../../../services/campfire.service';
 
@@ -14,7 +14,7 @@ import {CampfireService} from '../../../services/campfire.service';
 export class SongDetailsComponent implements OnInit, AfterViewInit {
 
     previousUrl = '';
-    song: Song = null;
+    song: ISong = null;
     chordsVisible = true;
     simpleChords = true;
 

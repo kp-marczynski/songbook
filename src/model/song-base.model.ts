@@ -1,13 +1,17 @@
 import * as uuidv4 from 'uuid/v4';
 
-export class SongBase {
+export interface ISongBase {
     uuid: string;
     title: string;
     author: string;
     language: string;
     lastEdit: number;
+}
 
-    constructor(uuid: string, title: string, author: string, language: string) {
+export class SongBase implements ISongBase {
+    lastEdit: number;
+
+    constructor(public uuid: string, public title: string, public author: string, public language: string) {
         this.title = title;
         this.author = author;
         this.language = language;

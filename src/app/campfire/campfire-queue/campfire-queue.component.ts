@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CampfireService} from '../../../services/campfire.service';
-import {SongBase} from '../../../model/song-base.model';
+import {ISongBase} from '../../../model/song-base.model';
 
 @Component({
     selector: 'app-campfire-queue',
@@ -9,7 +9,7 @@ import {SongBase} from '../../../model/song-base.model';
 })
 export class CampfireQueueComponent implements OnInit {
 
-    songQueue: SongBase[];
+    songQueue: ISongBase[];
 
     constructor(private campfireService: CampfireService) {
     }
@@ -35,7 +35,7 @@ export class CampfireQueueComponent implements OnInit {
         this.loadSongs().then(() => event.target.complete());
     }
 
-    remove(song: any) {
+    remove(song: ISongBase) {
         this.campfireService.removeFromQueue(song);
     }
 }

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {SongBase} from '../../../model/song-base.model';
+import {ISongBase} from '../../../model/song-base.model';
 import {SongIndexService} from '../../../services/song-index.service';
 import {CampfireService} from '../../../services/campfire.service';
 import {SongDetailsService} from '../../../services/song-details.service';
@@ -11,9 +11,9 @@ import {SongDetailsService} from '../../../services/song-details.service';
 })
 export class SongListComponent implements OnInit {
 
-    songIndex: SongBase[] = [];
-    displaySongs: SongBase[] = [];
-    filteredSongs: SongBase[] = [];
+    songIndex: ISongBase[] = [];
+    displaySongs: ISongBase[] = [];
+    filteredSongs: ISongBase[] = [];
 
     numberOfItems = 20;
     search = '';
@@ -61,11 +61,11 @@ export class SongListComponent implements OnInit {
         this.loadSongs().then(() => event.target.complete());
     }
 
-    remove(song: SongBase) {
+    remove(song: ISongBase) {
         this.songDetailsService.removeSong(song);
     }
 
-    addToQueue(song: SongBase) {
+    addToQueue(song: ISongBase) {
         this.campfireService.addToQueue(song);
     }
 

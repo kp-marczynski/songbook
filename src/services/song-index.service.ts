@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {SongBase} from '../model/song-base.model';
+import {ISongBase, SongBase} from '../model/song-base.model';
 import {Storage} from '@ionic/storage';
 import {Subject} from 'rxjs';
 
@@ -7,7 +7,7 @@ import {Subject} from 'rxjs';
     providedIn: 'root'
 })
 export class SongIndexService {
-    public songIndex: SongBase[] = [];
+    public songIndex: ISongBase[] = [];
     private songListUpdateSubject = new Subject();
     public songListUpdate$ = this.songListUpdateSubject.asObservable();
 
@@ -16,14 +16,14 @@ export class SongIndexService {
 
     getSongIndex(): Promise<SongBase[]> {
         return new Promise<SongBase[]>((resolve, reject) => {
-            this.storage.get('index').then((res: SongBase[]) => {
+            this.storage.get('index').then((res: ISongBase[]) => {
                 this.songIndex = res ? res : [];
                 resolve(res ? res : []);
             });
         });
     }
 
-    public removeSongFromIndex(song: SongBase): Promise<any> {
+    public removeSongFromIndex(song: ISongBase): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.getSongIndex().then(index => {
                 const updatedIndex = index.filter(elem => elem.uuid !== song.uuid);
@@ -36,7 +36,7 @@ export class SongIndexService {
         });
     }
 
-    public addSongToIndex(newSong: SongBase): Promise<any> {
+    public addSongToIndex(newSong: ISongBase): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.getSongIndex().then(index => {
                 index = index ? index : [];

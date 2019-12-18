@@ -2,14 +2,14 @@ import {Injectable, NgZone} from '@angular/core';
 import {auth} from 'firebase/app';
 import {Router} from '@angular/router';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {User} from '../model/user.model';
+import {IUser} from '../model/user.model';
 
 @Injectable({
     providedIn: 'root'
 })
 
 export class AuthService {
-    user: User;
+    user: IUser;
 
     constructor(
         public router: Router,

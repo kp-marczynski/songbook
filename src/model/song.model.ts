@@ -1,12 +1,16 @@
-import {SongBase} from './song-base.model';
-import {ChordProGroup} from './chord-pro-group.model';
+import {ISongBase} from './song-base.model';
+import {IChordProGroup} from './chord-pro-group.model';
 
-export class Song {
-    songBase: SongBase;
+export interface ISong {
+    songBase: ISongBase;
     content: string;
-    formattedContent: ChordProGroup[];
+    formattedContent: IChordProGroup[];
+}
 
-    constructor(songBase: SongBase, content?: string) {
+export class Song implements ISong {
+    formattedContent: IChordProGroup[];
+
+    constructor(public songBase: ISongBase, public content: string) {
         this.songBase = songBase;
         this.content = content;
     }

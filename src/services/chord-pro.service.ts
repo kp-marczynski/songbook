@@ -1,23 +1,22 @@
 import {Injectable} from '@angular/core';
-import {Song} from '../model/song.model';
-import {SongBase} from '../model/song-base.model';
-import {SongDetailsService} from './song-details.service';
 import {ChordProGroup} from '../model/chord-pro-group.model';
+import {ISong, Song} from '../model/song.model';
+import {SongBase} from '../model/song-base.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ChordProService {
 
-    constructor(private songDetailsService: SongDetailsService) {
+    constructor() {
     }
 
-    public saveSongsFromChordProFile(chordProFileContent: string, callback: (progress: number) => void) {
+    public parseSongsFromChordProFile(chordProFileContent: string, callback: (progress: number) => void): ISong[] {
         const chordProSongs = chordProFileContent.split('{new_song}');
-        this.saveSongsFromChordProFileRecursive(chordProSongs, 0, callback);
+        return this.parseSongsFromChordProFileRecursive(chordProSongs, 0, callback);
     }
 
-    private saveSongsFromChordProFileRecursive(chordProSongs: string[], index, callback: (progress: number) => void) {
+    private parseSongsFromChordProFileRecursive(chordProSongs: string[], index, callback: (progress: number) => void): ISong[] {
         callback(index / chordProSongs.length);
         if (index < chordProSongs.length) {
             console.log((index + 1) + ' of ' + chordProSongs.length);
@@ -28,17 +27,18 @@ export class ChordProService {
             }
             const author = song.match('{artist:.+}');
             const language = song.match('{language:.+}');
+            const result = this.parseSongsFromChordProFileRecursive(chordProSongs, index + 1, callback);
             if (title && author && language) {
-                this.songDetailsService.saveSong(new Song(new SongBase(
+                result.push(new Song(new SongBase(
                     null,
                     title[0].substring(title[0].indexOf(':') + 2, title[0].indexOf('}')),
                     author[0].substring(author[0].indexOf(':') + 2, author[0].indexOf('}')),
                     language[0].substring(language[0].indexOf(':') + 2, language[0].indexOf('}'))),
-                    song)).then(() =>
-                    this.saveSongsFromChordProFileRecursive(chordProSongs, index + 1, callback));
-            } else {
-                this.saveSongsFromChordProFileRecursive(chordProSongs, index + 1, callback);
+                    song));
             }
+            return result;
+        } else {
+            return [] as ISong[];
         }
     }
 

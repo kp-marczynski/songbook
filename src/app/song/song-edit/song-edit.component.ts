@@ -3,7 +3,7 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterExtService} from '../../../services/router-ext.service';
 import {SongDetailsService} from '../../../services/song-details.service';
-import {Song} from '../../../model/song.model';
+import {ISong, Song} from '../../../model/song.model';
 import {SongBase} from '../../../model/song-base.model';
 
 @Component({
@@ -49,7 +49,7 @@ export class SongEditComponent implements OnInit, AfterViewInit {
         });
     }
 
-    updateForm(song: Song) {
+    updateForm(song: ISong) {
         this.editForm.patchValue({
             uuid: song.songBase.uuid,
             title: song.songBase.title,
@@ -59,7 +59,7 @@ export class SongEditComponent implements OnInit, AfterViewInit {
         });
     }
 
-    private createFromForm(): Song {
+    private createFromForm(): ISong {
         return new Song(new SongBase(
             this.editForm.get(['uuid']).value,
             this.editForm.get(['title']).value,
@@ -71,7 +71,7 @@ export class SongEditComponent implements OnInit, AfterViewInit {
     save() {
         this.isSaving = true;
         const song = this.createFromForm();
-        console.log(song);
+        // console.log(song);
         this.songDetailsService.saveSong(song).then(() => this.previousState());
     }
 

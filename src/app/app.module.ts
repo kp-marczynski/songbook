@@ -15,6 +15,7 @@ import {TabsService} from '../services/tabs.service';
 import {RouterExtService} from '../services/router-ext.service';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireAuthModule} from '@angular/fire/auth';
+import {AngularFirestoreModule} from '@angular/fire/firestore';
 
 @NgModule({
     declarations: [AppComponent],
@@ -28,6 +29,7 @@ import {AngularFireAuthModule} from '@angular/fire/auth';
         IonicStorageModule.forRoot(),
         ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
         AngularFireAuthModule,
+        AngularFirestoreModule,
         AngularFireModule.initializeApp(environment.firebaseConfig)],
     providers: [
         StatusBar,

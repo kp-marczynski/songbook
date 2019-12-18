@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {SongBase} from '../model/song-base.model';
+import {ISongBase} from '../model/song-base.model';
 import {Subject} from 'rxjs';
 import {Storage} from '@ionic/storage';
 
@@ -13,7 +13,7 @@ export class CampfireService {
     constructor(private storage: Storage) {
     }
 
-    addToQueue(song: SongBase): Promise<any> {
+    addToQueue(song: ISongBase): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.getQueue().then(queue => {
                 queue.push(song);
@@ -25,7 +25,7 @@ export class CampfireService {
         });
     }
 
-    getQueue(): Promise<SongBase[]> {
+    getQueue(): Promise<ISongBase[]> {
         return new Promise<any[]>((resolve, reject) => {
             this.storage.get('queue').then(res => {
                 let queue: any[] = [];
@@ -37,7 +37,7 @@ export class CampfireService {
         });
     }
 
-    removeFromQueue(song: SongBase): Promise<any> {
+    removeFromQueue(song: ISongBase): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.getQueue().then(queue => {
                 queue = queue.filter(elem => elem.uuid !== song.uuid);
