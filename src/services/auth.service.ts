@@ -14,16 +14,15 @@ export class AuthService {
     constructor(
         public router: Router,
         public ngZone: NgZone,
-        public afAuth: AngularFireAuth,
-        private angularFireAuth: AngularFireAuth
+        public angularFireAuth: AngularFireAuth
     ) {
-        this.afAuth.authState.subscribe(user => {
+        this.angularFireAuth.authState.subscribe(user => {
             this.user = user;
         });
     }
 
     private oAuthProvider(provider) {
-        return this.afAuth.auth.signInWithRedirect(provider)
+        return this.angularFireAuth.auth.signInWithRedirect(provider)
             .then((res) => {
                 this.ngZone.run(() => {
                     // this.router.navigate(['/']);
@@ -43,7 +42,7 @@ export class AuthService {
     }
 
     signOut() {
-        return this.afAuth.auth.signOut().then(() => {
+        return this.angularFireAuth.auth.signOut().then(() => {
             // this.router.navigate(['login']);
         });
     }
