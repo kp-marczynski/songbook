@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ChordProGroup} from '../model/chord-pro-group.model';
 import {ISong, Song} from '../model/song.model';
-import {SongBase} from '../model/song-base.model';
 
 @Injectable({
     providedIn: 'root'
@@ -29,11 +28,11 @@ export class ChordProService {
             const language = song.match('{language:.+}');
             const result = this.parseSongsFromChordProFileRecursive(chordProSongs, index + 1, callback);
             if (title && author && language) {
-                result.push(new Song(new SongBase(
+                result.push(new Song(
                     null,
                     title[0].substring(title[0].indexOf(':') + 2, title[0].indexOf('}')),
                     author[0].substring(author[0].indexOf(':') + 2, author[0].indexOf('}')),
-                    language[0].substring(language[0].indexOf(':') + 2, language[0].indexOf('}'))),
+                    language[0].substring(language[0].indexOf(':') + 2, language[0].indexOf('}')),
                     song));
             }
             return result;

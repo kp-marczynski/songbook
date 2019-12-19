@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {StorageHelperService} from '../../services/storage-helper.service';
 import {ChordProService} from '../../services/chord-pro.service';
-import {SongDetailsService} from '../../services/song-details.service';
+import {SongService} from '../../services/song.service';
 
 @Component({
     selector: 'app-settings',
@@ -19,7 +19,7 @@ export class SettingsComponent implements OnInit {
     constructor(
         private storageHelperService: StorageHelperService,
         private chordProService: ChordProService,
-        private songDetailsService: SongDetailsService) {
+        private songService: SongService) {
     }
 
     ngOnInit() {
@@ -43,6 +43,11 @@ export class SettingsComponent implements OnInit {
         fileReader.onload = (e) => {
             const songs = this.chordProService.parseSongsFromChordProFile(fileReader.result as string,
                 (progress: number) => this.setParsingProgress(progress));
+            this.uploading = false;
+            console.log(songs);
+            songs.forEach(song => {
+                this.songService.saveSong(song);
+            });
             // todo bulk save
         };
         fileReader.readAsText(this.file);

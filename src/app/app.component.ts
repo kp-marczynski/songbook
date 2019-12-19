@@ -5,10 +5,8 @@ import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {StorageHelperService} from '../services/storage-helper.service';
 import {TabsService} from '../services/tabs.service';
-import {SongIndexService} from '../services/song-index.service';
-import {SongDetailsService} from '../services/song-details.service';
+import {SongService} from '../services/song.service';
 import {Song} from '../model/song.model';
-import {SongBase} from '../model/song-base.model';
 
 @Component({
     selector: 'app-root',
@@ -21,8 +19,7 @@ export class AppComponent {
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
         private storageHelperService: StorageHelperService,
-        private songIndexService: SongIndexService,
-        private songDetailsService: SongDetailsService,
+        private songService: SongService,
         public tabs: TabsService
     ) {
         this.initializeApp();
@@ -36,7 +33,7 @@ export class AppComponent {
         if (!document.body.classList.contains('dark')) {
             this.storageHelperService.getDarkMode().then((res: boolean) => {
                 document.body.classList.toggle('dark', res);
-            })
+            });
         }
         this.addSampleData();
     }
@@ -89,12 +86,12 @@ export class AppComponent {
             "\n" +
             "[EEbdim]  [Bb/D]   [Dbmaj13]   [C]   [Dbdim]   [C]    [F]  \n" +
             "[Bb]Any way[F] the wi[Fdim]nd blo[C7sus4]ws";
-        const song = new Song(new SongBase(null, "Bohemian Rhapsody", "Queen", "en"), songText);
+        const song = new Song(null, "Bohemian Rhapsody", "Queen", "en", songText);
 
-        this.songIndexService.getSongIndex().then(res => {
-            if (!res || res.length == 0) {
-                this.songDetailsService.saveSong(song);
+        this.songService.getSongIndex().then(res => {
+            if (!res || res.length === 0) {
+                this.songService.saveSong(song);
             }
-        })
+        });
     }
 }

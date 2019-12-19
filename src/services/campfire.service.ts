@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
-import {ISongBase} from '../model/song-base.model';
 import {Subject} from 'rxjs';
 import {Storage} from '@ionic/storage';
+import {ISong} from '../model/song.model';
+import {StorageKeys} from '../model/storage-keys.model';
 
 @Injectable({
     providedIn: 'root'
@@ -13,11 +14,11 @@ export class CampfireService {
     constructor(private storage: Storage) {
     }
 
-    addToQueue(song: ISongBase): Promise<any> {
+    addToQueue(song: ISong): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.getQueue().then(queue => {
                 queue.push(song);
-                this.storage.set('queue', queue).then(() => {
+                this.storage.set(StorageKeys.QUEUE, queue).then(() => {
                     this.queueUpdateSubject.next();
                     resolve();
                 });
@@ -25,9 +26,9 @@ export class CampfireService {
         });
     }
 
-    getQueue(): Promise<ISongBase[]> {
+    getQueue(): Promise<ISong[]> {
         return new Promise<any[]>((resolve, reject) => {
-            this.storage.get('queue').then(res => {
+            this.storage.get(StorageKeys.QUEUE).then(res => {
                 let queue: any[] = [];
                 if (res) {
                     queue = res as any[];
@@ -37,11 +38,11 @@ export class CampfireService {
         });
     }
 
-    removeFromQueue(song: ISongBase): Promise<any> {
+    removeFromQueue(song: ISong): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.getQueue().then(queue => {
                 queue = queue.filter(elem => elem.uuid !== song.uuid);
-                this.storage.set('queue', queue).then(() => {
+                this.storage.set(StorageKeys.QUEUE, queue).then(() => {
                     this.queueUpdateSubject.next();
                     resolve();
                 });

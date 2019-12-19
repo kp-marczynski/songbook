@@ -3,8 +3,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ToastController} from '@ionic/angular';
 import {RouterExtService} from '../../../services/router-ext.service';
 import {ISong} from '../../../model/song.model';
-import {SongDetailsService} from '../../../services/song-details.service';
+import {SongService} from '../../../services/song.service';
 import {CampfireService} from '../../../services/campfire.service';
+import {IChordProGroup} from '../../../model/chord-pro-group.model';
+import {ChordProService} from '../../../services/chord-pro.service';
 
 @Component({
     selector: 'app-song-details',
@@ -15,12 +17,14 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
 
     previousUrl = '';
     song: ISong = null;
+    formattedContent: IChordProGroup[];
     chordsVisible = true;
     simpleChords = true;
 
     constructor(
-        private songDetailsService: SongDetailsService,
+        private songService: SongService,
         private campfireService: CampfireService,
+        private chordProService: ChordProService,
         private route: ActivatedRoute,
         private toastController: ToastController,
         private router: Router,
@@ -32,10 +36,13 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
             if (!params || !params.get('uuid')) {
                 this.previousState();
             }
-            this.songDetailsService.getSong(params.get('uuid')).then(res => {
+            this.songService.getSong(params.get('uuid')).then(res => {
                 this.song = res;
                 if (!this.song) {
                     this.previousState();
+                } else {
+                    console.log(this.song);
+                    this.formattedContent = this.chordProService.parseChordPro(this.song.content);
                 }
             });
         });
@@ -49,7 +56,7 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
     }
 
     async presentToast() {
-        this.campfireService.addToQueue(this.song.songBase);
+        this.campfireService.addToQueue(this.song);
         const toast = await this.toastController.create({
             message: 'Song added to queue',
             duration: 2000
@@ -58,7 +65,7 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
     }
 
     remove() {
-        this.songDetailsService.removeSong(this.song.songBase);
+        this.songService.removeSong(this.song);
         this.router.navigate(['/tabs/song']);
     }
 

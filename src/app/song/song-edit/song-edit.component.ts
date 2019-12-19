@@ -2,9 +2,8 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterExtService} from '../../../services/router-ext.service';
-import {SongDetailsService} from '../../../services/song-details.service';
+import {SongService} from '../../../services/song.service';
 import {ISong, Song} from '../../../model/song.model';
-import {SongBase} from '../../../model/song-base.model';
 
 @Component({
     selector: 'app-song-edit',
@@ -27,14 +26,14 @@ export class SongEditComponent implements OnInit, AfterViewInit {
     constructor(
         private fb: FormBuilder,
         private route: ActivatedRoute,
-        private songDetailsService: SongDetailsService,
+        private songService: SongService,
         private routerExtService: RouterExtService,
         private router: Router) {
     }
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
-            this.songDetailsService.getSong(params.get('uuid')).then(res => {
+            this.songService.getSong(params.get('uuid')).then(res => {
                 if (res) {
                     this.updateForm(res);
                 }
@@ -51,20 +50,20 @@ export class SongEditComponent implements OnInit, AfterViewInit {
 
     updateForm(song: ISong) {
         this.editForm.patchValue({
-            uuid: song.songBase.uuid,
-            title: song.songBase.title,
-            author: song.songBase.author,
-            language: song.songBase.language,
+            uuid: song.uuid,
+            title: song.title,
+            author: song.author,
+            language: song.language,
             content: song.content
         });
     }
 
     private createFromForm(): ISong {
-        return new Song(new SongBase(
+        return new Song(
             this.editForm.get(['uuid']).value,
             this.editForm.get(['title']).value,
             this.editForm.get(['author']).value,
-            this.editForm.get(['language']).value),
+            this.editForm.get(['language']).value,
             this.editForm.get(['content']).value);
     }
 
@@ -72,7 +71,7 @@ export class SongEditComponent implements OnInit, AfterViewInit {
         this.isSaving = true;
         const song = this.createFromForm();
         // console.log(song);
-        this.songDetailsService.saveSong(song).then(() => this.previousState());
+        this.songService.saveSong(song).then(() => this.previousState());
     }
 
     previousState() {

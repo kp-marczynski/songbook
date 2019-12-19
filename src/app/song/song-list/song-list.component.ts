@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ISongBase} from '../../../model/song-base.model';
-import {SongIndexService} from '../../../services/song-index.service';
 import {CampfireService} from '../../../services/campfire.service';
-import {SongDetailsService} from '../../../services/song-details.service';
+import {SongService} from '../../../services/song.service';
+import {ISong} from '../../../model/song.model';
 
 @Component({
     selector: 'app-song-list',
@@ -11,29 +10,28 @@ import {SongDetailsService} from '../../../services/song-details.service';
 })
 export class SongListComponent implements OnInit {
 
-    songIndex: ISongBase[] = [];
-    displaySongs: ISongBase[] = [];
-    filteredSongs: ISongBase[] = [];
+    songIndex: ISong[] = [];
+    displaySongs: ISong[] = [];
+    filteredSongs: ISong[] = [];
 
     numberOfItems = 20;
     search = '';
 
     constructor(
-        private songIndexService: SongIndexService,
-        private songDetailsService: SongDetailsService,
+        private songService: SongService,
         private campfireService: CampfireService) {
     }
 
     ngOnInit(): void {
         this.loadSongs();
-        this.songIndexService.songListUpdate$.subscribe(() => {
+        this.songService.songListUpdate$.subscribe(() => {
             this.loadSongs();
         });
     }
 
     loadSongs(): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            this.songIndexService.getSongIndex().then(res => {
+            this.songService.getSongIndex().then(res => {
                     this.songIndex = res;
                     if (this.songIndex) {
                         this.sortSongList();
@@ -61,11 +59,11 @@ export class SongListComponent implements OnInit {
         this.loadSongs().then(() => event.target.complete());
     }
 
-    remove(song: ISongBase) {
-        this.songDetailsService.removeSong(song);
+    remove(song: ISong) {
+        this.songService.removeSong(song);
     }
 
-    addToQueue(song: ISongBase) {
+    addToQueue(song: ISong) {
         this.campfireService.addToQueue(song);
     }
 
