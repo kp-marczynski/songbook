@@ -46,9 +46,9 @@ export class SongListComponent implements OnInit {
 
     sortSongList() {
         this.songIndex.sort((a, b) =>
-            this.compareStrings(a.author, b.author) === 0
+            this.compareStrings(a.artist, b.artist) === 0
                 ? this.compareStrings(a.title, b.title)
-                : this.compareStrings(a.author, b.author));
+                : this.compareStrings(a.artist, b.artist));
     }
 
     compareStrings(a: string, b: string): number {
@@ -88,7 +88,7 @@ export class SongListComponent implements OnInit {
         if (value && value.trim().length > 0) {
             this.filteredSongs = [...this.songIndex.filter(elem =>
                 elem.title.toLowerCase().includes(value.trim().toLowerCase())
-                || elem.author.toLowerCase().includes(value.trim().toLowerCase()))];
+                || elem.artist.toLowerCase().includes(value.trim().toLowerCase()))];
         } else {
             this.filteredSongs = [...this.songIndex];
         }

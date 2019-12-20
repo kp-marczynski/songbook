@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {StorageHelperService} from '../../services/storage-helper.service';
 import {ChordProService} from '../../services/chord-pro.service';
 import {SongService} from '../../services/song.service';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
     selector: 'app-settings',
@@ -14,17 +15,24 @@ export class SettingsComponent implements OnInit {
     uploading = false;
     progress = 0;
 
+    lastSync: Date;
     file: any;
 
     constructor(
         private storageHelperService: StorageHelperService,
         private chordProService: ChordProService,
+        private authService: AuthService,
         private songService: SongService) {
     }
 
     ngOnInit() {
         this.storageHelperService.getDarkMode().then((res: boolean) => {
             this.darkMode = res;
+        });
+        this.songService.getSongsUpdateTimestamp().then((res: number) => {
+            if (res) {
+                this.lastSync = new Date(res);
+            }
         });
     }
 
@@ -56,5 +64,10 @@ export class SettingsComponent implements OnInit {
     setParsingProgress(progress: number) {
         this.progress = progress;
         this.uploading = progress < 100;
+    }
+
+    syncWithFirebase() {
+        this.songService.syncWithFirebase();
+        this.lastSync = new Date();
     }
 }

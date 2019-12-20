@@ -52,7 +52,7 @@ export class SongEditComponent implements OnInit, AfterViewInit {
         this.editForm.patchValue({
             uuid: song.uuid,
             title: song.title,
-            author: song.author,
+            author: song.artist,
             language: song.language,
             content: song.content
         });

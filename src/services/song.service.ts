@@ -45,12 +45,65 @@ export class SongService {
         //         .set(JSON.parse(JSON.stringify(song)));
         // }
         // this.angularFirestore.collection('songs-details')
-
+        // this.saveSongToFirebase(song);
         return new Promise<any>((resolve, reject) =>
             this.storage.set(song.uuid, song)
                 .then(() => this.addSongToIndex(song).then(() => resolve()))
         );
     }
+
+    syncWithFirebase() {
+        const user = this.authService.user;
+        if (user) {
+            console.log('sync');
+            this.getSongsUpdateTimestamp().then(lastUpdate => {
+                const newLocalSongs = lastUpdate ? this.songIndex.filter(elem => elem.lastEdit > lastUpdate) : this.songIndex;
+                const currentTimestamp = Date.now();
+
+                this.angularFirestore.collection<ISong>(StorageKeys.SONGS, ref => {
+                    let query = ref.where('owner', '==', user.uid);
+                    if (lastUpdate) {
+                        query = query.where('lastEdit', '>', lastUpdate);
+                    }
+                    return query;
+                }).get().toPromise().then(newSongsSnapshot => {
+                    const newFirebaseSongs: ISong[] = newSongsSnapshot.docs.map(elem => elem.data() as ISong);
+                    newFirebaseSongs.forEach(newFirebaseSong => {
+                        if (!newLocalSongs.find(elem => elem.uuid === newFirebaseSong.uuid && elem.lastEdit > newFirebaseSong.lastEdit)) {
+                            this.saveSong(newFirebaseSong);
+                        }
+                    });
+                    newLocalSongs.forEach(newLocalSong => {
+                        if (!newFirebaseSongs.find(elem => elem.uuid === newLocalSong.uuid && elem.lastEdit > newLocalSong.lastEdit)) {
+                            newLocalSong.lastEdit = currentTimestamp;
+                            newLocalSong.owner = user.uid;
+                            this.angularFirestore
+                                .collection(StorageKeys.SONGS).doc(newLocalSong.uuid)
+                                .set(JSON.parse(JSON.stringify(newLocalSong)));
+                        }
+                    });
+                    this.setSongsUpdateTimestamp(currentTimestamp);
+                });
+            });
+        }
+    }
+
+    // saveSongToFirebase(song: ISong): Promise<any> {
+    //     return new Promise<any>((resolve, reject) => {
+    //         const user = this.authService.user;
+    //         if (user) {
+    //             if (!song.owner) {
+    //                 song.owner = user.uid;
+    //             }
+    //             this.angularFirestore
+    //             // .collection(StorageKeys.SONGBOOK).doc(user.uid)
+    //                 .collection(StorageKeys.SONGS).doc(song.uuid)
+    //                 .set(JSON.parse(JSON.stringify(song))).then(() => resolve());
+    //         } else {
+    //             reject();
+    //         }
+    //     });
+    // }
 
     removeSong(song: ISong) {
         this.storage.remove(song.uuid);
@@ -119,8 +172,8 @@ export class SongService {
         });
     }
 
-    public setSongsUpdateTimestamp() {
-        this.storage.set(StorageKeys.SONGS_UPDATE_TIMESTAMP, Date.now());
+    public setSongsUpdateTimestamp(timestamp: number) {
+        this.storage.set(StorageKeys.SONGS_UPDATE_TIMESTAMP, timestamp);
     }
 
     public getSongsUpdateTimestamp(): Promise<number> {
