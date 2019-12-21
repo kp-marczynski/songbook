@@ -72,4 +72,8 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
     previousState() {
         this.router.navigate([this.previousUrl]);
     }
+
+    setCurrentSong() {
+        this.campfireService.setCurrentSong(this.song);
+    }
 }
