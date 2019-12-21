@@ -75,11 +75,15 @@ export class SongService {
                     });
                     newLocalSongs.forEach(newLocalSong => {
                         if (!newFirebaseSongs.find(elem => elem.uuid === newLocalSong.uuid && elem.lastEdit > newLocalSong.lastEdit)) {
-                            newLocalSong.lastEdit = currentTimestamp;
-                            newLocalSong.owner = user.uid;
-                            this.angularFirestore
-                                .collection(StorageKeys.SONGS).doc(newLocalSong.uuid)
-                                .set(JSON.parse(JSON.stringify(newLocalSong)));
+                            this.getSong(newLocalSong.uuid).then(res => {
+                                newLocalSong = res;
+                                newLocalSong.lastEdit = currentTimestamp;
+                                newLocalSong.owner = user.uid;
+                                this.angularFirestore
+                                    .collection(StorageKeys.SONGS).doc(newLocalSong.uuid)
+                                    .set(JSON.parse(JSON.stringify(newLocalSong)));
+                                this.saveSong(newLocalSong);
+                            });
                         }
                     });
                     this.setSongsUpdateTimestamp(currentTimestamp);

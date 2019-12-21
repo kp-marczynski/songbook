@@ -20,8 +20,8 @@
         <ion-progress-bar [value]="progress" buffer="0"></ion-progress-bar>
     </ion-item>
     <app-login></app-login>
-    <ion-item>
-        <ion-button (click)="syncWithFirebase()" *ngIf="authService.user">
+    <ion-item *ngIf="authService.user">
+        <ion-button (click)="syncWithFirebase()">
             <ion-label>Sync with firebase!</ion-label>
         </ion-button>
         <label>Last sync: {{lastSync ? lastSync.toLocaleString() : 'never'}}</label>

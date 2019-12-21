@@ -21,7 +21,7 @@ export class SettingsComponent implements OnInit {
     constructor(
         private storageHelperService: StorageHelperService,
         private chordProService: ChordProService,
-        private authService: AuthService,
+        public authService: AuthService,
         private songService: SongService) {
     }
 
