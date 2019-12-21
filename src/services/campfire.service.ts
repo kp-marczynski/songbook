@@ -10,8 +10,19 @@ import {StorageKeys} from '../model/storage-keys.model';
 export class CampfireService {
     private queueUpdateSubject = new Subject();
     public queueUpdate$ = this.queueUpdateSubject.asObservable();
+    private currentSongSubject = new Subject();
+    public currentSong$ = this.currentSongSubject.asObservable();
 
     constructor(private storage: Storage) {
+    }
+
+    setCurrentSong(song: ISong): Promise<any> {
+        this.currentSongSubject.next(song);
+        return this.storage.set(StorageKeys.CURRENT_SONG, song);
+    }
+
+    getCurrentSong(): Promise<ISong> {
+        return this.storage.get(StorageKeys.CURRENT_SONG);
     }
 
     addToQueue(song: ISong): Promise<any> {

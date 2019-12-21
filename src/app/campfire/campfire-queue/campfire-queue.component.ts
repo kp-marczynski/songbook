@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterContentInit, AfterViewChecked, AfterViewInit, Component, OnInit} from '@angular/core';
 import {CampfireService} from '../../../services/campfire.service';
 import {ISong} from '../../../model/song.model';
 
@@ -10,6 +10,7 @@ import {ISong} from '../../../model/song.model';
 export class CampfireQueueComponent implements OnInit {
 
     songQueue: ISong[];
+    currentSong: ISong;
 
     constructor(private campfireService: CampfireService) {
     }
@@ -19,6 +20,7 @@ export class CampfireQueueComponent implements OnInit {
         this.campfireService.queueUpdate$.subscribe(() => {
             this.loadSongs();
         });
+        this.campfireService.currentSong$.subscribe((res: ISong) => this.currentSong = res);
     }
 
     loadSongs(): Promise<any> {

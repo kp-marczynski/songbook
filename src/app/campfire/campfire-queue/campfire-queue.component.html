@@ -31,10 +31,10 @@
         </ion-item-sliding>
     </ion-list>
 </ion-content>
-<ion-item-divider slot="end" style="margin-left: 0">
+<ion-item-divider slot="end" style="margin-left: 0" *ngIf="currentSong" [routerLink]="['/tabs/song', currentSong.uuid, 'view']">
     <ion-icon name="play-circle" size="large" slot="end" style="padding-left: 1.5rem; padding-right: 1.5rem;"></ion-icon>
     <ion-label class="ion-text-wrap">
-        <h1>Zombie</h1>
-        <h3>Cranberries</h3>
+        <h1>{{currentSong.title}}</h1>
+        <h3>{{currentSong.artist}}</h3>
     </ion-label>
 </ion-item-divider>

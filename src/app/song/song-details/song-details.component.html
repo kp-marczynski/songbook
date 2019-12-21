@@ -18,6 +18,9 @@
             <ion-fab-button color="danger" (click)="presentToast()" data-desc="Add to queue">
                 <ion-icon name="flame"></ion-icon>
             </ion-fab-button>
+            <ion-fab-button (click)="setCurrentSong()" data-desc="Play">
+                <ion-icon name="play"></ion-icon>
+            </ion-fab-button>
             <ion-fab-button [routerLink]="['/tabs/song', song.uuid, 'edit']" data-desc="Edit">
                 <ion-icon name="create"></ion-icon>
             </ion-fab-button>

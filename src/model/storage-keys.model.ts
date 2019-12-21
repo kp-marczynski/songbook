@@ -3,5 +3,6 @@ export enum StorageKeys {
     QUEUE = 'queue',
     SONGS_UPDATE_TIMESTAMP = 'songs-update-timestamp',
     SONGS = 'songs',
-    SONGBOOK = 'songbook'
+    SONGBOOK = 'songbook',
+    CURRENT_SONG = 'current-song'
 }
