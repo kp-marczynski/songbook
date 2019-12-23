@@ -1,16 +1,19 @@
 <ion-header>
     <ion-toolbar>
-        <ion-buttons slot="start">
+        <ion-buttons slot="start" *ngIf="!guestMode">
             <ion-back-button [defaultHref]="previousUrl"></ion-back-button>
         </ion-buttons>
-        <ion-title>
+        <ion-title *ngIf="!guestMode">
             Song Details
+        </ion-title>
+        <ion-title *ngIf="guestMode">
+            Current Song
         </ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="song">
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!guestMode">
         <ion-fab-button>
             <ion-icon name="arrow-dropup"></ion-icon>
         </ion-fab-button>

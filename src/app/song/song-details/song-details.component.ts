@@ -21,6 +21,7 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
     formattedContent: IChordProGroup[];
     chordsVisible = true;
     simpleChords = true;
+    guestMode = false;
 
     constructor(
         private songService: SongService,
@@ -39,6 +40,7 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
             }
             const uuid = params.get('uuid');
             if (this.router.url.includes(StorageKeys.CAMPFIRE)) {
+                this.guestMode = true;
                 this.campfireService.getCurrentSongFromFirebase(uuid).subscribe(res => {
                     console.log(res);
                     this.song = res;

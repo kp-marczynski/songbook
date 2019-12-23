@@ -31,7 +31,7 @@ export class CampfireService {
                     .collection(StorageKeys.CAMPFIRE).doc(currentSong.uuid)
                     .set(JSON.parse(JSON.stringify(currentSong)));
             }
-            this.storage.set(StorageKeys.CURRENT_SONG, song).then(() => resolve());
+            this.storage.set(StorageKeys.CURRENT_SONG, currentSong).then(() => resolve());
         }))
     }
 
