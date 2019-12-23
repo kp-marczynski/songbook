@@ -1,6 +1,6 @@
 {
   "name": "ionic-songbook",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": "kp-marczynski",
   "homepage": "https://github.com/kp-marczynski",
   "scripts": {
@@ -28,6 +28,7 @@
     "@ionic-native/status-bar": "^5.0.0",
     "@ionic/angular": "^4.7.1",
     "@ionic/storage": "^2.2.0",
+    "angular2-qrcode": "^2.0.3",
     "cordova": "^9.0.0",
     "cordova-sqlite-storage": "^4.0.0",
     "core-js": "^2.5.4",

@@ -7,6 +7,7 @@ import {SongService} from '../../../services/song.service';
 import {CampfireService} from '../../../services/campfire.service';
 import {IChordProGroup} from '../../../model/chord-pro-group.model';
 import {ChordProService} from '../../../services/chord-pro.service';
+import {StorageKeys} from "../../../model/storage-keys.model";
 
 @Component({
     selector: 'app-song-details',
@@ -36,15 +37,24 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
             if (!params || !params.get('uuid')) {
                 this.previousState();
             }
-            this.songService.getSong(params.get('uuid')).then(res => {
-                this.song = res;
-                if (!this.song) {
-                    this.previousState();
-                } else {
-                    console.log(this.song);
+            const uuid = params.get('uuid');
+            if (this.router.url.includes(StorageKeys.CAMPFIRE)) {
+                this.campfireService.getCurrentSongFromFirebase(uuid).subscribe(res => {
+                    console.log(res);
+                    this.song = res;
                     this.formattedContent = this.chordProService.parseChordPro(this.song.content);
-                }
-            });
+                });
+            } else {
+                this.songService.getSong(params.get('uuid')).then(res => {
+                    this.song = res;
+                    if (!this.song) {
+                        this.previousState();
+                    } else {
+                        console.log(this.song);
+                        this.formattedContent = this.chordProService.parseChordPro(this.song.content);
+                    }
+                });
+            }
         });
     }
 
