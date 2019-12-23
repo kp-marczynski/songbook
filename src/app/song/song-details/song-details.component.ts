@@ -41,6 +41,7 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
             const uuid = params.get('uuid');
             if (this.router.url.includes(StorageKeys.CAMPFIRE)) {
                 this.guestMode = true;
+                document.body.classList.toggle('dark', true);
                 this.campfireService.getCurrentSongFromFirebase(uuid).subscribe(res => {
                     console.log(res);
                     this.song = res;
