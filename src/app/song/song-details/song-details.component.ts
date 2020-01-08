@@ -27,7 +27,6 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
     isScrolling = false;
     scrollPaused = false;
     wheeling;
-    // wheeldelta: number;
 
     constructor(
         private songService: SongService,
@@ -69,29 +68,35 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
         window.addEventListener('wheel', event => {
             if (!this.wheeling) {
                 if (this.isScrolling) {
-                    console.log('paused');
-                    this.scrollPaused = true;
-                    this.triggerAutoScroll();
+                    this.triggerScrollPause();
                 }
-                console.log('start wheeling!');
             }
 
             clearTimeout(this.wheeling);
             this.wheeling = setTimeout(() => {
-                console.log('stop wheeling!');
                 if (this.scrollPaused) {
-                    this.scrollPaused = false;
-                    this.triggerAutoScroll();
+                    this.triggerScrollPause();
                 }
                 this.wheeling = undefined;
-
-                // reset wheeldelta
-                // this.wheeldelta = 0;
             }, 250);
-
-            // this.wheeldelta += event.deltaMode * event.deltaY;
-            // console.log(this.wheeldelta);
         });
+
+        window.addEventListener('touchstart', event => {
+            if (this.isScrolling) {
+                this.triggerScrollPause();
+            }
+        });
+
+        window.addEventListener('touchend', event => {
+            if (this.scrollPaused) {
+                this.triggerScrollPause();
+            }
+        });
+    }
+
+    private triggerScrollPause() {
+        this.scrollPaused = !this.scrollPaused;
+        this.triggerAutoScroll();
     }
 
     ngAfterViewInit(): void {
@@ -124,7 +129,6 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
     }
 
     triggerAutoScroll() {
-        console.log('trigger autoscroll');
         this.content.getScrollElement().then((element: HTMLElement) => {
             this.isScrolling = !this.isScrolling;
             const scrollableHeight = document.getElementById('song-details-list').scrollHeight
