@@ -132,7 +132,8 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
         this.content.getScrollElement().then((element: HTMLElement) => {
             this.isScrolling = !this.isScrolling;
             const scrollableHeight = document.getElementById('song-details-list').scrollHeight
-                + element.getBoundingClientRect().top - element.offsetHeight;
+                + element.getBoundingClientRect().top + element.getBoundingClientRect().bottom
+                - element.offsetHeight;
             this.scroll(scrollableHeight, element.scrollTop);
         });
     }
