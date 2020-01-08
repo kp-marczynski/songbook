@@ -9,10 +9,14 @@
         <ion-title *ngIf="guestMode">
             Current Song
         </ion-title>
+        <ion-item>
+            <ion-button (click)="triggerAutoScroll()">Start scroll</ion-button>
+            <ion-range min="-5" max="5" step="1" pin="true" snaps="true" ticks="true" [(ngModel)]="scrollSpeed"></ion-range>
+        </ion-item>
     </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="song">
+<ion-content *ngIf="song" [scrollEvents]="true">
     <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!guestMode">
         <ion-fab-button>
             <ion-icon name="arrow-dropup"></ion-icon>
@@ -44,8 +48,9 @@
             <ion-label>Show chords</ion-label>
             <ion-toggle [(ngModel)]="chordsVisible"></ion-toggle>
         </ion-item>
+
     </ion-list>
-    <ion-list lines="none">
+    <ion-list lines="none" id="song-details-list">
         <ion-item-group *ngFor="let group of formattedContent">
             <ion-item-divider sticky *ngIf="chordsVisible && group.simpleChords.length > 0">
                 <ion-label class="ion-text-wrap chords" color="danger">

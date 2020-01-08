@@ -1,13 +1,13 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ToastController} from '@ionic/angular';
+import {IonContent, ToastController} from '@ionic/angular';
 import {RouterExtService} from '../../../services/router-ext.service';
 import {ISong} from '../../../model/song.model';
 import {SongService} from '../../../services/song.service';
 import {CampfireService} from '../../../services/campfire.service';
 import {IChordProGroup} from '../../../model/chord-pro-group.model';
 import {ChordProService} from '../../../services/chord-pro.service';
-import {StorageKeys} from "../../../model/storage-keys.model";
+import {StorageKeys} from '../../../model/storage-keys.model';
 
 @Component({
     selector: 'app-song-details',
@@ -15,13 +15,19 @@ import {StorageKeys} from "../../../model/storage-keys.model";
     styleUrls: ['./song-details.component.scss'],
 })
 export class SongDetailsComponent implements OnInit, AfterViewInit {
-
+    @ViewChild(IonContent, {static: false}) content: IonContent;
     previousUrl = '';
     song: ISong = null;
     formattedContent: IChordProGroup[];
     chordsVisible = true;
     simpleChords = true;
     guestMode = false;
+
+    scrollSpeed = 0;
+    isScrolling = false;
+    scrollPaused = false;
+    wheeling;
+    // wheeldelta: number;
 
     constructor(
         private songService: SongService,
@@ -59,6 +65,33 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
                 });
             }
         });
+
+        window.addEventListener('wheel', event => {
+            if (!this.wheeling) {
+                if (this.isScrolling) {
+                    console.log('paused');
+                    this.scrollPaused = true;
+                    this.triggerAutoScroll();
+                }
+                console.log('start wheeling!');
+            }
+
+            clearTimeout(this.wheeling);
+            this.wheeling = setTimeout(() => {
+                console.log('stop wheeling!');
+                if (this.scrollPaused) {
+                    this.scrollPaused = false;
+                    this.triggerAutoScroll();
+                }
+                this.wheeling = undefined;
+
+                // reset wheeldelta
+                // this.wheeldelta = 0;
+            }, 250);
+
+            // this.wheeldelta += event.deltaMode * event.deltaY;
+            // console.log(this.wheeldelta);
+        });
     }
 
     ngAfterViewInit(): void {
@@ -88,5 +121,27 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
 
     setCurrentSong() {
         this.campfireService.setCurrentSong(this.song);
+    }
+
+    triggerAutoScroll() {
+        console.log('trigger autoscroll');
+        this.content.getScrollElement().then((element: HTMLElement) => {
+            this.isScrolling = !this.isScrolling;
+            const scrollableHeight = document.getElementById('song-details-list').scrollHeight
+                + element.getBoundingClientRect().top - element.offsetHeight;
+            this.scroll(scrollableHeight, element.scrollTop);
+        });
+    }
+
+    private scroll(scrollableHeight: number, scrollOffset: number) {
+        if (this.isScrolling) {
+            scrollOffset += (this.scrollSpeed + 5) / 50;
+            if (scrollOffset >= scrollableHeight) {
+                this.isScrolling = false;
+            }
+            this.content.scrollToPoint(0, scrollOffset).then(() => {
+                setTimeout(() => this.scroll(scrollableHeight, scrollOffset));
+            });
+        }
     }
 }
