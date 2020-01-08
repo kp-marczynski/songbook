@@ -9,10 +9,6 @@
         <ion-title *ngIf="guestMode">
             Current Song
         </ion-title>
-        <ion-item>
-            <ion-button (click)="triggerAutoScroll()">Start scroll</ion-button>
-            <ion-range min="-5" max="5" step="1" pin="true" snaps="true" ticks="true" [(ngModel)]="scrollSpeed"></ion-range>
-        </ion-item>
     </ion-toolbar>
 </ion-header>
 
@@ -64,3 +60,9 @@
         </ion-item-group>
     </ion-list>
 </ion-content>
+<ion-footer>
+    <ion-item>
+        <ion-button (click)="triggerAutoScroll()">Start scroll</ion-button>
+        <ion-range min="-5" max="5" step="1" pin="true" snaps="true" ticks="true" [(ngModel)]="scrollSpeed"></ion-range>
+    </ion-item>
+</ion-footer>
