@@ -11,7 +11,7 @@ import {ISong} from '../../../model/song.model';
 export class SongListComponent implements OnInit {
 
     songIndex: ISong[] = [];
-    displaySongs: ISong[] = [];
+    // displaySongs: ISong[] = [];
     filteredSongs: ISong[] = [];
 
     numberOfItems = 20;
@@ -36,7 +36,7 @@ export class SongListComponent implements OnInit {
                     if (this.songIndex) {
                         this.sortSongList();
                         this.searchSongs(this.search);
-                        this.loadDisplayData(null);
+                        // this.loadDisplayData(null);
                     }
                     resolve();
                 }
@@ -67,21 +67,21 @@ export class SongListComponent implements OnInit {
         this.campfireService.addToQueue(song);
     }
 
-    loadDisplayData(event) {
-        setTimeout(() => {
-            const displayedSongs = this.displaySongs.length;
-            for (let i = displayedSongs; i < this.filteredSongs.length && i - displayedSongs < this.numberOfItems; ++i) {
-                this.displaySongs.push(this.filteredSongs[i]);
-            }
-            if (event) {
-                event.target.complete();
-            }
-
-            if (this.displaySongs.length === this.filteredSongs.length && event) {
-                event.target.disabled = true;
-            }
-        }, 500);
-    }
+    // loadDisplayData(event) {
+    //     setTimeout(() => {
+    //         const displayedSongs = this.displaySongs.length;
+    //         for (let i = displayedSongs; i < this.filteredSongs.length && i - displayedSongs < this.numberOfItems; ++i) {
+    //             this.displaySongs.push(this.filteredSongs[i]);
+    //         }
+    //         if (event) {
+    //             event.target.complete();
+    //         }
+    //
+    //         if (this.displaySongs.length === this.filteredSongs.length && event) {
+    //             event.target.disabled = true;
+    //         }
+    //     }, 500);
+    // }
 
     searchSongs(value: string) {
         this.search = value;
@@ -92,7 +92,7 @@ export class SongListComponent implements OnInit {
         } else {
             this.filteredSongs = [...this.songIndex];
         }
-        this.displaySongs = [];
-        this.loadDisplayData(null);
+        // this.displaySongs = [];
+        // this.loadDisplayData(null);
     }
 }
