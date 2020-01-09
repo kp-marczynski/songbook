@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {Storage} from '@ionic/storage';
-import {ISong, Song} from '../model/song.model';
+import {ISong} from '../model/song.model';
 import {StorageKeys} from '../model/storage-keys.model';
-import {AngularFirestore} from "@angular/fire/firestore";
-import {AuthService} from "./auth.service";
+import {AngularFirestore} from '@angular/fire/firestore';
+import {AuthService} from './auth.service';
+import {CurrentSongMeta, ICurrentSongMeta} from '../model/current-song-meta.model';
 
 @Injectable({
     providedIn: 'root'
@@ -18,25 +19,34 @@ export class CampfireService {
     constructor(
         private storage: Storage,
         private angularFirestore: AngularFirestore,
-        private authService: AuthService) {
+        private authService: AuthService
+    ) {
     }
 
     setCurrentSong(song: ISong): Promise<any> {
-        return new Promise<any>((resolve, reject) => this.getCurrentSong().then((res: ISong) => {
-            const currentSong = new Song(res ? res.uuid : null, song.title, song.artist, song.language, song.content);
-            this.currentSongSubject.next(currentSong);
-            if (this.authService.user) {
-                currentSong.owner = this.authService.user.uid;
-                this.angularFirestore
-                    .collection(StorageKeys.CAMPFIRE).doc(currentSong.uuid)
-                    .set(JSON.parse(JSON.stringify(currentSong)));
+        return new Promise<any>((resolve, reject) => this.getCurrentSongMeta().then((meta: ICurrentSongMeta) => {
+            if (!meta) {
+                meta = new CurrentSongMeta(song.uuid, null);
+            } else {
+                meta.songUUid = song.uuid;
             }
-            this.storage.set(StorageKeys.CURRENT_SONG, currentSong).then(() => resolve());
-        }))
+            this.currentSongSubject.next(song);
+            if (this.authService.user) {
+                song.owner = this.authService.user.uid;
+                this.angularFirestore
+                    .collection(StorageKeys.CAMPFIRE).doc(meta.firebaseUuid)
+                    .set(JSON.parse(JSON.stringify(song)));
+            }
+            this.setCurrentSongMeta(meta).then(() => resolve());
+        }));
     }
 
-    getCurrentSong(): Promise<ISong> {
+    getCurrentSongMeta(): Promise<ICurrentSongMeta> {
         return this.storage.get(StorageKeys.CURRENT_SONG);
+    }
+
+    private setCurrentSongMeta(meta: ICurrentSongMeta): Promise<any> {
+        return this.storage.set(StorageKeys.CURRENT_SONG, meta);
     }
 
     getCurrentSongFromFirebase(currentSongUuid): Observable<ISong> {

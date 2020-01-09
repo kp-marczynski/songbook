@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {CampfireService} from '../../../services/campfire.service';
 import {ISong} from '../../../model/song.model';
-import {PopoverController} from "@ionic/angular";
-import {CampfireShareComponent} from "../campfire-share/campfire-share.component";
+import {PopoverController} from '@ionic/angular';
+import {CampfireShareComponent} from '../campfire-share/campfire-share.component';
+import {SongService} from '../../../services/song.service';
 
 @Component({
     selector: 'app-campfire-queue',
@@ -16,7 +17,8 @@ export class CampfireQueueComponent implements OnInit {
 
     constructor(
         private campfireService: CampfireService,
-        private popoverController: PopoverController) {
+        private popoverController: PopoverController,
+        private songService: SongService) {
     }
 
     ngOnInit() {
@@ -24,7 +26,11 @@ export class CampfireQueueComponent implements OnInit {
         this.campfireService.queueUpdate$.subscribe(() => {
             this.loadSongs();
         });
-        this.campfireService.getCurrentSong().then(res => this.currentSong = res);
+        this.campfireService.getCurrentSongMeta().then(meta => {
+            if (meta) {
+                this.songService.getSong(meta.songUUid).then(res => this.currentSong = res);
+            }
+        });
         this.campfireService.currentSong$.subscribe((res: ISong) => this.currentSong = res);
     }
 
@@ -52,7 +58,7 @@ export class CampfireQueueComponent implements OnInit {
             event: ev,
             translucent: true,
             cssClass: 'popover',
-            componentProps: {currentSongUuid: this.currentSong.uuid, popoverController: this.popoverController}
+            componentProps: {popoverController: this.popoverController}
         });
         return await popover.present();
     }
