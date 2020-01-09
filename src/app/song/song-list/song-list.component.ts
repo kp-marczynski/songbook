@@ -45,10 +45,15 @@ export class SongListComponent implements OnInit {
     }
 
     sortSongList() {
-        this.songIndex.sort((a, b) =>
-            this.compareStrings(a.artist, b.artist) === 0
-                ? this.compareStrings(a.title, b.title)
-                : this.compareStrings(a.artist, b.artist));
+        if (this.songIndex) {
+            this.songIndex.sort((a, b) =>
+                'artist' in a && 'artist' in b && 'title' in a && 'title' in b
+                    ? (this.compareStrings(a.artist, b.artist) === 0
+                        ? this.compareStrings(a.title, b.title)
+                        : this.compareStrings(a.artist, b.artist)
+                    ) : 0
+            );
+        }
     }
 
     compareStrings(a: string, b: string): number {
