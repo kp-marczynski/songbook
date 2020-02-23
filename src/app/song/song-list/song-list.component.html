@@ -4,10 +4,10 @@
             All Songs
         </ion-title>
     </ion-toolbar>
-    <ion-searchbar debounce="300" (ionChange)="searchSongs(searchbar.value)" #searchbar></ion-searchbar>
+    <ion-searchbar debounce="300" (ionChange)="loadSongs()" #searchbar></ion-searchbar>
 </ion-header>
 
-<ion-content>
+<ion-content (ionScrollStart)="hideKeyboard()">
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
@@ -17,9 +17,9 @@
     </ion-fab-button>
 </ion-fab>
     <ion-list #slidedList>
-        <ion-virtual-scroll [items]="filteredSongs">
+        <ion-virtual-scroll [items]="filteredSongs" [trackBy]="trackByFn">
             <ion-item-sliding *virtualItem="let song">
-                <ion-item [routerLink]="['/tabs/song', song.uuid, 'view']">
+                <ion-item (click)="navigate(['/tabs/song', song.uuid, 'view'])" button="true">
                     <ion-label class="ion-text-wrap">
                         <h2>{{song.title}}</h2>
                         <p>{{song.artist}}</p>

@@ -1,25 +1,39 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CampfireService} from '../../../services/campfire.service';
 import {SongService} from '../../../services/song.service';
 import {ISong} from '../../../model/song.model';
+import {Location} from "@angular/common";
+import {Subscription} from "rxjs";
+import {ActivatedRoute, NavigationStart, Router} from "@angular/router";
+import {IonSearchbar} from "@ionic/angular";
 
 @Component({
     selector: 'app-song-list',
     templateUrl: './song-list.component.html',
     styleUrls: ['./song-list.component.scss'],
 })
-export class SongListComponent implements OnInit {
+export class SongListComponent implements OnInit, OnDestroy {
 
     songIndex: ISong[] = [];
     // displaySongs: ISong[] = [];
     filteredSongs: ISong[] = [];
 
     numberOfItems = 20;
-    search = '';
+    @ViewChild('searchbar', {static: false}) searchbar: IonSearchbar;
+
+    locationSubscription: Subscription;
 
     constructor(
         private songService: SongService,
-        private campfireService: CampfireService) {
+        private campfireService: CampfireService,
+        private location: Location,
+        private router: Router,
+        private activatedRoute: ActivatedRoute) {
+        router.events.subscribe(event => {
+            if (event instanceof NavigationStart) {
+                this.hideKeyboard();
+            }
+        });
     }
 
     ngOnInit(): void {
@@ -27,17 +41,43 @@ export class SongListComponent implements OnInit {
         this.songService.songListUpdate$.subscribe(() => {
             this.loadSongs();
         });
+        this.locationSubscription = <Subscription>this.location.subscribe((ev) => {
+            this.loadSongsOnListUrl(ev.url);
+        });
+        this.activatedRoute.url.subscribe(url => {
+            // console.log('route');
+            // console.log(url);
+            this.loadSongs();
+        });
+
+    }
+
+    ngOnDestroy(): void {
+        this.locationSubscription.unsubscribe();
+    }
+
+    loadSongsOnListUrl(url: string) {
+        if (url === '/tabs/song') {
+            this.loadSongs()
+        }
     }
 
     loadSongs(): Promise<any> {
+        console.log('songs loaded');
         return new Promise<any>((resolve, reject) => {
             this.songService.getSongIndex().then(res => {
-                    this.songIndex = res;
-                    if (this.songIndex) {
+                    if (!this.songListsEquals(res, this.songIndex)) {
+                        this.songIndex = res;
                         this.sortSongList();
-                        this.searchSongs(this.search);
-                        // this.loadDisplayData(null);
                     }
+                    if (this.songIndex) {
+                        this.searchSongs();
+                    }
+                    // if (this.songIndex) {
+                    //     this.sortSongList();
+                    //     this.searchSongs(this.search);
+                    //     // this.loadDisplayData(null);
+                    // }
                     resolve();
                 }
             );
@@ -61,6 +101,7 @@ export class SongListComponent implements OnInit {
     }
 
     doRefresh(event) {
+        this.filteredSongs = [];
         this.loadSongs().then(() => event.target.complete());
     }
 
@@ -88,16 +129,40 @@ export class SongListComponent implements OnInit {
     //     }, 500);
     // }
 
-    searchSongs(value: string) {
-        this.search = value;
+    searchSongs() {
+        const value: string = this.searchbar.value;
+        let temp: ISong[];
         if (value && value.trim().length > 0) {
-            this.filteredSongs = [...this.songIndex.filter(elem =>
+            temp = [...this.songIndex.filter(elem =>
                 elem.title.toLowerCase().includes(value.trim().toLowerCase())
                 || elem.artist.toLowerCase().includes(value.trim().toLowerCase()))];
         } else {
-            this.filteredSongs = [...this.songIndex];
+            temp = [...this.songIndex];
+        }
+        if (!this.songListsEquals(temp, this.filteredSongs)) {
+            console.log('lists not equals');
+            this.filteredSongs = temp;
         }
         // this.displaySongs = [];
         // this.loadDisplayData(null);
+    }
+
+    songListsEquals(list1: ISong[], list2: ISong[]): boolean {
+        return !!list1 && !!list2 && list1.length > 0 && list1.length === list2.length
+            && list1.map(list1Elem => !!list2.find(list2Elem => list1Elem.uuid === list2Elem.uuid)).reduce((a, b) => a && b)
+            && list2.map(list2Elem => !!list1.find(list1Elem => list1Elem.uuid === list2Elem.uuid)).reduce((a, b) => a && b);
+    }
+
+    trackByFn(index, item) {
+        return index;
+    }
+
+    hideKeyboard() {
+        (document.activeElement as HTMLElement).blur();
+    }
+
+    navigate(url: any) {
+        this.hideKeyboard();
+        setTimeout(() => this.router.navigate(url), 500);
     }
 }
