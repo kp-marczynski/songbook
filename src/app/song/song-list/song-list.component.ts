@@ -1,11 +1,11 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {CampfireService} from '../../../services/campfire.service';
 import {SongService} from '../../../services/song.service';
 import {ISong} from '../../../model/song.model';
-import {Location} from "@angular/common";
-import {Subscription} from "rxjs";
-import {ActivatedRoute, NavigationStart, Router} from "@angular/router";
-import {IonSearchbar} from "@ionic/angular";
+import {Location} from '@angular/common';
+import {Subscription} from 'rxjs';
+import {ActivatedRoute, NavigationStart, Router} from '@angular/router';
+import {IonSearchbar} from '@ionic/angular';
 
 @Component({
     selector: 'app-song-list',
@@ -15,7 +15,6 @@ import {IonSearchbar} from "@ionic/angular";
 export class SongListComponent implements OnInit, OnDestroy {
 
     songIndex: ISong[] = [];
-    // displaySongs: ISong[] = [];
     filteredSongs: ISong[] = [];
 
     numberOfItems = 20;
@@ -38,27 +37,16 @@ export class SongListComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.loadSongs();
-        this.songService.songListUpdate$.subscribe(() => {
-            this.loadSongs();
-        });
-        this.locationSubscription = <Subscription>this.location.subscribe((ev) => {
-            this.loadSongsOnListUrl(ev.url);
-        });
-        this.activatedRoute.url.subscribe(url => {
-            // console.log('route');
-            // console.log(url);
-            this.loadSongs();
-        });
-
+        this.songService.songListUpdate$.subscribe(() => this.loadSongs());
+        this.locationSubscription = this.location.subscribe((ev) => this.loadSongsOnListUrl(ev.url)) as Subscription;
+        this.activatedRoute.url.subscribe(url => this.loadSongs());
     }
 
-    ngOnDestroy(): void {
-        this.locationSubscription.unsubscribe();
-    }
+    ngOnDestroy = (): void => this.locationSubscription.unsubscribe();
 
     loadSongsOnListUrl(url: string) {
         if (url === '/tabs/song') {
-            this.loadSongs()
+            this.loadSongs();
         }
     }
 
@@ -73,11 +61,6 @@ export class SongListComponent implements OnInit, OnDestroy {
                     if (this.songIndex) {
                         this.searchSongs();
                     }
-                    // if (this.songIndex) {
-                    //     this.sortSongList();
-                    //     this.searchSongs(this.search);
-                    //     // this.loadDisplayData(null);
-                    // }
                     resolve();
                 }
             );
@@ -96,56 +79,34 @@ export class SongListComponent implements OnInit, OnDestroy {
         }
     }
 
-    compareStrings(a: string, b: string): number {
-        return a.localeCompare(b, 'en', {sensitivity: 'base'});
-    }
+    compareStrings = (a: string, b: string): number => a.localeCompare(b, 'en', {sensitivity: 'base'});
 
     doRefresh(event) {
         this.filteredSongs = [];
         this.loadSongs().then(() => event.target.complete());
     }
 
-    remove(song: ISong) {
-        this.songService.removeSong(song);
-    }
+    remove = (song: ISong) => this.songService.removeSong(song);
 
-    addToQueue(song: ISong) {
-        this.campfireService.addToQueue(song);
-    }
-
-    // loadDisplayData(event) {
-    //     setTimeout(() => {
-    //         const displayedSongs = this.displaySongs.length;
-    //         for (let i = displayedSongs; i < this.filteredSongs.length && i - displayedSongs < this.numberOfItems; ++i) {
-    //             this.displaySongs.push(this.filteredSongs[i]);
-    //         }
-    //         if (event) {
-    //             event.target.complete();
-    //         }
-    //
-    //         if (this.displaySongs.length === this.filteredSongs.length && event) {
-    //             event.target.disabled = true;
-    //         }
-    //     }, 500);
-    // }
+    addToQueue = (song: ISong) => this.campfireService.addToQueue(song);
 
     searchSongs() {
         const value: string = this.searchbar.value;
         let temp: ISong[];
         if (value && value.trim().length > 0) {
             temp = [...this.songIndex.filter(elem =>
-                elem.title.toLowerCase().includes(value.trim().toLowerCase())
-                || elem.artist.toLowerCase().includes(value.trim().toLowerCase()))];
+                this.checkIncludesLowerCase(elem.title, value)
+                || this.checkIncludesLowerCase(elem.artist, value))];
         } else {
             temp = [...this.songIndex];
         }
         if (!this.songListsEquals(temp, this.filteredSongs)) {
-            console.log('lists not equals');
             this.filteredSongs = temp;
         }
-        // this.displaySongs = [];
-        // this.loadDisplayData(null);
     }
+
+    checkIncludesLowerCase = (stringToCheck: string, value: string): boolean =>
+        stringToCheck.toLowerCase().includes(value.trim().toLowerCase());
 
     songListsEquals(list1: ISong[], list2: ISong[]): boolean {
         return !!list1 && !!list2 && list1.length > 0 && list1.length === list2.length
@@ -153,13 +114,9 @@ export class SongListComponent implements OnInit, OnDestroy {
             && list2.map(list2Elem => !!list1.find(list1Elem => list1Elem.uuid === list2Elem.uuid)).reduce((a, b) => a && b);
     }
 
-    trackByFn(index, item) {
-        return index;
-    }
+    trackByFn = (index, item) => index;
 
-    hideKeyboard() {
-        (document.activeElement as HTMLElement).blur();
-    }
+    hideKeyboard = () => (document.activeElement as HTMLElement).blur();
 
     navigate(url: any) {
         this.hideKeyboard();

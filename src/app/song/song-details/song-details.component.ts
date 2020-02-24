@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {IonContent, ToastController} from '@ionic/angular';
+import {IonContent} from '@ionic/angular';
 import {RouterExtService} from '../../../services/router-ext.service';
 import {ISong} from '../../../model/song.model';
 import {SongService} from '../../../services/song.service';

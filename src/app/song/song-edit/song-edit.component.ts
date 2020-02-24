@@ -74,7 +74,5 @@ export class SongEditComponent implements OnInit, AfterViewInit {
         this.songService.saveSong(song).then(() => this.previousState());
     }
 
-    previousState() {
-        this.router.navigate([this.previousUrl]);
-    }
+    previousState = () => this.router.navigate([this.previousUrl]);
 }

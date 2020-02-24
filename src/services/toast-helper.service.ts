@@ -9,7 +9,7 @@ export class ToastHelperService {
     constructor(private toastController: ToastController) {
     }
 
-    async presentToast(message: string, duration?: number) {
+    public async presentToast(message: string, duration?: number) {
         const toast = await this.toastController.create({
             message,
             duration: !!duration ? duration : 2000
