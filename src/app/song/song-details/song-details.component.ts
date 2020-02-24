@@ -160,7 +160,7 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
 
     private performScrollRecursive(scrollableHeight: number, scrollOffset: number) {
         if (this.isScrolling && !this.isScrollPaused) {
-            scrollOffset += (this.scrollSpeed + 5) / 50;
+            scrollOffset += (this.scrollSpeed + 5) / 75;
             if (scrollOffset >= scrollableHeight) {
                 this.isScrolling = false;
             }
