@@ -27,25 +27,11 @@ export class SongService {
         return new Promise<ISong>((resolve, reject) => {
             this.storage.get(uuid).then((res: ISong) => {
                 resolve(res);
-                // this.getSongIndex().then(() => {
-                //     const base = this.songIndex.find(elem => elem.uuid === uuid);
-                //     const song = new Song(base, res);
-                //     song.formattedContent = this.chordProService.parseChordPro(song.content);
-                //     resolve(song);
-                // });
             });
         });
     }
 
     saveSong(song: ISong): Promise<any> {
-        // if (this.authService.user) {
-        //     this.angularFirestore
-        //         .collection('songs-details').doc(this.authService.user.uid)
-        //         .collection('content').doc(song.songBase.uuid)
-        //         .set(JSON.parse(JSON.stringify(song)));
-        // }
-        // this.angularFirestore.collection('songs-details')
-        // this.saveSongToFirebase(song);
         return new Promise<any>((resolve, reject) =>
             this.storage.set(song.uuid, song)
                 .then(() => this.addSongToIndex(song).then(() => resolve()))
@@ -92,23 +78,6 @@ export class SongService {
         }
     }
 
-    // saveSongToFirebase(song: ISong): Promise<any> {
-    //     return new Promise<any>((resolve, reject) => {
-    //         const user = this.authService.user;
-    //         if (user) {
-    //             if (!song.owner) {
-    //                 song.owner = user.uid;
-    //             }
-    //             this.angularFirestore
-    //             // .collection(StorageKeys.SONGBOOK).doc(user.uid)
-    //                 .collection(StorageKeys.SONGS).doc(song.uuid)
-    //                 .set(JSON.parse(JSON.stringify(song))).then(() => resolve());
-    //         } else {
-    //             reject();
-    //         }
-    //     });
-    // }
-
     removeSong(song: ISong) {
         this.storage.remove(song.uuid);
         this.removeSongFromIndex(song);
@@ -118,21 +87,14 @@ export class SongService {
     getSongIndex(): Promise<ISong[]> {
         return new Promise<ISong[]>((resolve, reject) => {
             this.storage.keys().then(keys => {
-                // console.log(Object.values(StorageKeys));
                 keys = keys.filter(key => !(Object.values(StorageKeys)).find(storageKey => storageKey === key));
-                // console.log(keys.length);
                 keys.forEach(key => {
 
                 });
                 this.loadSongsToIndex(keys, 0).then(() => {
-                    // console.log(this.songIndex);
                     resolve(this.songIndex);
                 });
             });
-            // this.storage.get('index').then((res: ISong[]) => {
-            //     this.songIndex = res ? res : [];
-            //     resolve(res ? res : []);
-            // });
         });
     }
 

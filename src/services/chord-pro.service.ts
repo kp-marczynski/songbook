@@ -68,7 +68,6 @@ export class ChordProService {
                             } else {
                                 text += splitRight[i];
                                 chords += ' ' + '_'.repeat(splitRight[i].length) + ' ';
-
                             }
                         }
                     } else {

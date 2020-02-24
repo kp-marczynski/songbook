@@ -16,34 +16,20 @@ export class AuthService {
         public ngZone: NgZone,
         public angularFireAuth: AngularFireAuth
     ) {
-        this.angularFireAuth.authState.subscribe(user => {
-            this.user = user;
-        });
+        this.angularFireAuth.authState.subscribe(user => this.user = user);
     }
 
     private oAuthProvider(provider) {
         return this.angularFireAuth.auth.signInWithRedirect(provider)
-            .then((res) => {
-                this.ngZone.run(() => {
-                    // this.router.navigate(['/']);
-                });
-            }).catch((error) => {
-                window.alert(error);
-            });
+            .then((res) => this.ngZone.run(() => {}))
+            .catch((error) => window.alert(error));
     }
 
     signInWithGoogle() {
         return this.oAuthProvider(new auth.GoogleAuthProvider())
-            .then(res => {
-                console.log('Successfully logged in!');
-            }).catch(error => {
-                console.log(error);
-            });
+            .then(res => console.log('Successfully logged in!'))
+            .catch(error => console.log(error));
     }
 
-    signOut() {
-        return this.angularFireAuth.auth.signOut().then(() => {
-            // this.router.navigate(['login']);
-        });
-    }
+    signOut = () => this.angularFireAuth.auth.signOut().then(() => {});
 }

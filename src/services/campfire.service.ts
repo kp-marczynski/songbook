@@ -41,17 +41,12 @@ export class CampfireService {
         }));
     }
 
-    getCurrentSongMeta(): Promise<ICurrentSongMeta> {
-        return this.storage.get(StorageKeys.CURRENT_SONG);
-    }
+    getCurrentSongMeta = (): Promise<ICurrentSongMeta> => this.storage.get(StorageKeys.CURRENT_SONG);
 
-    private setCurrentSongMeta(meta: ICurrentSongMeta): Promise<any> {
-        return this.storage.set(StorageKeys.CURRENT_SONG, meta);
-    }
+    private setCurrentSongMeta = (meta: ICurrentSongMeta): Promise<any> => this.storage.set(StorageKeys.CURRENT_SONG, meta);
 
-    getCurrentSongFromFirebase(currentSongUuid): Observable<ISong> {
-        return this.angularFirestore.collection(StorageKeys.CAMPFIRE).doc<ISong>(currentSongUuid).valueChanges();
-    }
+    getCurrentSongFromFirebase = (currentSongUuid): Observable<ISong> =>
+        this.angularFirestore.collection(StorageKeys.CAMPFIRE).doc<ISong>(currentSongUuid).valueChanges();
 
     addToQueue(song: ISong): Promise<any> {
         return new Promise<any>((resolve, reject) => {

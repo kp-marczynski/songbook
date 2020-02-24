@@ -10,11 +10,7 @@ export class StorageHelperService {
     constructor(private storage: Storage) {
     }
 
-    public getDarkMode(): Promise<any> {
-        return this.storage.get(StorageKeys.DARK_MODE);
-    }
+    public getDarkMode = (): Promise<any> => this.storage.get(StorageKeys.DARK_MODE);
 
-    public setDarkMode(darkMode: boolean): Promise<any> {
-        return this.storage.set(StorageKeys.DARK_MODE, darkMode);
-    }
+    public setDarkMode = (darkMode: boolean): Promise<any> => this.storage.set(StorageKeys.DARK_MODE, darkMode);
 }
