@@ -1,1 +1,4 @@
-<qr-code [value]="'kpmarczynski-songbook.firebaseapp.com/tabs/campfire/' + currentSongUuid + '/view'" [size]="280" level="M"></qr-code>
+<div [ngSwitch]="!!authService.user">
+    <qr-code *ngSwitchCase="true" [value]="'kpmarczynski-songbook.firebaseapp.com/tabs/campfire/' + currentSongUuid + '/view'" [size]="280" level="M"></qr-code>
+    <div *ngSwitchCase="false" class="popover-text">You need to be signed in to share your current song!</div>
+</div>

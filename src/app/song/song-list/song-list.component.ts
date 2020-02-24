@@ -51,7 +51,6 @@ export class SongListComponent implements OnInit, OnDestroy {
     }
 
     loadSongs(): Promise<any> {
-        console.log('songs loaded');
         return new Promise<any>((resolve, reject) => {
             this.songService.getSongIndex().then(res => {
                     if (!this.songListsEquals(res, this.songIndex)) {

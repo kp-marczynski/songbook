@@ -23,9 +23,7 @@ export class CampfireQueueComponent implements OnInit {
 
     ngOnInit() {
         this.loadSongs();
-        this.campfireService.queueUpdate$.subscribe(() => {
-            this.loadSongs();
-        });
+        this.campfireService.queueUpdate$.subscribe(() => this.loadSongs());
         this.campfireService.getCurrentSongMeta().then(meta => {
             if (meta) {
                 this.songService.getSong(meta.songUUid).then(res => this.currentSong = res);
@@ -44,13 +42,9 @@ export class CampfireQueueComponent implements OnInit {
         });
     }
 
-    doRefresh(event) {
-        this.loadSongs().then(() => event.target.complete());
-    }
+    doRefresh = (event) => this.loadSongs().then(() => event.target.complete());
 
-    remove(song: ISong) {
-        this.campfireService.removeFromQueue(song);
-    }
+    removeSongFromQueue = (song: ISong) => this.campfireService.removeFromQueue(song);
 
     async presentPopover(ev: any) {
         const popover = await this.popoverController.create({

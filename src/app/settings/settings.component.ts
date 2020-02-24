@@ -26,9 +26,7 @@ export class SettingsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.storageHelperService.getDarkMode().then((res: boolean) => {
-            this.darkMode = res;
-        });
+        this.storageHelperService.getDarkMode().then((res: boolean) => this.darkMode = res);
         this.songService.getSongsUpdateTimestamp().then((res: number) => {
             if (res) {
                 this.lastSync = new Date(res);
@@ -41,9 +39,7 @@ export class SettingsComponent implements OnInit {
         this.storageHelperService.setDarkMode(this.darkMode);
     }
 
-    fileChanged(e) {
-        this.file = e.target.files[0];
-    }
+    handleImportFileChanged = (e) => this.file = e.target.files[0];
 
     uploadDocument() {
         const fileReader = new FileReader();
