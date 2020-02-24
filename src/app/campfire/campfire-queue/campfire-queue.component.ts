@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {CampfireService} from '../../../services/campfire.service';
 import {ISong} from '../../../model/song.model';
-import {PopoverController} from '@ionic/angular';
-import {CampfireShareComponent} from '../campfire-share/campfire-share.component';
 import {SongService} from '../../../services/song.service';
+import {CampfireSharePopoverService} from '../campfire-share-popover.service';
 
 @Component({
     selector: 'app-campfire-queue',
@@ -17,7 +16,7 @@ export class CampfireQueueComponent implements OnInit {
 
     constructor(
         private campfireService: CampfireService,
-        private popoverController: PopoverController,
+        private campfireSharePopoverService: CampfireSharePopoverService,
         private songService: SongService) {
     }
 
@@ -46,14 +45,5 @@ export class CampfireQueueComponent implements OnInit {
 
     removeSongFromQueue = (song: ISong) => this.campfireService.removeFromQueue(song);
 
-    async presentPopover(ev: any) {
-        const popover = await this.popoverController.create({
-            component: CampfireShareComponent,
-            event: ev,
-            translucent: true,
-            cssClass: 'popover',
-            componentProps: {popoverController: this.popoverController}
-        });
-        return await popover.present();
-    }
+    presentPopover = (ev: any) => this.campfireSharePopoverService.presentPopover(ev);
 }

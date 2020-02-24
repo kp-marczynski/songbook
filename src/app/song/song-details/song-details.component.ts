@@ -9,6 +9,7 @@ import {IChordProGroup} from '../../../model/chord-pro-group.model';
 import {ChordProService} from '../../../services/chord-pro.service';
 import {StorageKeys} from '../../../model/storage-keys.model';
 import {ToastHelperService} from '../../../services/toast-helper.service';
+import {CampfireSharePopoverService} from '../../campfire/campfire-share-popover.service';
 
 @Component({
     selector: 'app-song-details',
@@ -36,7 +37,8 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
         private route: ActivatedRoute,
         private router: Router,
         private routerExtService: RouterExtService,
-        private toastHelperService: ToastHelperService) {
+        private toastHelperService: ToastHelperService,
+        private campfireSharePopoverService: CampfireSharePopoverService) {
     }
 
     ngOnInit(): void {
@@ -50,7 +52,6 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
                 document.body.classList.toggle('dark', true);
                 this.campfireService.getCurrentSongFromFirebase(uuid).subscribe(res => {
                     this.displaySong(res);
-                    this.content.scrollToTop();
                 });
             } else {
                 this.songService.getSong(params.get('uuid')).then(res => this.displaySong(res));
@@ -65,6 +66,9 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
             this.previousState();
         } else {
             this.formattedContent = this.chordProService.parseChordPro(this.song.content);
+            if(this.content){
+                this.content.scrollToTop();
+            }
         }
     }
 
@@ -147,6 +151,7 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
     pauseScrolling() {
         this.isScrolling = false;
     }
+
     private calculateScrollableHeight(element: HTMLElement): number {
         return document.getElementById('song-details-list').scrollHeight
             + element.getBoundingClientRect().top + element.getBoundingClientRect().bottom
@@ -164,4 +169,6 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
             });
         }
     }
+
+    presentPopover = (ev: any) => this.campfireSharePopoverService.presentPopover(ev);
 }

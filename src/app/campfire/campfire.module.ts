@@ -7,6 +7,7 @@ import {CampfireQueueComponent} from './campfire-queue/campfire-queue.component'
 import {CampfireShareComponent} from "./campfire-share/campfire-share.component";
 import {QRCodeModule} from "angular2-qrcode";
 import {SongModule} from "../song/song.module";
+import {CampfireSharePopoverService} from './campfire-share-popover.service';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {SongModule} from "../song/song.module";
         QRCodeModule,
         SongModule
     ],
-    entryComponents: [CampfireShareComponent]
+    entryComponents: [CampfireShareComponent],
+    providers: [CampfireSharePopoverService]
 })
 export class CampfireModule {
 }
