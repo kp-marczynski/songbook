@@ -1,37 +1,27 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-buttons slot="start" *ngIf="!guestMode">
+    <ion-toolbar [ngSwitch]="guestMode">
+        <ion-buttons slot="start" *ngSwitchCase="false">
             <ion-back-button [defaultHref]="previousUrl"></ion-back-button>
         </ion-buttons>
-        <ion-title *ngIf="!guestMode">
+        <ion-title *ngSwitchCase="false">
             Song Details
         </ion-title>
-        <ion-title *ngIf="guestMode">
+        <ion-buttons slot="end" *ngSwitchCase="false">
+            <ion-fab-button (click)="editSong()" size="small">
+                <ion-icon name="create"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color="danger" (click)="removeSong()" size="small">
+                <ion-icon name="trash"></ion-icon>
+            </ion-fab-button>
+        </ion-buttons>
+
+        <ion-title *ngSwitchCase="true">
             Current Song
         </ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="song" [scrollEvents]="true">
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!guestMode">
-        <ion-fab-button>
-            <ion-icon name="arrow-dropup"></ion-icon>
-        </ion-fab-button>
-        <ion-fab-list side="top">
-            <ion-fab-button color="danger" (click)="addSongToQueue()" data-desc="Add to queue">
-                <ion-icon name="flame"></ion-icon>
-            </ion-fab-button>
-            <ion-fab-button (click)="setCurrentSong()" data-desc="Play">
-                <ion-icon name="play"></ion-icon>
-            </ion-fab-button>
-            <ion-fab-button [routerLink]="['/tabs/song', song.uuid, 'edit']" data-desc="Edit">
-                <ion-icon name="create"></ion-icon>
-            </ion-fab-button>
-            <ion-fab-button color="danger" (click)="removeSong()" data-desc="Delete">
-                <ion-icon name="trash"></ion-icon>
-            </ion-fab-button>
-        </ion-fab-list>
-    </ion-fab>
 
     <ion-list *ngIf="song">
         <ion-item-divider sticky>
@@ -61,8 +51,24 @@
     </ion-list>
 </ion-content>
 <ion-footer>
-    <ion-item>
-        <ion-button (click)="triggerAutoScroll()">Start scroll</ion-button>
+    <!--    <ion-item>-->
+    <!--        <ion-button (click)="triggerAutoScroll()">Start scroll</ion-button>-->
+
+    <!--    </ion-item>-->
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-fab-button (click)="playSong()" size="small" *ngIf="!isScrolling">
+                <ion-icon name="play"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button (click)="pauseScrolling()" size="small" *ngIf="isScrolling">
+                <ion-icon name="pause"></ion-icon>
+            </ion-fab-button>
+        </ion-buttons>
         <ion-range min="-5" max="5" step="1" pin="true" snaps="true" ticks="true" [(ngModel)]="scrollSpeed"></ion-range>
-    </ion-item>
+        <ion-buttons slot="end">
+            <ion-fab-button color="danger" (click)="addSongToQueue()" size="small">
+                <ion-icon name="flame"></ion-icon>
+            </ion-fab-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-footer>

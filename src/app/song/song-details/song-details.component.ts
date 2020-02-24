@@ -26,7 +26,7 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
 
     scrollSpeed = 0;
     isScrolling = false;
-    scrollPaused = false;
+    isScrollPaused = false;
     wheeling;
 
     constructor(
@@ -48,7 +48,10 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
             if (this.router.url.includes(StorageKeys.CAMPFIRE)) {
                 this.guestMode = true;
                 document.body.classList.toggle('dark', true);
-                this.campfireService.getCurrentSongFromFirebase(uuid).subscribe(res => this.displaySong(res));
+                this.campfireService.getCurrentSongFromFirebase(uuid).subscribe(res => {
+                    this.displaySong(res);
+                    this.content.scrollToTop();
+                });
             } else {
                 this.songService.getSong(params.get('uuid')).then(res => this.displaySong(res));
             }
@@ -82,22 +85,30 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
         this.router.navigate(['/tabs/song']);
     }
 
+    editSong() {
+        this.router.navigate(['/tabs/song', this.song.uuid, 'edit']);
+    }
+
     previousState = () => this.router.navigate([this.previousUrl]);
+
+    playSong() {
+        this.setCurrentSong();
+        this.startScroll();
+    }
 
     setCurrentSong = () => this.campfireService.setCurrentSong(this.song);
 
     private registerScrollListeners() {
         window.addEventListener('wheel', event => {
-            if (!this.wheeling) {
-                if (this.isScrolling) {
-                    this.triggerScrollPause();
-                }
+            if (!this.wheeling && this.isScrolling) {
+                this.isScrollPaused = true;
             }
 
             clearTimeout(this.wheeling);
             this.wheeling = setTimeout(() => {
-                if (this.scrollPaused) {
-                    this.triggerScrollPause();
+                if (this.isScrollPaused) {
+                    this.isScrollPaused = false;
+                    this.performScroll();
                 }
                 this.wheeling = undefined;
             }, 250);
@@ -105,43 +116,51 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
 
         window.addEventListener('touchstart', event => {
             if (this.isScrolling) {
-                this.triggerScrollPause();
+                this.isScrollPaused = true;
             }
         });
 
         window.addEventListener('touchend', event => {
-            if (this.scrollPaused) {
-                this.triggerScrollPause();
+            if (this.isScrollPaused) {
+                this.isScrollPaused = false;
+                this.performScroll();
             }
         });
     }
 
-    private triggerScrollPause() {
-        this.scrollPaused = !this.scrollPaused;
-        this.triggerAutoScroll();
+    triggerAutoScroll() {
+        this.isScrolling = !this.isScrolling;
+        this.performScroll();
     }
 
-    triggerAutoScroll() {
+    performScroll() {
         this.content.getScrollElement().then((element: HTMLElement) => {
-            this.isScrolling = !this.isScrolling;
-            this.performScroll(this.calculateScrollableHeight(element), element.scrollTop);
+            this.performScrollRecursive(this.calculateScrollableHeight(element), element.scrollTop);
         });
     }
 
+    startScroll() {
+        this.isScrolling = true;
+        this.performScroll();
+    }
+
+    pauseScrolling() {
+        this.isScrolling = false;
+    }
     private calculateScrollableHeight(element: HTMLElement): number {
         return document.getElementById('song-details-list').scrollHeight
             + element.getBoundingClientRect().top + element.getBoundingClientRect().bottom
             - 2 * element.offsetHeight;
     }
 
-    private performScroll(scrollableHeight: number, scrollOffset: number) {
-        if (this.isScrolling) {
+    private performScrollRecursive(scrollableHeight: number, scrollOffset: number) {
+        if (this.isScrolling && !this.isScrollPaused) {
             scrollOffset += (this.scrollSpeed + 5) / 50;
             if (scrollOffset >= scrollableHeight) {
                 this.isScrolling = false;
             }
             this.content.scrollToPoint(0, scrollOffset).then(() => {
-                setTimeout(() => this.performScroll(scrollableHeight, scrollOffset));
+                setTimeout(() => this.performScrollRecursive(scrollableHeight, scrollOffset));
             });
         }
     }
