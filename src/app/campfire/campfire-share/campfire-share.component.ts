@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {NavParams, PopoverController} from '@ionic/angular';
 import {CampfireService} from '../../../services/campfire.service';
 import {AuthService} from '../../../services/auth.service';
+import {StorageKeys} from '../../../model/storage-keys.model';
 
 @Component({
     selector: 'app-campfire-share',
@@ -10,11 +11,20 @@ import {AuthService} from '../../../services/auth.service';
 })
 export class CampfireShareComponent implements OnInit {
 
-    currentSongUuid = '';
+    shareUrl = '';
     pop: PopoverController;
 
     constructor(navParams: NavParams, campfireService: CampfireService, public authService: AuthService) {
-        campfireService.getCurrentSongMeta().then(meta => this.currentSongUuid = meta.firebaseUuid);
+        const currentUrl = window.location.href;
+        if (currentUrl.includes(StorageKeys.CAMPFIRE)) {
+            this.shareUrl = currentUrl;
+        } else {
+            if (authService.user) {
+                campfireService.getCurrentSongMeta().then(meta => {
+                    this.shareUrl = 'kpmarczynski-songbook.firebaseapp.com/tabs/campfire/' + meta.firebaseUuid + '/view';
+                });
+            }
+        }
         this.pop = navParams.get('popoverController');
     }
 

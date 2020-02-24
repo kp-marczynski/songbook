@@ -55,10 +55,6 @@
     </ion-list>
 </ion-content>
 <ion-footer>
-    <!--    <ion-item>-->
-    <!--        <ion-button (click)="triggerAutoScroll()">Start scroll</ion-button>-->
-
-    <!--    </ion-item>-->
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-fab-button (click)="playSong()" size="small" *ngIf="!isScrolling">
@@ -68,7 +64,28 @@
                 <ion-icon name="pause"></ion-icon>
             </ion-fab-button>
         </ion-buttons>
-        <ion-range min="-5" max="5" step="1" pin="true" snaps="true" ticks="true" [(ngModel)]="scrollSpeed"></ion-range>
+
+<!--        <ion-buttons>-->
+<!--            <ion-fab-button size="small" color="dark">-->
+<!--                <ion-icon name="remove"></ion-icon>-->
+<!--            </ion-fab-button>-->
+<!--            <ion-label>Scroll: {{scrollSpeed}}</ion-label>-->
+<!--            <ion-fab-button size="small" color="dark">-->
+<!--                <ion-icon name="add"></ion-icon>-->
+<!--            </ion-fab-button>-->
+<!--        </ion-buttons>-->
+
+<!--        <ion-buttons>-->
+<!--            <ion-fab-button size="small" color="dark">-->
+<!--                <ion-icon name="remove"></ion-icon>-->
+<!--            </ion-fab-button>-->
+<!--            <ion-label>Transpose: 0</ion-label>-->
+<!--            <ion-fab-button size="small" color="dark">-->
+<!--                <ion-icon name="add"></ion-icon>-->
+<!--            </ion-fab-button>-->
+<!--        </ion-buttons>-->
+
+        <ion-range min="-5" max="5" step="1" pin="true" snaps="true" ticks="true" [(ngModel)]="scrollSpeed" *ngIf="isScrolling"></ion-range>
         <ion-buttons slot="end">
             <ion-fab-button color="danger" (click)="addSongToQueue()" size="small">
                 <ion-icon name="flame"></ion-icon>
