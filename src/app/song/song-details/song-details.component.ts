@@ -25,7 +25,10 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
     simpleChords = true;
     guestMode = false;
 
-    scrollSpeed = 0;
+    scrollSpeed = 100;
+    speedStep = 20;
+    baseSpeed = 3;
+    scrollSpeedDecimals = 2;
     isScrolling = false;
     isScrollPaused = false;
     wheeling;
@@ -66,7 +69,7 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
             this.previousState();
         } else {
             this.formattedContent = this.chordProService.parseChordPro(this.song.content);
-            if(this.content){
+            if (this.content) {
                 this.content.scrollToTop();
             }
         }
@@ -153,14 +156,15 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
     }
 
     private calculateScrollableHeight(element: HTMLElement): number {
-        return document.getElementById('song-details-list').scrollHeight
+        const songDetailsListElement = document.getElementById('song-details-list');
+        return !!songDetailsListElement ? songDetailsListElement.scrollHeight
             + element.getBoundingClientRect().top + element.getBoundingClientRect().bottom
-            - 2 * element.offsetHeight;
+            - 2 * element.offsetHeight : 0;
     }
 
     private performScrollRecursive(scrollableHeight: number, scrollOffset: number) {
         if (this.isScrolling && !this.isScrollPaused) {
-            scrollOffset += (this.scrollSpeed + 5) / 75;
+            scrollOffset += this.scrollSpeed * this.baseSpeed / Math.pow(10, this.scrollSpeedDecimals * 2);
             if (scrollOffset >= scrollableHeight) {
                 this.isScrolling = false;
             }
@@ -171,4 +175,14 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
     }
 
     presentPopover = (ev: any) => this.campfireSharePopoverService.presentPopover(ev);
+
+    changeScrollSpeed(value: number) {
+        this.scrollSpeed = this.scrollSpeed + value > 0
+            ? this.scrollSpeed + value
+            : 0;
+    }
+
+    getSpeedWithDecimals(speed: number) {
+        return speed / Math.pow(10, this.scrollSpeedDecimals);
+    }
 }
