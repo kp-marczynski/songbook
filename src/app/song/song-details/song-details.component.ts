@@ -27,7 +27,7 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
 
     scrollSpeed = 100;
     speedStep = 20;
-    baseSpeed = 3;
+    baseSpeed = 6;
     scrollSpeedDecimals = 2;
     isScrolling = false;
     isScrollPaused = false;
