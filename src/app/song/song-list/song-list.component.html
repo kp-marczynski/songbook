@@ -12,14 +12,14 @@
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button [routerLink]="['/tabs/song/new']">
-        <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-</ion-fab>
+        <ion-fab-button (click)="navigateWithTimeout(['/tabs/song/new'])">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
     <ion-list #slidedList>
         <ion-virtual-scroll [items]="filteredSongs" [trackBy]="trackByFn">
             <ion-item-sliding *virtualItem="let song">
-                <ion-item (click)="navigate(['/tabs/song', song.uuid, 'view'])" button="true">
+                <ion-item (click)="navigateWithTimeout(['/tabs/song', song.uuid, 'view'])" button="true">
                     <ion-label class="ion-text-wrap">
                         <h2>{{song.title}}</h2>
                         <p>{{song.artist}}</p>
@@ -39,10 +39,4 @@
         </ion-virtual-scroll>
 
     </ion-list>
-<!--    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadDisplayData($event)">-->
-<!--        <ion-infinite-scroll-content-->
-<!--                loadingSpinner="bubbles"-->
-<!--                loadingText="Loading more data...">-->
-<!--        </ion-infinite-scroll-content>-->
-<!--    </ion-infinite-scroll>-->
 </ion-content>

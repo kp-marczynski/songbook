@@ -24,7 +24,7 @@
         <ion-button (click)="syncWithFirebase()">
             <ion-label>Sync with firebase!</ion-label>
         </ion-button>
-        <label>Last sync: {{lastSync ? lastSync.toLocaleString() : 'never'}}</label>
+        <label>Last sync: {{getLastSyncDateString()}}</label>
     </ion-item>
 </ion-content>
 

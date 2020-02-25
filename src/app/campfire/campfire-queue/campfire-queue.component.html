@@ -17,7 +17,7 @@
     </ion-fab>
     <ion-list>
         <ion-item-sliding *ngFor="let song of songQueue">
-            <ion-item [routerLink]="['/tabs/song', song.uuid, 'view']">
+            <ion-item (click)="navigateToSongDetails(song)">
                 <ion-label class="ion-text-wrap">
                     <h2>{{song.title}}</h2>
                     <p>{{song.artist}}</p>
@@ -31,8 +31,8 @@
         </ion-item-sliding>
     </ion-list>
 </ion-content>
-<ion-item-divider slot="end" style="margin-left: 0" *ngIf="currentSong" [routerLink]="['/tabs/song', currentSong.uuid, 'view']">
-    <ion-icon name="play-circle" size="large" slot="end" style="padding-left: 1.5rem; padding-right: 1.5rem;"></ion-icon>
+<ion-item-divider slot="end" class="current-song-container" *ngIf="currentSong" (click)="navigateToSongDetails(currentSong)">
+    <ion-icon name="play-circle" size="large" slot="end" class="current-song-icon"></ion-icon>
     <ion-label class="ion-text-wrap">
         <h1>{{currentSong.title}}</h1>
         <h3>{{currentSong.artist}}</h3>

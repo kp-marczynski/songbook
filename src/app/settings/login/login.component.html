@@ -1,8 +1,8 @@
-<ion-button (click)="authService.signInWithGoogle()" expand="block" *ngIf="!authService.user">
+<ion-button (click)="signInWithGoogle()" expand="block" *ngIf="!authService.user">
     <ion-label>Sign in with Google</ion-label>
     <ion-icon name="logo-google" size="large"></ion-icon>
 </ion-button>
 
-<ion-button (click)="authService.signOut()" expand="block" *ngIf="authService.user" color="danger">
+<ion-button (click)="signOut()" expand="block" *ngIf="authService.user" color="danger">
     <ion-label>Sign out!</ion-label>
 </ion-button>

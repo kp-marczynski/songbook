@@ -66,4 +66,8 @@ export class SettingsComponent implements OnInit {
         this.songService.syncWithFirebase();
         this.lastSync = new Date();
     }
+
+    getLastSyncDateString(): string {
+        return !!this.lastSync ? this.lastSync.toLocaleString() : 'never';
+    }
 }

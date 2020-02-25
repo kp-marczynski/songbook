@@ -117,7 +117,7 @@ export class SongListComponent implements OnInit, OnDestroy {
 
     hideKeyboard = () => (document.activeElement as HTMLElement).blur();
 
-    navigate(url: any) {
+    navigateWithTimeout(url: string[]) {
         this.hideKeyboard();
         setTimeout(() => this.router.navigate(url), 500);
     }

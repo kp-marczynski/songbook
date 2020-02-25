@@ -185,4 +185,8 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
     getSpeedWithDecimals(speed: number) {
         return speed / Math.pow(10, this.scrollSpeedDecimals);
     }
+
+    getGroupChords(group: IChordProGroup, index: number) {
+        return this.simpleChords ? group.simpleChords[index] : group.chords[index];
+    }
 }
