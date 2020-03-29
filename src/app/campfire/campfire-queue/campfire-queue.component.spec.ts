@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { QueueListComponent } from './queue-list.component';
+import { CampfireQueueComponent } from './campfire-queue.component';
 
-describe('QueueListComponent', () => {
-  let component: QueueListComponent;
-  let fixture: ComponentFixture<QueueListComponent>;
+describe('CampfireQueueComponent', () => {
+  let component: CampfireQueueComponent;
+  let fixture: ComponentFixture<CampfireQueueComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ QueueListComponent ],
+      declarations: [ CampfireQueueComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(QueueListComponent);
+    fixture = TestBed.createComponent(CampfireQueueComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

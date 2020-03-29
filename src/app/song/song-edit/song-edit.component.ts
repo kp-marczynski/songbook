@@ -1,10 +1,9 @@
-import {AfterContentInit, AfterViewChecked, AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {ChordProGroup} from '../../../model/chord-pro-group.model';
-import {Song} from '../../../model/song.model';
 import {ActivatedRoute, Router} from '@angular/router';
-import {StorageHelperService} from '../../../services/storage-helper.service';
-import {RouterExtService} from "../../../services/router-ext.service";
+import {RouterExtService} from '../../../services/router-ext.service';
+import {SongService} from '../../../services/song.service';
+import {ISong, Song} from '../../../model/song.model';
 
 @Component({
     selector: 'app-song-edit',
@@ -27,14 +26,14 @@ export class SongEditComponent implements OnInit, AfterViewInit {
     constructor(
         private fb: FormBuilder,
         private route: ActivatedRoute,
-        private storageHelperService: StorageHelperService,
+        private songService: SongService,
         private routerExtService: RouterExtService,
         private router: Router) {
     }
 
     ngOnInit() {
         this.route.paramMap.subscribe(params => {
-            this.storageHelperService.getSong(params.get('uuid')).then(res => {
+            this.songService.getSong(params.get('uuid')).then(res => {
                 if (res) {
                     this.updateForm(res);
                 }
@@ -42,39 +41,38 @@ export class SongEditComponent implements OnInit, AfterViewInit {
         });
     }
 
-    updateForm(song: Song) {
+    ngAfterViewInit(): void {
+        setTimeout(() => {
+            const prevUrl = this.routerExtService.getPreviousUrl();
+            this.previousUrl = prevUrl ? prevUrl : '/tabs/song';
+        });
+    }
+
+    updateForm(song: ISong) {
         this.editForm.patchValue({
             uuid: song.uuid,
             title: song.title,
-            author: song.author,
+            author: song.artist,
             language: song.language,
             content: song.content
         });
     }
 
-    private createFromForm(): Song {
+    private createFromForm(): ISong {
         return new Song(
+            this.editForm.get(['uuid']).value,
             this.editForm.get(['title']).value,
             this.editForm.get(['author']).value,
             this.editForm.get(['language']).value,
-            this.editForm.get(['content']).value,
-            this.editForm.get(['uuid']).value);
+            this.editForm.get(['content']).value);
     }
 
     save() {
         this.isSaving = true;
         const song = this.createFromForm();
-        console.log(song);
-        this.storageHelperService.saveSong(song).then(() => this.router.navigate([this.previousUrl]));
+        // console.log(song);
+        this.songService.saveSong(song).then(() => this.previousState());
     }
 
-    previousState() {
-        const prevUrl = this.routerExtService.getPreviousUrl();
-        return prevUrl ? prevUrl : '/tabs/song';
-    }
-
-    ngAfterViewInit(): void {
-        setTimeout(() =>
-            this.previousUrl = this.previousState());
-    }
+    previousState = () => this.router.navigate([this.previousUrl]);
 }

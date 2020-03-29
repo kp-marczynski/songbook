@@ -199,3 +199,13 @@ body.dark {
 body.dark {
   background-color: var(--ion-item-background);
 }
+
+ion-popover {
+  div.popover-content {
+    top: calc(50% - 150px) !important;
+    left: calc(50% - 150px) !important;
+    --background: white;
+    padding: 10px;
+    --width: 300px;
+  }
+}

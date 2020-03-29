@@ -13,20 +13,19 @@
     </ion-item>
     <ion-item>
         <ion-label>Import songs</ion-label>
-        <ion-input type="file" (change)="fileChanged($event)"></ion-input>
+        <ion-input type="file" (change)="handleImportFileChanged($event)"></ion-input>
         <ion-button (click)="uploadDocument()" [disabled]="uploading">Load!</ion-button>
     </ion-item>
     <ion-item *ngIf="uploading">
         <ion-progress-bar [value]="progress" buffer="0"></ion-progress-bar>
     </ion-item>
+    <app-login></app-login>
+    <ion-item *ngIf="authService.user">
+        <ion-button (click)="syncWithFirebase()">
+            <ion-label>Sync with firebase!</ion-label>
+        </ion-button>
+        <label>Last sync: {{getLastSyncDateString()}}</label>
+    </ion-item>
 </ion-content>
 
-<ion-item slot="end" class="ion-text-center">
-    <ion-label>
-        <img src="assets/icons/icon-128x128.png" width="72px" height="72px">
-        <br/>
-        {{name}} v{{version}}
-        <br/>
-        &copy; {{year}} {{author}}
-    </ion-label>
-</ion-item>
+<app-info></app-info>

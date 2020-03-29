@@ -9,10 +9,13 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 import {IonicStorageModule} from '@ionic/storage';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
-import {TabsService} from "../services/tabs.service";
-import {RouterExtService} from "../services/router-ext.service";
+import {ServiceWorkerModule} from '@angular/service-worker';
+import {environment} from '../environments/environment';
+import {TabsService} from '../services/tabs.service';
+import {RouterExtService} from '../services/router-ext.service';
+import {AngularFireModule} from '@angular/fire';
+import {AngularFireAuthModule} from '@angular/fire/auth';
+import {AngularFirestoreModule} from '@angular/fire/firestore';
 
 @NgModule({
     declarations: [AppComponent],
@@ -23,8 +26,11 @@ import {RouterExtService} from "../services/router-ext.service";
             animated: false
         }),
         AppRoutingModule,
-      IonicStorageModule.forRoot(),
-      ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
+        IonicStorageModule.forRoot(),
+        ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production}),
+        AngularFireAuthModule,
+        AngularFirestoreModule,
+        AngularFireModule.initializeApp(environment.firebaseConfig)],
     providers: [
         StatusBar,
         SplashScreen,
