@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {CampfireService} from '../../../services/campfire.service';
 import {ISong} from '../../../model/song.model';
 import {SongService} from '../../../services/song.service';
-import {CampfireSharePopoverService} from '../campfire-share-popover.service';
 import {Router} from '@angular/router';
+import {CurrentSongSharePopoverService} from "../../shared/current-song-share/current-song-share-popover.service";
 
 @Component({
     selector: 'app-campfire-queue',
@@ -17,7 +17,7 @@ export class CampfireQueueComponent implements OnInit {
 
     constructor(
         private campfireService: CampfireService,
-        private campfireSharePopoverService: CampfireSharePopoverService,
+        private currentSongSharePopoverService: CurrentSongSharePopoverService,
         private songService: SongService,
         private router: Router) {
     }
@@ -47,7 +47,7 @@ export class CampfireQueueComponent implements OnInit {
 
     removeSongFromQueue = (song: ISong) => this.campfireService.removeFromQueue(song);
 
-    presentPopover = (ev: any) => this.campfireSharePopoverService.presentPopover(ev);
+    presentPopover = (ev: any) => this.currentSongSharePopoverService.presentPopover(ev);
 
     navigateToSongDetails(song: ISong) {
         this.router.navigate(['/tabs/song', song.uuid, 'view']);

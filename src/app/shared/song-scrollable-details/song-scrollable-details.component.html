@@ -1,0 +1,29 @@
+<ion-content>
+
+    <ion-list *ngIf="song">
+        <ion-item-divider sticky>
+            <ion-label class="ion-text-wrap">
+                <h1>{{song.title}}</h1>
+                <h3>{{song.artist}}</h3>
+            </ion-label>
+        </ion-item-divider>
+        <ion-item>
+            <ion-label>Show chords</ion-label>
+            <ion-toggle [(ngModel)]="chordsVisible"></ion-toggle>
+        </ion-item>
+    </ion-list>
+
+    <ion-list lines="none" id="song-details-list">
+        <ion-item-group *ngFor="let group of formattedContent">
+            <ion-item-divider sticky *ngIf="chordsVisible && group.simpleChords.length > 0">
+                <ion-label class="ion-text-wrap chords" color="danger">
+                    <p *ngFor="let chords of group.chords; let i=index">{{getGroupChords(group, i)}}</p>
+                </ion-label>
+
+            </ion-item-divider>
+            <ion-item *ngFor="let textLine of group.textLines" class="lyrics-item">
+                {{textLine}}
+            </ion-item>
+        </ion-item-group>
+    </ion-list>
+</ion-content>

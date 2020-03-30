@@ -19,12 +19,7 @@
     <ion-list #slidedList>
         <ion-virtual-scroll [items]="filteredSongs" [trackBy]="trackByFn">
             <ion-item-sliding *virtualItem="let song">
-                <ion-item (click)="navigateWithTimeout(['/tabs/song', song.uuid, 'view'])" button="true">
-                    <ion-label class="ion-text-wrap">
-                        <h2>{{song.title}}</h2>
-                        <p>{{song.artist}}</p>
-                    </ion-label>
-                </ion-item>
+            <app-song-list-item [song]="song"></app-song-list-item>
                 <ion-item-options side="end">
                     <ion-item-option color="danger" (click)="remove(song); slidedList.closeSlidingItems()">
                         <ion-icon name="trash" slot="icon-only"></ion-icon>

@@ -1,16 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {NavParams, PopoverController} from '@ionic/angular';
-import {CampfireService} from '../../../services/campfire.service';
-import {AuthService} from '../../../services/auth.service';
-import {StorageKeys} from '../../../model/storage-keys.model';
+import {NavParams, PopoverController} from "@ionic/angular";
+import {CampfireService} from "../../../services/campfire.service";
+import {AuthService} from "../../../services/auth.service";
+import {StorageKeys} from "../../../model/storage-keys.model";
 
 @Component({
-    selector: 'app-campfire-share',
-    templateUrl: './campfire-share.component.html',
-    styleUrls: ['./campfire-share.component.scss'],
+    selector: 'app-share-current-song',
+    templateUrl: './current-song-share.component.html',
+    styleUrls: ['./current-song-share.component.scss'],
 })
-export class CampfireShareComponent implements OnInit {
-
+export class CurrentSongShareComponent implements OnInit {
     shareUrl = '';
     pop: PopoverController;
 
@@ -32,5 +31,6 @@ export class CampfireShareComponent implements OnInit {
 
     ngOnInit() {
     }
+
 
 }

@@ -1,0 +1,16 @@
+.chords {
+  max-height: 25vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.chords p {
+  font-size: 1.3rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+  word-spacing: 0.1rem;
+}
+
+.lyrics-item {
+  --min-height: 32px;
+}

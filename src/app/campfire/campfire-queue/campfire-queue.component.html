@@ -17,12 +17,7 @@
     </ion-fab>
     <ion-list>
         <ion-item-sliding *ngFor="let song of songQueue">
-            <ion-item (click)="navigateToSongDetails(song)">
-                <ion-label class="ion-text-wrap">
-                    <h2>{{song.title}}</h2>
-                    <p>{{song.artist}}</p>
-                </ion-label>
-            </ion-item>
+            <app-song-list-item [song]="song"></app-song-list-item>
             <ion-item-options side="end">
                 <ion-item-option color="danger" (click)="removeSongFromQueue(song)">
                     <ion-icon name="close" slot="icon-only"></ion-icon>

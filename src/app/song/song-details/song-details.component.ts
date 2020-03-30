@@ -1,15 +1,14 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {IonContent} from '@ionic/angular';
 import {RouterExtService} from '../../../services/router-ext.service';
 import {ISong} from '../../../model/song.model';
 import {SongService} from '../../../services/song.service';
 import {CampfireService} from '../../../services/campfire.service';
-import {IChordProGroup} from '../../../model/chord-pro-group.model';
 import {ChordProService} from '../../../services/chord-pro.service';
 import {StorageKeys} from '../../../model/storage-keys.model';
 import {ToastHelperService} from '../../../services/toast-helper.service';
-import {CampfireSharePopoverService} from '../../campfire/campfire-share-popover.service';
+import {SongScrollableDetailsComponent} from "../../shared/song-scrollable-details/song-scrollable-details.component";
+import {CurrentSongSharePopoverService} from "../../shared/current-song-share/current-song-share-popover.service";
 
 @Component({
     selector: 'app-song-details',
@@ -17,21 +16,17 @@ import {CampfireSharePopoverService} from '../../campfire/campfire-share-popover
     styleUrls: ['./song-details.component.scss'],
 })
 export class SongDetailsComponent implements OnInit, AfterViewInit {
-    @ViewChild(IonContent, {static: false}) content: IonContent;
+    // @ViewChild(IonContent, {static: false}) content: IonContent;
+    @ViewChild(SongScrollableDetailsComponent, {static: false}) songScrollableDetailsComponent: SongScrollableDetailsComponent;
     previousUrl = '';
     song: ISong = null;
-    formattedContent: IChordProGroup[];
-    chordsVisible = true;
-    simpleChords = true;
     guestMode = false;
 
     scrollSpeed = 100;
     speedStep = 20;
-    baseSpeed = 6;
     scrollSpeedDecimals = 2;
     isScrolling = false;
-    isScrollPaused = false;
-    wheeling;
+
 
     constructor(
         private songService: SongService,
@@ -41,7 +36,7 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
         private router: Router,
         private routerExtService: RouterExtService,
         private toastHelperService: ToastHelperService,
-        private campfireSharePopoverService: CampfireSharePopoverService) {
+        private currentSongSharePopoverService: CurrentSongSharePopoverService) {
     }
 
     ngOnInit(): void {
@@ -54,25 +49,12 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
                 this.guestMode = true;
                 document.body.classList.toggle('dark', true);
                 this.campfireService.getCurrentSongFromFirebase(uuid).subscribe(res => {
-                    this.displaySong(res);
+                    this.song = res;
                 });
             } else {
-                this.songService.getSong(params.get('uuid')).then(res => this.displaySong(res));
+                this.songService.getSong(params.get('uuid')).then(res => this.song = res);
             }
         });
-        this.registerScrollListeners();
-    }
-
-    private displaySong(song: ISong) {
-        this.song = song;
-        if (!this.song) {
-            this.previousState();
-        } else {
-            this.formattedContent = this.chordProService.parseChordPro(this.song.content);
-            if (this.content) {
-                this.content.scrollToTop();
-            }
-        }
     }
 
     ngAfterViewInit(): void {
@@ -105,88 +87,25 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
 
     setCurrentSong = () => this.campfireService.setCurrentSong(this.song);
 
-    private registerScrollListeners() {
-        window.addEventListener('wheel', event => {
-            if (!this.wheeling && this.isScrolling) {
-                this.isScrollPaused = true;
-            }
-
-            clearTimeout(this.wheeling);
-            this.wheeling = setTimeout(() => {
-                if (this.isScrollPaused) {
-                    this.isScrollPaused = false;
-                    this.performScroll();
-                }
-                this.wheeling = undefined;
-            }, 250);
-        });
-
-        window.addEventListener('touchstart', event => {
-            if (this.isScrolling) {
-                this.isScrollPaused = true;
-            }
-        });
-
-        window.addEventListener('touchend', event => {
-            if (this.isScrollPaused) {
-                this.isScrollPaused = false;
-                this.performScroll();
-            }
-        });
-    }
-
-    triggerAutoScroll() {
-        this.isScrolling = !this.isScrolling;
-        this.performScroll();
-    }
-
-    performScroll() {
-        this.content.getScrollElement().then((element: HTMLElement) => {
-            this.performScrollRecursive(this.calculateScrollableHeight(element), element.scrollTop);
-        });
-    }
-
     startScroll() {
-        this.isScrolling = true;
-        this.performScroll();
+        this.songScrollableDetailsComponent.startScroll();
     }
 
     pauseScrolling() {
-        this.isScrolling = false;
+        this.songScrollableDetailsComponent.pauseScrolling();
     }
-
-    private calculateScrollableHeight(element: HTMLElement): number {
-        const songDetailsListElement = document.getElementById('song-details-list');
-        return !!songDetailsListElement ? songDetailsListElement.scrollHeight
-            + element.getBoundingClientRect().top + element.getBoundingClientRect().bottom
-            - 2 * element.offsetHeight : 0;
-    }
-
-    private performScrollRecursive(scrollableHeight: number, scrollOffset: number) {
-        if (this.isScrolling && !this.isScrollPaused) {
-            scrollOffset += this.scrollSpeed * this.baseSpeed / Math.pow(10, this.scrollSpeedDecimals * 2);
-            if (scrollOffset >= scrollableHeight) {
-                this.isScrolling = false;
-            }
-            this.content.scrollToPoint(0, scrollOffset).then(() => {
-                setTimeout(() => this.performScrollRecursive(scrollableHeight, scrollOffset));
-            });
-        }
-    }
-
-    presentPopover = (ev: any) => this.campfireSharePopoverService.presentPopover(ev);
 
     changeScrollSpeed(value: number) {
-        this.scrollSpeed = this.scrollSpeed + value > 0
-            ? this.scrollSpeed + value
-            : 0;
+        this.scrollSpeed = this.songScrollableDetailsComponent.changeScrollSpeed(value);
     }
 
     getSpeedWithDecimals(speed: number) {
         return speed / Math.pow(10, this.scrollSpeedDecimals);
     }
 
-    getGroupChords(group: IChordProGroup, index: number) {
-        return this.simpleChords ? group.simpleChords[index] : group.chords[index];
+    scrollStateChanged(scroll: boolean) {
+        this.isScrolling = scroll;
     }
+
+    presentPopover = (ev: any) => this.currentSongSharePopoverService.presentPopover(ev);
 }

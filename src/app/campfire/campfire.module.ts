@@ -4,23 +4,23 @@ import {CommonModule} from '@angular/common';
 import {CampfireRoutingModule} from './campfire-routing.module';
 import {IonicModule} from '@ionic/angular';
 import {CampfireQueueComponent} from './campfire-queue/campfire-queue.component';
-import {CampfireShareComponent} from "./campfire-share/campfire-share.component";
-import {QRCodeModule} from "angular2-qrcode";
 import {SongModule} from "../song/song.module";
-import {CampfireSharePopoverService} from './campfire-share-popover.service';
+import {CampfireGuestComponent} from "./campfire-guest/campfire-guest.component";
+import {SharedModule} from "../shared/shared.module";
 
 
 @NgModule({
-    declarations: [CampfireQueueComponent, CampfireShareComponent],
+    declarations: [
+        CampfireQueueComponent,
+        CampfireGuestComponent
+    ],
     imports: [
         CommonModule,
         CampfireRoutingModule,
         IonicModule,
-        QRCodeModule,
-        SongModule
-    ],
-    entryComponents: [CampfireShareComponent],
-    providers: [CampfireSharePopoverService]
+        SongModule,
+        SharedModule
+    ]
 })
 export class CampfireModule {
 }
