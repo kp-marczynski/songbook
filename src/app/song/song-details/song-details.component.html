@@ -1,12 +1,12 @@
 <ion-header>
-    <ion-toolbar [ngSwitch]="guestMode">
-        <ion-buttons slot="start" *ngSwitchCase="false">
+    <ion-toolbar>
+        <ion-buttons slot="start">
             <ion-back-button [defaultHref]="previousUrl"></ion-back-button>
         </ion-buttons>
-        <ion-title *ngSwitchCase="false">
+        <ion-title>
             Song Details
         </ion-title>
-        <ion-buttons slot="end" *ngSwitchCase="false">
+        <ion-buttons slot="end">
             <ion-fab-button color="danger" (click)="addSongToQueue()" size="small">
                 <ion-icon name="flame"></ion-icon>
             </ion-fab-button>
@@ -17,10 +17,6 @@
                 <ion-icon name="trash" slot="icon-only"></ion-icon>
             </ion-button>
         </ion-buttons>
-
-        <ion-title *ngSwitchCase="true">
-            Current Song
-        </ion-title>
     </ion-toolbar>
 </ion-header>
 

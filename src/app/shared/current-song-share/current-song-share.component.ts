@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {NavParams, PopoverController} from "@ionic/angular";
 import {CampfireService} from "../../../services/campfire.service";
 import {AuthService} from "../../../services/auth.service";
@@ -9,7 +9,7 @@ import {StorageKeys} from "../../../model/storage-keys.model";
     templateUrl: './current-song-share.component.html',
     styleUrls: ['./current-song-share.component.scss'],
 })
-export class CurrentSongShareComponent implements OnInit {
+export class CurrentSongShareComponent {
     shareUrl = '';
     pop: PopoverController;
 
@@ -20,7 +20,7 @@ export class CurrentSongShareComponent implements OnInit {
         } else {
             if (authService.user) {
                 campfireService.getCurrentSongMeta().then(meta => {
-                    this.shareUrl = 'kpmarczynski-songbook.firebaseapp.com/tabs/campfire/' + meta.firebaseUuid + '/view';
+                    this.shareUrl = 'kpmarczynski-songbook.firebaseapp.com/tabs/campfire/guest/' + meta.firebaseUuid;
                 });
             }
         }
@@ -28,9 +28,4 @@ export class CurrentSongShareComponent implements OnInit {
     }
 
     close = () => this.pop.dismiss();
-
-    ngOnInit() {
-    }
-
-
 }

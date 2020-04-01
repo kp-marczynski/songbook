@@ -1,3 +1,38 @@
-<p>
-  campfire-guest works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Current Song
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="song" [scrollEvents]="true">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="presentPopover($event)">
+    <ion-fab-button>
+      <ion-icon name="share"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <app-song-scrollable-details [song]="song" [scrollSpeed]="scrollSpeed" [isScrolling]="isScrolling" (scrollStateChanged)="scrollStateChanged($event)"></app-song-scrollable-details>
+</ion-content>
+<ion-footer *ngIf="song">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      Scroll speed:
+      <ion-fab-button size="small" color="dark" (click)="changeScrollSpeed(-speedStep)">
+        -{{getSpeedWithDecimals(speedStep)}}
+      </ion-fab-button>
+      {{getSpeedWithDecimals(scrollSpeed)}}x
+      <ion-fab-button size="small" color="dark" (click)="changeScrollSpeed(speedStep)">
+        +{{getSpeedWithDecimals(speedStep)}}
+      </ion-fab-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-fab-button (click)="playSong()" size="small" *ngIf="!isScrolling">
+        <ion-icon name="play"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="pauseScrolling()" size="small" *ngIf="isScrolling">
+        <ion-icon name="pause"></ion-icon>
+      </ion-fab-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

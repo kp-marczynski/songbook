@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import {CampfireQueueComponent} from './campfire-queue/campfire-queue.component';
-import {SongDetailsComponent} from "../song/song-details/song-details.component";
+import {CampfireGuestComponent} from "./campfire-guest/campfire-guest.component";
 
 
 const routes: Routes = [
@@ -10,8 +10,8 @@ const routes: Routes = [
         component: CampfireQueueComponent
     },
     {
-        path: ':uuid/view',
-        component: SongDetailsComponent
+        path: 'guest/:uuid',
+        component: CampfireGuestComponent
     }
 ];
 

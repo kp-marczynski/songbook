@@ -1,4 +1,5 @@
 <div [ngSwitch]="shareUrl.length > 0">
-  <qr-code *ngSwitchCase="true" [value]="shareUrl" [size]="280" level="M"></qr-code>
-  <div *ngSwitchCase="false" class="popover-text">You need to be signed in to share your current song!</div>
+    <qr-code *ngSwitchCase="true" [value]="shareUrl" [size]="280" level="M"></qr-code>
+    <p *ngSwitchCase="true" class="url-paragraph">{{shareUrl}}</p>
+    <div *ngSwitchCase="false" class="popover-text">You need to be signed in to share your current song!</div>
 </div>

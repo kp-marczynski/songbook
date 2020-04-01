@@ -4,8 +4,6 @@ import {RouterExtService} from '../../../services/router-ext.service';
 import {ISong} from '../../../model/song.model';
 import {SongService} from '../../../services/song.service';
 import {CampfireService} from '../../../services/campfire.service';
-import {ChordProService} from '../../../services/chord-pro.service';
-import {StorageKeys} from '../../../model/storage-keys.model';
 import {ToastHelperService} from '../../../services/toast-helper.service';
 import {SongScrollableDetailsComponent} from "../../shared/song-scrollable-details/song-scrollable-details.component";
 import {CurrentSongSharePopoverService} from "../../shared/current-song-share/current-song-share-popover.service";
@@ -16,44 +14,33 @@ import {CurrentSongSharePopoverService} from "../../shared/current-song-share/cu
     styleUrls: ['./song-details.component.scss'],
 })
 export class SongDetailsComponent implements OnInit, AfterViewInit {
-    // @ViewChild(IonContent, {static: false}) content: IonContent;
     @ViewChild(SongScrollableDetailsComponent, {static: false}) songScrollableDetailsComponent: SongScrollableDetailsComponent;
     previousUrl = '';
     song: ISong = null;
-    guestMode = false;
 
     scrollSpeed = 100;
     speedStep = 20;
     scrollSpeedDecimals = 2;
     isScrolling = false;
 
-
     constructor(
         private songService: SongService,
         private campfireService: CampfireService,
-        private chordProService: ChordProService,
         private route: ActivatedRoute,
         private router: Router,
         private routerExtService: RouterExtService,
         private toastHelperService: ToastHelperService,
-        private currentSongSharePopoverService: CurrentSongSharePopoverService) {
+        private currentSongSharePopoverService: CurrentSongSharePopoverService
+    ) {
     }
 
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
-            if (!params || !params.get('uuid')) {
+            const uuid = params.get('uuid');
+            if (!params || !uuid) {
                 this.previousState();
             }
-            const uuid = params.get('uuid');
-            if (this.router.url.includes(StorageKeys.CAMPFIRE)) {
-                this.guestMode = true;
-                document.body.classList.toggle('dark', true);
-                this.campfireService.getCurrentSongFromFirebase(uuid).subscribe(res => {
-                    this.song = res;
-                });
-            } else {
-                this.songService.getSong(params.get('uuid')).then(res => this.song = res);
-            }
+            this.songService.getSong(uuid).then(res => this.song = res);
         });
     }
 
@@ -107,5 +94,8 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
         this.isScrolling = scroll;
     }
 
-    presentPopover = (ev: any) => this.currentSongSharePopoverService.presentPopover(ev);
+    presentPopover = (ev: any) => {
+        this.setCurrentSong();
+        this.currentSongSharePopoverService.presentPopover(ev);
+    }
 }

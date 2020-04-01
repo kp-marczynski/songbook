@@ -39,7 +39,7 @@ export class SongScrollableDetailsComponent implements OnInit {
         this.registerScrollListeners();
     }
 
-    private displaySong() {
+    displaySong() {
         if (!this.song) {
         } else {
             this.formattedContent = this.chordProService.parseChordPro(this.song.content);
