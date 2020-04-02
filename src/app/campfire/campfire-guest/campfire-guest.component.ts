@@ -31,10 +31,10 @@ export class CampfireGuestComponent implements OnInit {
             const uuid = params.get('uuid');
             document.body.classList.toggle('dark', true);
             this.campfireService.getCurrentSongFromFirebase(uuid).subscribe(res => {
-                this.song = res;
-                // if (this.songScrollableDetailsComponent) {
+                if (res) {
+                    this.song = res;
                     setTimeout(() => this.songScrollableDetailsComponent.displaySong());
-                // }
+                }
             });
         });
     }

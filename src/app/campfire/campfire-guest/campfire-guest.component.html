@@ -15,7 +15,7 @@
   <app-song-scrollable-details [song]="song" [scrollSpeed]="scrollSpeed" [isScrolling]="isScrolling" (scrollStateChanged)="scrollStateChanged($event)"></app-song-scrollable-details>
 </ion-content>
 <ion-footer *ngIf="song">
-  <ion-toolbar>
+  <ion-toolbar class="song-details-footer">
     <ion-buttons slot="start">
       Scroll speed:
       <ion-fab-button size="small" color="dark" (click)="changeScrollSpeed(-speedStep)">

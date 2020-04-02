@@ -13,7 +13,7 @@ export class TabsService {
 
     visibility$ = this.visibilitySubject.asObservable();
 
-    hideTabBarPages = ['view', 'edit', 'new'];
+    hideTabBarPages = ['view', 'edit', 'new', 'guest'];
 
     constructor(private router: Router, private platform: Platform) {
         this.platform.ready().then(() => {
@@ -27,11 +27,8 @@ export class TabsService {
     }
 
     private showHideTabs(e: any) {
-        const urlArray = e.url.split('/');
-        const pageUrl = urlArray[urlArray.length - 1];
-        const page = pageUrl.split('?')[0];
-
-        this.changeVisibility(this.hideTabBarPages.indexOf(page) < 0);
+        const url: string = e.url;
+        this.changeVisibility(this.hideTabBarPages.filter(elem => url.includes(elem)).length == 0);
     }
 
     changeVisibility = (visibility: boolean) => this.visibilitySubject.next(visibility);

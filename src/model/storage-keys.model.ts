@@ -6,5 +6,6 @@ export enum StorageKeys {
     SONGBOOK = 'songbook',
     CURRENT_SONG = 'current-song',
     CAMPFIRE = 'campfire',
+    GUEST = 'guest',
     INDEX = 'index'
 }

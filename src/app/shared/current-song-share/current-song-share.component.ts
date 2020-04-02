@@ -15,12 +15,13 @@ export class CurrentSongShareComponent {
 
     constructor(navParams: NavParams, campfireService: CampfireService, public authService: AuthService) {
         const currentUrl = window.location.href;
-        if (currentUrl.includes(StorageKeys.CAMPFIRE)) {
+        if (currentUrl.includes(StorageKeys.GUEST)) {
             this.shareUrl = currentUrl;
         } else {
             if (authService.user) {
                 campfireService.getCurrentSongMeta().then(meta => {
                     this.shareUrl = 'kpmarczynski-songbook.firebaseapp.com/tabs/campfire/guest/' + meta.firebaseUuid;
+                    console.log(this.shareUrl)
                 });
             }
         }
