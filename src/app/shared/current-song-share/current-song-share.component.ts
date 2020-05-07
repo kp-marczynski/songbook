@@ -20,7 +20,7 @@ export class CurrentSongShareComponent {
         } else {
             if (authService.user) {
                 campfireService.getCurrentSongMeta().then(meta => {
-                    this.shareUrl = 'kpmarczynski-songbook.firebaseapp.com/tabs/campfire/guest/' + meta.firebaseUuid;
+                    this.shareUrl = 'https://kpmarczynski-songbook.firebaseapp.com/tabs/campfire/guest/' + meta.firebaseUuid;
                     console.log(this.shareUrl)
                 });
             }

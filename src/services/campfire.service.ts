@@ -26,8 +26,8 @@ export class CampfireService {
     setCurrentSong(song: ISong): Promise<ICurrentSongMeta> {
         return new Promise<any>((resolve, reject) => this.getCurrentSongMeta().then((meta: ICurrentSongMeta) => {
             const songUuid = song ? song.uuid : null;
-            if (!meta) {
-                meta = new CurrentSongMeta(songUuid, null);
+            if (this.validateMeta(meta)) {
+                meta = new CurrentSongMeta(songUuid);
             } else {
                 meta.songUUid = songUuid;
             }
@@ -50,14 +50,18 @@ export class CampfireService {
 
     getCurrentSongMeta = (): Promise<ICurrentSongMeta> => {
         return new Promise<ICurrentSongMeta>((resolve, reject) => this.storage.get(StorageKeys.CURRENT_SONG).then((meta: ICurrentSongMeta) => {
-            if (meta) {
-                resolve(meta);
+            if (this.validateMeta(meta)) {
+                this.setCurrentSongMeta(new CurrentSongMeta(null)).then(res => resolve(res));
             } else {
-                this.setCurrentSongMeta(new CurrentSongMeta(null, null)).then(res => resolve(res));
+                resolve(meta);
             }
         }))
 
     };
+
+    private validateMeta(meta: ICurrentSongMeta): boolean {
+        return meta && meta.firebaseUuid && meta.firebaseUuid == 'undefined'
+    }
 
     private setCurrentSongMeta = (meta: ICurrentSongMeta): Promise<any> => this.storage.set(StorageKeys.CURRENT_SONG, meta);
 
