@@ -26,10 +26,11 @@ export class CampfireService {
     setCurrentSong(song: ISong): Promise<ICurrentSongMeta> {
         return new Promise<any>((resolve, reject) => this.getCurrentSongMeta().then((meta: ICurrentSongMeta) => {
             const songUuid = song ? song.uuid : null;
-            if (this.validateMeta(meta)) {
+            if (CampfireService.isMetaInvalid(meta)) {
                 meta = new CurrentSongMeta(songUuid);
             } else {
                 meta.songUUid = songUuid;
+                meta.timestamp = Date.now();
             }
             this.currentSongSubject.next(song);
             if (this.authService.user) {
@@ -50,8 +51,9 @@ export class CampfireService {
 
     getCurrentSongMeta = (): Promise<ICurrentSongMeta> => {
         return new Promise<ICurrentSongMeta>((resolve, reject) => this.storage.get(StorageKeys.CURRENT_SONG).then((meta: ICurrentSongMeta) => {
-            if (this.validateMeta(meta)) {
-                this.setCurrentSongMeta(new CurrentSongMeta(null)).then(res => resolve(res));
+            if (CampfireService.isMetaInvalid(meta)) {
+                const songUUid = meta ? meta.songUUid : null;
+                this.setCurrentSongMeta(new CurrentSongMeta(songUUid)).then(res => resolve(res));
             } else {
                 resolve(meta);
             }
@@ -59,8 +61,12 @@ export class CampfireService {
 
     };
 
-    private validateMeta(meta: ICurrentSongMeta): boolean {
-        return meta && meta.firebaseUuid && meta.firebaseUuid == 'undefined'
+    private static isMetaInvalid(meta: ICurrentSongMeta): boolean {
+        return !meta || !meta.firebaseUuid || meta.firebaseUuid == 'undefined' || !meta.timestamp || this.getHoursSinceUpdate(meta) > 6;
+    }
+
+    private static getHoursSinceUpdate(meta: ICurrentSongMeta): number {
+        return (Date.now() - meta.timestamp) / 3600000;
     }
 
     private setCurrentSongMeta = (meta: ICurrentSongMeta): Promise<any> => this.storage.set(StorageKeys.CURRENT_SONG, meta);
