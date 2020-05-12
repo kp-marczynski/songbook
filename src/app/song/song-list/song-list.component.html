@@ -7,7 +7,7 @@
     <ion-searchbar debounce="300" (ionChange)="loadSongs()" #searchbar></ion-searchbar>
 </ion-header>
 
-<ion-content (ionScrollStart)="hideKeyboard()">
+<ion-content (wheel)="hideKeyboard()" (panstart)="hideKeyboard()">
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
