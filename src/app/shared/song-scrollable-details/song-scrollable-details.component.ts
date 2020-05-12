@@ -17,12 +17,12 @@ export class SongScrollableDetailsComponent implements OnInit {
     @Input() scrollSpeed: number;
     @Input() isScrolling: boolean;
     @Input() isScrollPaused: boolean;
+    @Input() chordsVisible: boolean;
     @ViewChild(IonContent, {static: false}) content: IonContent;
 
     @Output() scrollStateChanged = new EventEmitter();
 
     formattedContent: IChordProGroup[];
-    chordsVisible = true;
     simpleChords = true;
 
     baseSpeed = 6;

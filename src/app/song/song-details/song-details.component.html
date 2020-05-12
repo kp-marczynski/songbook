@@ -26,7 +26,7 @@
             <ion-icon name="share"></ion-icon>
         </ion-fab-button>
     </ion-fab>
-    <app-song-scrollable-details [song]="song" [scrollSpeed]="scrollSpeed" [isScrolling]="isScrolling" (scrollStateChanged)="scrollStateChanged($event)"></app-song-scrollable-details>
+    <app-song-scrollable-details [song]="song" [scrollSpeed]="scrollSpeed" [isScrolling]="isScrolling" [chordsVisible]="true" (scrollStateChanged)="scrollStateChanged($event)"></app-song-scrollable-details>
 </ion-content>
 <ion-footer *ngIf="song">
     <ion-toolbar>
