@@ -16,7 +16,7 @@
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>
-    <ion-list #slidedList>
+    <ion-list #slidedList *ngIf="filteredSongs && filteredSongs.length > 0">
         <ion-virtual-scroll [items]="filteredSongs" [trackBy]="trackByFn">
             <ion-item-sliding *virtualItem="let song">
             <app-song-list-item [song]="song"></app-song-list-item>
@@ -34,4 +34,8 @@
         </ion-virtual-scroll>
 
     </ion-list>
+    <div class="ion-text-center ion-padding-top" *ngIf="!filteredSongs || filteredSongs.length == 0">
+        <img src="assets/undraw_no_data_qbuo.svg" alt="No data" width="205" height="195">
+        <h2>No songs found</h2>
+    </div>
 </ion-content>

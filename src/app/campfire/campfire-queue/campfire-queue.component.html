@@ -15,7 +15,7 @@
             <ion-icon name="share"></ion-icon>
         </ion-fab-button>
     </ion-fab>
-    <ion-list>
+    <ion-list *ngIf="songQueue && songQueue.length > 0">
         <ion-item-sliding *ngFor="let song of songQueue">
             <app-song-list-item [song]="song"></app-song-list-item>
             <ion-item-options side="end">
@@ -25,6 +25,10 @@
             </ion-item-options>
         </ion-item-sliding>
     </ion-list>
+    <div class="ion-text-center ion-padding-top" *ngIf="!songQueue || songQueue.length == 0">
+        <img src="assets/undraw_into_the_night_vumi.svg" alt="No data" width="205" height="195">
+        <h2>Nothing to play by campfire...</h2>
+    </div>
 </ion-content>
 <ion-item-divider slot="end" class="current-song-container" *ngIf="currentSong" (click)="navigateToSongDetails(currentSong)">
     <ion-icon name="play-circle" size="large" slot="end" class="current-song-icon"></ion-icon>
