@@ -32,9 +32,11 @@
                 </ion-item-options>
             </ion-item-sliding>
         </ion-virtual-scroll>
-
     </ion-list>
-    <div class="ion-text-center ion-padding-top" *ngIf="!filteredSongs || filteredSongs.length == 0">
+    <div class="ion-text-center ion-padding-top" *ngIf="loading">
+        <ion-spinner></ion-spinner>
+    </div>
+    <div class="ion-text-center ion-padding-top" *ngIf="(!filteredSongs || filteredSongs.length == 0) && !loading">
         <img src="assets/undraw_no_data_qbuo.svg" alt="No data" width="205" height="195">
         <h2>No songs found</h2>
     </div>

@@ -14,6 +14,7 @@ export class CampfireQueueComponent implements OnInit {
 
     songQueue: ISong[];
     currentSong: ISong;
+    loading: boolean;
 
     constructor(
         private campfireService: CampfireService,
@@ -34,9 +35,11 @@ export class CampfireQueueComponent implements OnInit {
     }
 
     loadSongs(): Promise<any> {
+        this.loading = true;
         return new Promise<any>((resolve, reject) => {
             this.campfireService.getQueue().then(res => {
                     this.songQueue = res;
+                    this.loading = false;
                     resolve();
                 }
             );

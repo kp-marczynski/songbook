@@ -52,8 +52,8 @@ export class CampfireService {
     getCurrentSongMeta = (): Promise<ICurrentSongMeta> => {
         return new Promise<ICurrentSongMeta>((resolve, reject) => this.storage.get(StorageKeys.CURRENT_SONG).then((meta: ICurrentSongMeta) => {
             if (CampfireService.isMetaInvalid(meta)) {
-                const songUUid = meta ? meta.songUUid : null;
-                this.setCurrentSongMeta(new CurrentSongMeta(songUUid)).then(res => resolve(res));
+                // const songUUid = meta ? meta.songUUid : null;
+                this.setCurrentSongMeta(new CurrentSongMeta()).then(res => resolve(res));
             } else {
                 resolve(meta);
             }

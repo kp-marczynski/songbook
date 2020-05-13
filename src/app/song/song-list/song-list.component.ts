@@ -16,6 +16,7 @@ export class SongListComponent implements OnInit, OnDestroy {
 
     songIndex: ISong[] = [];
     filteredSongs: ISong[] = [];
+    loading: boolean;
 
     numberOfItems = 20;
     @ViewChild('searchbar', {static: false}) searchbar: IonSearchbar;
@@ -51,6 +52,7 @@ export class SongListComponent implements OnInit, OnDestroy {
     }
 
     loadSongs(): Promise<any> {
+        this.loading = true;
         return new Promise<any>((resolve, reject) => {
             this.songService.getSongIndex().then(res => {
                     if (!this.songListsEquals(res, this.songIndex)) {
@@ -60,6 +62,7 @@ export class SongListComponent implements OnInit, OnDestroy {
                     if (this.songIndex) {
                         this.searchSongs();
                     }
+                    this.loading = false;
                     resolve();
                 }
             );

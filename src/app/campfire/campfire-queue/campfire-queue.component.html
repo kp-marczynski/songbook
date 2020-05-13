@@ -25,7 +25,10 @@
             </ion-item-options>
         </ion-item-sliding>
     </ion-list>
-    <div class="ion-text-center ion-padding-top" *ngIf="!songQueue || songQueue.length == 0">
+    <div class="ion-text-center ion-padding-top" *ngIf="loading">
+        <ion-spinner></ion-spinner>
+    </div>
+    <div class="ion-text-center ion-padding-top" *ngIf="(!songQueue || songQueue.length == 0) && !loading">
         <img src="assets/undraw_into_the_night_vumi.svg" alt="No data" width="205" height="195">
         <h2>Nothing to play by campfire...</h2>
     </div>
