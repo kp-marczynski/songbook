@@ -6,13 +6,18 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="song" [scrollEvents]="true">
+<ion-content [scrollEvents]="true">
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="presentPopover($event)">
     <ion-fab-button>
       <ion-icon name="share"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <app-song-scrollable-details [song]="song" [scrollSpeed]="scrollSpeed" [isScrolling]="isScrolling" [chordsVisible]="false" (scrollStateChanged)="scrollStateChanged($event)"></app-song-scrollable-details>
+  <app-song-scrollable-details *ngIf="song" [song]="song" [scrollSpeed]="scrollSpeed" [isScrolling]="isScrolling" [chordsVisible]="false" (scrollStateChanged)="scrollStateChanged($event)"></app-song-scrollable-details>
+  <div class="ion-text-center ion-padding-top" *ngIf="!song">
+    <img src="assets/undraw_happy_music_g6wc.svg" alt="No song found" width="200">
+    <h2>Waiting for song to start...</h2>
+    <p>In the meantime feel free to share QR code with other campfire participants!</p>
+  </div>
 </ion-content>
 <ion-footer *ngIf="song">
   <ion-toolbar class="song-details-footer">
