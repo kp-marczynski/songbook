@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
-      Current Song
+    <ion-title *ngIf="song" class="ellipsis">
+      {{song.title}}
     </ion-title>
   </ion-toolbar>
 </ion-header>

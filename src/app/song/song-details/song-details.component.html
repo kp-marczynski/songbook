@@ -3,8 +3,8 @@
         <ion-buttons slot="start">
             <ion-back-button [defaultHref]="previousUrl"></ion-back-button>
         </ion-buttons>
-        <ion-title>
-            Song Details
+        <ion-title *ngIf="song" class="ellipsis">
+            {{song.title}}
         </ion-title>
         <ion-buttons slot="end">
             <ion-fab-button color="danger" (click)="addSongToQueue()" size="small">
