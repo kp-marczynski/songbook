@@ -126,4 +126,9 @@ export class SongListComponent implements OnInit, OnDestroy {
         this.hideKeyboard();
         setTimeout(() => this.router.navigate(url), 500);
     }
+
+    openRandomSong() {
+        const randomSong = this.songIndex[Math.floor(Math.random() * this.songIndex.length)]
+        this.navigateWithTimeout(['/tabs/song', randomSong.uuid, 'view'])
+    }
 }
