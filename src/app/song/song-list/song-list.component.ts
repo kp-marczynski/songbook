@@ -97,8 +97,10 @@ export class SongListComponent implements OnInit, OnDestroy {
         let temp: ISong[];
         if (value && value.trim().length > 0) {
             temp = [...this.songIndex.filter(elem =>
-                this.checkIncludesLowerCase(elem.title, value)
-                || this.checkIncludesLowerCase(elem.artist, value))];
+                value.split(" ").every(splittedValue =>
+                    this.checkIncludesLowerCase(elem.title, splittedValue)
+                    || this.checkIncludesLowerCase(elem.artist, splittedValue))
+                )]
         } else {
             temp = [...this.songIndex];
         }
