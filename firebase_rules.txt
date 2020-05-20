@@ -1,0 +1,22 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /songs/{songId} {
+    	allow read, update, delete: if resource.data.owner == request.auth.uid && request.auth.uid == 'yS4FcEgI5ubU56LT8NA9JuprdAM2';
+      allow create: if request.resource.data.owner == request.auth.uid && request.auth.uid == 'yS4FcEgI5ubU56LT8NA9JuprdAM2';
+    }
+
+    match /campfire/{campfireId} {
+    	allow update, delete: if resource.data.owner == request.auth.uid && request.auth.uid == 'yS4FcEgI5ubU56LT8NA9JuprdAM2';
+      allow create: if request.resource.data.owner == request.auth.uid && request.auth.uid == 'yS4FcEgI5ubU56LT8NA9JuprdAM2';
+      allow read: if true;
+      allow list: if false;
+    }
+
+    // deny rest
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
