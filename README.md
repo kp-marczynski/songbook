@@ -1,6 +1,9 @@
 # Songbook
 PWA songbook with auto-scroll and real time auto-sharing currently playing song with campfire participants.
 
+## Demo
+<img src="songbook-demo.gif" width="480" height="800" />
+
 ## Prerequisites
 * [Node.js 10+](https://nodejs.org/) 
 * [Firebase CLI](https://firebase.google.com/docs/cli)
