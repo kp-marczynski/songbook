@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {FrequencyBars} from "./frequency-bars";
 import {TunerService} from "./tuner.service";
+import {NavigationStart, Router} from "@angular/router";
 
 @Component({
     selector: 'app-tuner',
@@ -15,12 +16,20 @@ export class TunerComponent implements OnInit {
     meterPointer: number;
     activeNote: any;
 
-    constructor(private tuner: TunerService) {
+    constructor(private tuner: TunerService, router: Router) {
+        router.events.forEach((event) => {
+            if (event instanceof NavigationStart) {
+                tuner.setRecorderState(event.url.includes("tuner"))
+            }
+        }).then();
+        document.addEventListener('visibilitychange', () => {
+            tuner.setRecorderState(document.visibilityState == 'visible')
+        });
     }
 
     ngOnInit() {
         this.frequencyBars = new FrequencyBars('.frequency-bars')
-        this.update({ name: 'A', frequency: 440, octave: 4, value: 69, cents: 0 })
+        this.update({name: 'A', frequency: 440, octave: 4, value: 69, cents: 0})
         this.init()
     }
 
@@ -42,13 +51,13 @@ export class TunerComponent implements OnInit {
     }
 
     init(): void {
-        this.tuner.onNoteDetected = (note) => {
+        this.tuner.onNoteDetected = note => {
             // if (this.notes.isAutoMode) {
-                if (this.lastNote === note.name) {
-                    this.update(note)
-                } else {
-                    this.lastNote = note.name
-                }
+            if (this.lastNote === note.name) {
+                this.update(note)
+            } else {
+                this.lastNote = note.name
+            }
             // }
         }
 
