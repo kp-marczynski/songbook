@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as Aubio from "./aubio/aubio";
-import {NavigationStart, Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -44,9 +43,9 @@ export class TunerService {
     }
 
     // Older browsers might not implement mediaDevices at all, so we set an empty object first
-    // if (navigator.mediaDevices === undefined) {
-    //   (navigator as any).mediaDevices = {}
-    // }
+    if (navigator.mediaDevices === undefined) {
+      (navigator as any).mediaDevices = {}
+    }
 
     // Some browsers partially implement mediaDevices. We can't just assign an object
     // with getUserMedia as it would overwrite existing properties.
