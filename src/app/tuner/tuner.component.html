@@ -1,20 +1,6 @@
 <div class="wrapper">
     <canvas class="frequency-bars"></canvas>
-    <div class="meter">
-        <div class="meter-dot"></div>
-        <div class="meter-pointer" style="transform: rotate(27.9deg);"></div>
-        <div class="meter-scale meter-scale-strong" style="transform: rotate(-45deg);"></div>
-        <div class="meter-scale" style="transform: rotate(-36deg);"></div>
-        <div class="meter-scale" style="transform: rotate(-27deg);"></div>
-        <div class="meter-scale" style="transform: rotate(-18deg);"></div>
-        <div class="meter-scale" style="transform: rotate(-9deg);"></div>
-        <div class="meter-scale meter-scale-strong" style="transform: rotate(0deg);"></div>
-        <div class="meter-scale" style="transform: rotate(9deg);"></div>
-        <div class="meter-scale" style="transform: rotate(18deg);"></div>
-        <div class="meter-scale" style="transform: rotate(27deg);"></div>
-        <div class="meter-scale" style="transform: rotate(36deg);"></div>
-        <div class="meter-scale meter-scale-strong" style="transform: rotate(45deg);"></div>
-    </div>
+    <app-meter [pointer]="meterPointer"></app-meter>
     <div class="notes">
         <div class="notes-list">
             <div class="note" data-name="C" data-value="36" data-octave="2" data-frequency="65.40639132514966">C<span

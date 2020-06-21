@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Notes} from "./notes";
-import {Meter} from "./meter";
 import {Tuner} from "./tuner";
 import {FrequencyBars} from "./frequency-bars";
 
@@ -12,11 +11,11 @@ import {FrequencyBars} from "./frequency-bars";
 export class TunerComponent implements OnInit {
 
     notes: Notes;
-    meter: Meter;
     tuner: Tuner;
     frequencyBars: FrequencyBars;
     frequencyData: any;
     lastNote: any;
+    meterPointer: number;
 
     constructor() {
     }
@@ -24,7 +23,6 @@ export class TunerComponent implements OnInit {
     ngOnInit() {
         this.tuner = new Tuner()
         this.notes = new Notes('.notes', this.tuner)
-        this.meter = new Meter('.meter')
         this.frequencyBars = new FrequencyBars('.frequency-bars')
         this.update({ name: 'A', frequency: 440, octave: 4, value: 69, cents: 0 })
         this.init()
@@ -32,7 +30,7 @@ export class TunerComponent implements OnInit {
 
     update(note) {
         this.notes.update(note);
-        this.meter.update((note.cents / 50) * 45);
+        this.meterPointer = (note.cents / 50) * 45;
     }
 
     toggleAutoMode() {

@@ -1,0 +1,7 @@
+<div class="meter">
+    <div class="meter-dot"></div>
+    <div #meterPointer class="meter-pointer"></div>
+    <div class="meter-scale" [ngClass]="{'meter-scale-strong': scale % 5 === 0}"
+         *ngFor="let scale of scales"
+         [style.transform]="'rotate(' + (scale * 9 - 45) + 'deg)'"></div>
+</div>
