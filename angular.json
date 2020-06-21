@@ -30,6 +30,11 @@
                 "input": "node_modules/ionicons/dist/ionicons/svg",
                 "output": "./svg"
               },
+              {
+                "glob": "**/aubio.wasm",
+                "input": "src/app/tuner/aubio",
+                "output": ""
+              },
               "src/manifest.webmanifest"
             ],
             "styles": [

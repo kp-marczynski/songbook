@@ -38,6 +38,16 @@ const routes: Routes = [
                 ]
             },
             {
+                path: 'tuner',
+                children: [
+                    {
+                        path: '',
+                        loadChildren: () =>
+                            import('../tuner/tuner.module').then(m => m.TunerModule)
+                    }
+                ]
+            },
+            {
                 path: '',
                 redirectTo: '/tabs/song',
                 pathMatch: 'full'
