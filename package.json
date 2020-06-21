@@ -1,6 +1,6 @@
 {
   "name": "ionic-songbook",
-  "version": "2.3.2",
+  "version": "2.3.9",
   "author": "kp-marczynski",
   "homepage": "https://github.com/kp-marczynski",
   "browser": { "fs": false, "path": false, "os": false},
@@ -11,7 +11,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "deploy": "ionic build --prod && firebase deploy"
+    "deploy": "ionic build --prod --source-map --optimization=false && firebase deploy"
   },
   "private": true,
   "dependencies": {

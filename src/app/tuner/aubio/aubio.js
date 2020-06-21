@@ -65,7 +65,9 @@ var Aubio = function (Aubio) {
     }); else if (u || v) {
         if (u) {
             var fa = this._currentScript || document.currentScript;
-            0 !== fa.src.indexOf("blob:") && (w = fa.src.split("/").slice(0, -1).join("/") + "/")
+            if(fa){
+                0 !== fa.src.indexOf("blob:") && (w = fa.src.split("/").slice(0, -1).join("/") + "/")
+            }
         } else v && (w = self.location.href.split("/").slice(0, -1).join("/") + "/");
         c.read = function (a) {
             var b = new XMLHttpRequest;

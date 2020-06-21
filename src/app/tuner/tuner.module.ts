@@ -4,6 +4,7 @@ import {TunerComponent} from "./tuner.component";
 import {TunerRoutingModule} from "./tuner-routing.module";
 import {MeterComponent} from "./meter/meter.component";
 import {NotesComponent} from "./notes/notes.component";
+import {IonicModule} from "@ionic/angular";
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import {NotesComponent} from "./notes/notes.component";
     ],
     imports: [
         CommonModule,
+        IonicModule,
         TunerRoutingModule
     ]
 })

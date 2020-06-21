@@ -26,6 +26,7 @@
 .notes-list {
   overflow: auto;
   overflow: -moz-scrollbars-none;
+  scrollbar-width: none;
   white-space: nowrap;
   -ms-overflow-style: none;
   -webkit-mask-image: -webkit-linear-gradient(

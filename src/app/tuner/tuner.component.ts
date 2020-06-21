@@ -23,7 +23,7 @@ export class TunerComponent implements OnInit {
             }
         }).then();
         document.addEventListener('visibilitychange', () => {
-            tuner.setRecorderState(document.visibilityState == 'visible')
+            tuner.setRecorderState(document.visibilityState == 'visible' && router.url.includes("tuner"))
         });
     }
 
