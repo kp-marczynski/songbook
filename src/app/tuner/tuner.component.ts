@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {Notes} from "./notes";
-import {Tuner} from "./tuner";
 import {FrequencyBars} from "./frequency-bars";
+import {TunerService} from "./tuner.service";
 
 @Component({
     selector: 'app-tuner',
@@ -10,31 +9,28 @@ import {FrequencyBars} from "./frequency-bars";
 })
 export class TunerComponent implements OnInit {
 
-    notes: Notes;
-    tuner: Tuner;
     frequencyBars: FrequencyBars;
     frequencyData: any;
     lastNote: any;
     meterPointer: number;
+    activeNote: any;
 
-    constructor() {
+    constructor(private tuner: TunerService) {
     }
 
     ngOnInit() {
-        this.tuner = new Tuner()
-        this.notes = new Notes('.notes', this.tuner)
         this.frequencyBars = new FrequencyBars('.frequency-bars')
         this.update({ name: 'A', frequency: 440, octave: 4, value: 69, cents: 0 })
         this.init()
     }
 
     update(note) {
-        this.notes.update(note);
+        this.activeNote = note;
         this.meterPointer = (note.cents / 50) * 45;
     }
 
     toggleAutoMode() {
-        this.notes.toggleAutoMode();
+        // this.notes.toggleAutoMode();
     }
 
     updateFrequencyBars() {
@@ -47,13 +43,13 @@ export class TunerComponent implements OnInit {
 
     init(): void {
         this.tuner.onNoteDetected = (note) => {
-            if (this.notes.isAutoMode) {
+            // if (this.notes.isAutoMode) {
                 if (this.lastNote === note.name) {
                     this.update(note)
                 } else {
                     this.lastNote = note.name
                 }
-            }
+            // }
         }
 
         this.tuner.init()

@@ -11,7 +11,7 @@
 .meter-pointer {
   width: 2px;
   height: 100%;
-  background: #2c3e50;
+  background: var(--ion-color-primary);
   transform: rotate(45deg);
   transform-origin: bottom;
   transition: transform 0.5s;
@@ -22,7 +22,7 @@
 .meter-dot {
   width: 10px;
   height: 10px;
-  background: #2c3e50;
+  background: var(--ion-color-primary);
   border-radius: 50%;
   position: absolute;
   bottom: -5px;
@@ -39,6 +39,7 @@
   border-top: 10px solid;
   position: absolute;
   right: 50%;
+  color: var(--ion-text-color);
 }
 
 .meter-scale-strong {
