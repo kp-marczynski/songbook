@@ -13,8 +13,11 @@
             <ion-button (click)="editSong()" size="small">
                 <ion-icon name="create" slot="icon-only"></ion-icon>
             </ion-button>
-            <ion-button (click)="removeSong()" size="small">
+            <ion-button (click)="removeSong()" size="small" disabled="true">
                 <ion-icon name="trash" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-button (click)="openRandomSong()" size="small">
+                <ion-icon name="shuffle" slot="icon-only"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>

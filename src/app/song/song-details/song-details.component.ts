@@ -98,4 +98,12 @@ export class SongDetailsComponent implements OnInit, AfterViewInit {
         this.setCurrentSong();
         this.currentSongSharePopoverService.presentPopover(ev);
     }
+
+    openRandomSong() {
+        this.songService.getSongIndex().then(songIndex => {
+                const randomSong = songIndex[Math.floor(Math.random() * songIndex.length)]
+                this.router.navigate(['/tabs/song', randomSong.uuid, 'view'])
+            }
+        )
+    }
 }
