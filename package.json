@@ -15,7 +15,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "deploy": "ionic build --prod --source-map --optimization=false && firebase deploy"
+    "deploy": "ionic build --prod && firebase deploy",
+    "deployWihSourceMap": "ionic build --prod --source-map --optimization=false && firebase deploy"
   },
   "private": true,
   "dependencies": {
