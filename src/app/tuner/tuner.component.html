@@ -1,5 +1,14 @@
-<div class="wrapper">
-    <canvas class="frequency-bars"></canvas>
-    <app-meter [pointer]="meterPointer"></app-meter>
-    <app-notes [note]="activeNote"></app-notes>
-</div>
+<ion-header>
+    <ion-toolbar>
+        <ion-title>
+            Tuner
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <div class="wrapper">
+        <canvas class="frequency-bars"></canvas>
+        <app-meter [pointer]="meterPointer"></app-meter>
+        <app-notes [note]="activeNote"></app-notes>
+    </div>
+</ion-content>

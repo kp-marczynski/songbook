@@ -1,7 +1,8 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FrequencyBars} from "./frequency-bars";
 import {TunerService} from "./tuner.service";
 import {NavigationStart, Router} from "@angular/router";
+import {Note} from "./notes/note.model";
 
 @Component({
     selector: 'app-tuner',
@@ -11,10 +12,10 @@ import {NavigationStart, Router} from "@angular/router";
 export class TunerComponent implements OnInit {
 
     frequencyBars: FrequencyBars;
-    frequencyData: any;
-    lastNote: any;
+    frequencyData: Uint8Array;
+    lastNote: Note;
     meterPointer: number;
-    activeNote: any;
+    activeNote: Note;
 
     constructor(private tuner: TunerService, router: Router) {
         router.events.forEach((event) => {
@@ -33,13 +34,9 @@ export class TunerComponent implements OnInit {
         this.init()
     }
 
-    update(note) {
+    update(note: Note) {
         this.activeNote = note;
         this.meterPointer = (note.cents / 50) * 45;
-    }
-
-    toggleAutoMode() {
-        // this.notes.toggleAutoMode();
     }
 
     updateFrequencyBars() {
@@ -52,13 +49,11 @@ export class TunerComponent implements OnInit {
 
     init(): void {
         this.tuner.onNoteDetected = note => {
-            // if (this.notes.isAutoMode) {
-            if (this.lastNote === note.name) {
+            if (this.lastNote && this.lastNote.name === note.name && this.lastNote.octave === note.octave) {
                 this.update(note)
             } else {
-                this.lastNote = note.name
+                this.lastNote = note;
             }
-            // }
         }
 
         this.tuner.init()

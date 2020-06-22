@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as Aubio from "./aubio/aubio";
+import { Pitch } from "./aubio/aubio";
+import {Note} from "./notes/note.model";
 
 @Injectable({
     providedIn: 'root'
@@ -24,12 +26,12 @@ export class TunerService {
         'B'
     ]
 
-    audioContext: any;
-    analyser: any;
-    scriptProcessor: any;
-    oscillator: any;
-    pitchDetector: any;
-    onNoteDetected: any;
+    audioContext: AudioContext;
+    analyser: AnalyserNode;
+    scriptProcessor: ScriptProcessorNode;
+    oscillator: OscillatorNode;
+    pitchDetector: Pitch;
+    onNoteDetected: (note: Note) => void;
     stream: MediaStream;
 
     constructor() {
@@ -126,7 +128,7 @@ export class TunerService {
      * @param {number} frequency
      * @returns {number}
      */
-    getNote(frequency): number {
+    getNote(frequency: number): number {
         const note = 12 * (Math.log(frequency / this.middleA) / Math.log(2))
         return Math.round(note) + this.semitone
     }
@@ -137,7 +139,7 @@ export class TunerService {
      * @param note
      * @returns {number}
      */
-    getStandardFrequency(note) {
+    getStandardFrequency(note: number): number {
         return this.middleA * Math.pow(2, (note - this.semitone) / 12)
     }
 
@@ -148,7 +150,7 @@ export class TunerService {
      * @param {number} note
      * @returns {number}
      */
-    getCents(frequency, note) {
+    getCents(frequency: number, note: number): number {
         return Math.floor(
             (1200 * Math.log(frequency / this.getStandardFrequency(note))) / Math.log(2)
         )
@@ -159,7 +161,7 @@ export class TunerService {
      *
      * @param {number} frequency
      */
-    play(frequency) {
+    play(frequency: number) {
         if (!this.oscillator) {
             this.oscillator = this.audioContext.createOscillator()
             this.oscillator.connect(this.audioContext.destination)

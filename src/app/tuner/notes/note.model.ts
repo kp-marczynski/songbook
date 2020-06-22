@@ -1,4 +1,4 @@
 export class Note {
-    constructor(public name: any, public value: any, public octave: any, public frequency: any) {
+    constructor(public name: string, public value: number, public octave: number, public frequency: number, public cents?: number) {
     }
 }
