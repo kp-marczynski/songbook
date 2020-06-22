@@ -11,7 +11,7 @@ export class FrequencyBars {
     constructor(selector: string) {
         this.$canvas = document.querySelector(selector)
         this.$canvas.width = document.body.clientWidth
-        this.$canvas.height = document.body.clientHeight / 2
+        this.$canvas.height = document.body.clientHeight / 4
         this.canvasContext = this.$canvas.getContext('2d')
     }
 
@@ -26,7 +26,7 @@ export class FrequencyBars {
             this.canvasContext.fillStyle = '#ecf0f1'
             this.canvasContext.fillRect(
                 i * (width + 0.5),
-                this.$canvas.height - data[i],
+                this.$canvas.height - data[i]/2,
                 width,
                 data[i]
             )
