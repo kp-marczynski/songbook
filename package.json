@@ -1,9 +1,13 @@
 {
   "name": "ionic-songbook",
-  "version": "2.3.9",
+  "version": "2.3.10",
   "author": "kp-marczynski",
   "homepage": "https://github.com/kp-marczynski",
-  "browser": { "fs": false, "path": false, "os": false},
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

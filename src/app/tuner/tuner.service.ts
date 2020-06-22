@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as Aubio from "./aubio/aubio";
-import { Pitch } from "./aubio/aubio";
+import {Pitch} from "./aubio/aubio";
 import {Note} from "./notes/note.model";
 
 @Injectable({
@@ -39,8 +39,8 @@ export class TunerService {
     }
 
     initGetUserMedia() {
-        (window as any).AudioContext = (window as any).AudioContext || (window as any).webkitAudioContext
-        if (!(window as any).AudioContext) {
+        window['AudioContext'] = window['AudioContext'] || window['webkitAudioContext']
+        if (!window['AudioContext']) {
             return alert('AudioContext not supported')
         }
 
@@ -55,8 +55,7 @@ export class TunerService {
         if (navigator.mediaDevices.getUserMedia === undefined) {
             navigator.mediaDevices.getUserMedia = constraints => {
                 // First get ahold of the legacy getUserMedia, if present
-                const getUserMedia =
-                    (navigator as any).webkitGetUserMedia || (navigator as any).mozGetUserMedia
+                const getUserMedia = navigator['webkitGetUserMedia'] || navigator['mozGetUserMedia']
 
                 // Some browsers just don't implement it - return a rejected promise with an error
                 // to keep a consistent interface
@@ -82,9 +81,7 @@ export class TunerService {
                 this.analyser.connect(this.scriptProcessor)
                 this.scriptProcessor.connect(this.audioContext.destination)
                 this.scriptProcessor.addEventListener('audioprocess', event => {
-                    const frequency = this.pitchDetector.do(
-                        event.inputBuffer.getChannelData(0)
-                    )
+                    const frequency = this.pitchDetector.do(event.inputBuffer.getChannelData(0))
                     if (frequency && this.onNoteDetected) {
                         const note = tuner.getNote(frequency)
                         this.onNoteDetected({
@@ -103,7 +100,7 @@ export class TunerService {
     }
 
     init() {
-        this.audioContext = new (window as any).AudioContext()
+        this.audioContext = new window['AudioContext']()
         this.analyser = this.audioContext.createAnalyser()
         this.scriptProcessor = this.audioContext.createScriptProcessor(
             this.bufferSize,
