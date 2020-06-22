@@ -180,6 +180,7 @@ export class TunerService {
 
     setRecorderState(active: boolean) {
         if (active) {
+            this.stopRecording()
             this.init()
         } else {
             this.stopRecording()
