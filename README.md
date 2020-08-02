@@ -1,6 +1,8 @@
 # Songbook
 PWA songbook with auto-scroll and real time auto-sharing currently playing song with campfire participants.
 
+## Alternative version
+Second version of this app is being developed in React: https://github.com/kp-marczynski/songbook-react
 ## Demo
 <img src="songbook-demo.gif" width="480" height="800" />
 
